@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { Plus, Download, BookOpen } from 'lucide-react'
+import { Plus, Download, BookOpen, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import type { ColumnDef } from '@tanstack/react-table'
 import PageHeader from '@/components/shared/PageHeader'
@@ -14,57 +14,56 @@ import { formatRupees } from '@/lib/utils/currency'
 import { formatDate, relativeTime } from '@/lib/utils/dates'
 import { EVENT_TYPE_LABELS } from '@/lib/utils/booking'
 import { useUIStore } from '@/lib/store/uiStore'
-import type { BookingStatus, EventType } from '@/types/booking.types'
+import { useBookings } from '@/lib/hooks/useBookings'
+import type { Booking } from '@/types'
 
-const STATUSES = ['all','inquiry','confirmed','deposit_received','balance_pending','completed','cancelled'] as const
-
-const DEMO = [
-  { _id:'1', ref:'BK-2025-0019', client:'Ahmed Khan', type:'barat' as EventType, date:'2025-06-15', status:'confirmed' as BookingStatus, contract:850000, outstanding:350000 },
-  { _id:'2', ref:'BK-2025-0020', client:'Sara Ali', type:'mehndi' as EventType, date:'2025-06-18', status:'deposit_received' as BookingStatus, contract:320000, outstanding:120000 },
-  { _id:'3', ref:'BK-2025-0021', client:'Usman Sheikh', type:'valima' as EventType, date:'2025-06-20', status:'balance_pending' as BookingStatus, contract:1100000, outstanding:500000 },
-  { _id:'4', ref:'BK-2025-0022', client:'Fatima Raza', type:'nikah' as EventType, date:'2025-06-22', status:'confirmed' as BookingStatus, contract:600000, outstanding:200000 },
-  { _id:'5', ref:'BK-2025-0023', client:'Imran Ahmed', type:'dholki' as EventType, date:'2025-06-25', status:'inquiry' as BookingStatus, contract:150000, outstanding:150000 },
-]
+const STATUSES = ['all', 'inquiry', 'confirmed', 'deposit_received', 'balance_pending', 'completed', 'cancelled'] as const
 
 export default function BookingsPage() {
   const [activeStatus, setActiveStatus] = useState<string>('all')
   const [search, setSearch] = useState('')
   const { openNewBooking } = useUIStore()
 
-  const filtered = DEMO.filter(b => {
-    if (activeStatus !== 'all' && b.status !== activeStatus) return false
-    if (search && !b.client.toLowerCase().includes(search.toLowerCase())) return false
-    return true
+  // Dynamic real-time React Query hook for state persistence
+  const { data: resp, isLoading } = useBookings({
+    status: activeStatus,
+    search,
   })
 
-  const columns = useMemo<ColumnDef<(typeof DEMO)[number]>[]>(
+  const bookingsList = resp?.data || []
+
+  const columns = useMemo<ColumnDef<Booking>[]>(
     () => [
       {
         header: 'Ref',
-        accessorKey: 'ref',
-        cell: ({ row }) => <span className="text-xs font-medium text-[#556ee6]" style={{ fontFamily: 'var(--font-mono)' }}>{row.original.ref}</span>,
+        accessorKey: 'referenceNumber',
+        cell: ({ row }) => (
+          <span className="text-xs font-semibold text-[#556ee6]" style={{ fontFamily: 'var(--font-mono)' }}>
+            {row.original.referenceNumber}
+          </span>
+        ),
       },
       {
         header: 'Client',
-        accessorKey: 'client',
-        cell: ({ row }) => <span className="font-medium text-[#343a40]">{row.original.client}</span>,
+        accessorKey: 'clientName',
+        cell: ({ row }) => <span className="font-semibold text-[#343a40]">{row.original.clientName}</span>,
       },
       {
         header: 'Event',
-        accessorKey: 'type',
+        accessorKey: 'eventType',
         cell: ({ row }) => (
-          <span className="rounded px-1.5 py-0.5 text-[10px] font-medium" style={{ background: 'var(--color-accent-soft)', color: 'var(--color-accent)' }}>
-            {EVENT_TYPE_LABELS[row.original.type]}
+          <span className="rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider" style={{ background: 'var(--color-accent-soft)', color: 'var(--color-accent)' }}>
+            {EVENT_TYPE_LABELS[row.original.eventType] || row.original.eventType}
           </span>
         ),
       },
       {
         header: 'Date',
-        accessorKey: 'date',
+        accessorKey: 'eventDate',
         cell: ({ row }) => (
           <div>
-            <p className="text-[13px] text-[#343a40]">{formatDate(row.original.date)}</p>
-            <p className="text-[11px] text-[#74788d]">{relativeTime(row.original.date)}</p>
+            <p className="text-[13px] font-semibold text-[#343a40]">{formatDate(row.original.eventDate)}</p>
+            <p className="text-[11px] text-[#74788d]">{relativeTime(row.original.eventDate)}</p>
           </div>
         ),
       },
@@ -75,19 +74,27 @@ export default function BookingsPage() {
       },
       {
         header: 'Contract',
-        accessorKey: 'contract',
-        cell: ({ row }) => <span style={{ fontFamily: 'var(--font-mono)' }}>{formatRupees(row.original.contract, true)}</span>,
+        accessorKey: 'totalContractValue',
+        cell: ({ row }) => (
+          <span className="font-semibold font-mono text-xs text-[#343a40]">
+            {formatRupees(row.original.totalContractValue, true)}
+          </span>
+        ),
       },
       {
         header: 'Outstanding',
-        accessorKey: 'outstanding',
-        cell: ({ row }) => <span className="text-[#f1b44c]" style={{ fontFamily: 'var(--font-mono)' }}>{formatRupees(row.original.outstanding, true)}</span>,
+        accessorKey: 'totalOutstanding',
+        cell: ({ row }) => (
+          <span className="font-semibold font-mono text-xs text-[#f1b44c]">
+            {formatRupees(row.original.totalOutstanding, true)}
+          </span>
+        ),
       },
       {
         header: 'Actions',
         id: 'actions',
         cell: ({ row }) => (
-          <Link href={`/bookings/${row.original._id}`} className="rounded-md px-2 py-1 text-[11px] font-semibold text-[#74788d] hover:bg-[#f1f3f5]">
+          <Link href={`/bookings/${row.original._id}`} className="rounded-md px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-[#74788d] hover:bg-[#f1f3f5] border border-[var(--color-border)]">
             View
           </Link>
         ),
@@ -98,31 +105,66 @@ export default function BookingsPage() {
 
   return (
     <div>
-      <PageHeader title="Bookings" description="Manage all your wedding bookings"
-        actions={<button onClick={openNewBooking} className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-all hover:brightness-110 active:scale-[0.97]" style={{ background:'var(--color-accent)', color:'var(--color-text-inverse)' }}><Plus className="h-4 w-4" /> New Booking</button>} />
+      <PageHeader
+        title="Bookings"
+        description="Manage, trace, and audit all localized wedding contracts"
+        actions={
+          <button
+            onClick={openNewBooking}
+            className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-all hover:brightness-110 active:scale-[0.97]"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)' }}
+          >
+            <Plus className="h-4 w-4" /> New Booking
+          </button>
+        }
+      />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
         <div className="flex items-center gap-1 overflow-x-auto">
-          {STATUSES.map(s => (
-            <button key={s} onClick={() => setActiveStatus(s)} className="whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition-all"
-              style={{ background: activeStatus === s ? 'var(--color-accent-soft)' : 'transparent', color: activeStatus === s ? 'var(--color-accent)' : 'var(--color-text-secondary)' }}>
-              {s === 'all' ? 'All' : s.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase())}
+          {STATUSES.map((s) => (
+            <button
+              key={s}
+              onClick={() => setActiveStatus(s)}
+              className="whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition-all"
+              style={{
+                background: activeStatus === s ? 'var(--color-accent-soft)' : 'transparent',
+                color: activeStatus === s ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+              }}
+            >
+              {s === 'all' ? 'All' : s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
             </button>
           ))}
         </div>
         <div className="flex items-center gap-3">
-          <div className="w-64"><SearchInput placeholder="Search bookings..." onSearch={setSearch} /></div>
-          <button 
+          <div className="w-64">
+            <SearchInput placeholder="Search bookings..." onSearch={setSearch} />
+          </div>
+          <button
             onClick={() => toast.success('Exporting bookings to CSV...')}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border transition-colors hover:bg-[var(--color-border)]" style={{ borderColor:'var(--color-border)' }} aria-label="Export">
-            <Download className="h-4 w-4" style={{ color:'var(--color-text-secondary)' }} />
+            className="flex h-9 w-9 items-center justify-center rounded-lg border transition-colors hover:bg-[var(--color-border)]"
+            style={{ borderColor: 'var(--color-border)' }}
+            aria-label="Export"
+          >
+            <Download className="h-4 w-4" style={{ color: 'var(--color-text-secondary)' }} />
           </button>
         </div>
       </div>
 
-      {filtered.length === 0 ? (
-        <EmptyState icon={BookOpen} title="No bookings yet" description="Create your first booking to get started" action={{ label:'Create Booking', onClick: openNewBooking }} />
-      ) : <DataTable columns={columns} data={filtered} emptyMessage="No bookings found for current filters." />}
+      {isLoading ? (
+        <div className="py-24 flex flex-col items-center justify-center text-xs font-semibold text-[var(--color-text-muted)]">
+          <Loader2 className="h-8 w-8 animate-spin text-[var(--color-accent)] mb-3" />
+          Synchronizing contracts list...
+        </div>
+      ) : bookingsList.length === 0 ? (
+        <EmptyState
+          icon={BookOpen}
+          title="No bookings yet"
+          description="Create your first booking to get started"
+          action={{ label: 'Create Booking', onClick: openNewBooking }}
+        />
+      ) : (
+        <DataTable columns={columns} data={bookingsList} emptyMessage="No bookings found for current filters." />
+      )}
     </div>
   )
 }

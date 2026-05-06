@@ -26,8 +26,8 @@ export default function PaymentsPage() {
         <StatCard label="Most Used Method" value="Bank Transfer" accent="gold" index={2} />
       </div>
 
-      <div className="rounded-xl border overflow-hidden" style={{ borderColor:'var(--color-border)' }}>
-        <table className="w-full">
+      <div className="rounded-xl border overflow-x-auto w-full" style={{ borderColor:'var(--color-border)' }}>
+        <table className="w-full min-w-[700px]">
           <thead><tr style={{ background:'var(--color-bg-sunken)' }}>
             {['Date','Client','Booking Ref','Amount','Method','Received By','SMS'].map(h => (
               <th key={h} className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider" style={{ color:'var(--color-text-muted)' }}>{h}</th>

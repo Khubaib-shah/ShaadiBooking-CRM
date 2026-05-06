@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -37,8 +38,15 @@ const NAV_ITEMS = [
 
 export default function Sidebar() {
   const pathname = usePathname()
-  const { sidebarCollapsed, toggleSidebar } = useUIStore()
+  const { sidebarCollapsed, toggleSidebar, setSidebarCollapsed } = useUIStore()
   const { user, vendor } = useAuthStore()
+
+  // Auto-collapse sidebar on route change for mobile screens
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setSidebarCollapsed(true)
+    }
+  }, [pathname, setSidebarCollapsed])
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/'

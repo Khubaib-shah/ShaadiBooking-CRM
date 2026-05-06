@@ -10,11 +10,11 @@ export default function PageHeader({ title, description, actions }: PageHeaderPr
   return (
     <div className="mb-8 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h2 className="text-[18px] font-semibold uppercase tracking-wide" style={{ color: '#343a40' }}>
+        <h2 className="!text-[18px] font-semibold uppercase tracking-wide" style={{ color: '#343a40' }}>
           {title}
         </h2>
         {description && (
-          <p className="mt-1 text-[13px] font-medium" style={{ color: '#74788d' }}>
+          <p className="mt-1 !text-[12px] md:text-[14px] font-medium" style={{ color: '#74788d' }}>
             {description}
           </p>
         )}

@@ -1,0 +1,1712 @@
+You are a senior full-stack engineer with 12 years of experience and a 
+senior UI/UX designer with deep expertise in enterprise dashboard design. 
+You have built production SaaS applications used by thousands of businesses. 
+You do not write "AI slop." You write clean, maintainable, beautifully 
+designed code that looks like it was crafted by a team at Stripe, Linear, 
+or Vercel. Every pixel is intentional. Every component is reusable. 
+Every interaction is smooth.
+
+Build the complete frontend for ShaadiBook — a wedding and event 
+management SaaS for Pakistani banquet halls, marriage lawns, catering 
+companies, and event service providers.
+
+DESIGN PHILOSOPHY — NON-NEGOTIABLE
+Reference: Skote Admin Template (dark sidebar, clean white content area, 
+ApexCharts/Recharts data visualization, professional enterprise feel)
+
+DO NOT build generic "AI dashboard" UI with:
+- Generic blue buttons everywhere
+- Cookie-cutter card layouts
+- Boring default shadcn/ui without customization  
+- White backgrounds everywhere with no depth
+- Flat, lifeless tables
+- Missing hover/focus/active states
+
+DO build:
+- Dark sidebar (#2a3042) with subtle active state highlighting
+- Content area with slight off-white (#f8f9fa) background
+- Cards with gentle box-shadow, not harsh borders
+- Micro-animations on interactions (200ms ease-in-out)
+- Color-coded status badges with appropriate semantic colors
+- Data tables that feel like Notion or Airtable — clean, scannable
+- Charts that have tooltips, legends, smooth animations
+- Empty states with illustration-style SVG icons, not just text
+- Loading skeletons that match the exact shape of loaded content
+- Mobile-responsive: sidebar collapses to bottom nav on mobile
+
+TECH STACK — EXACT VERSIONS
+bash# Core
+Next.js 14.2 (App Router, TypeScript strict mode)
+React 18
+TypeScript 5.3
+
+# Styling
+Tailwind CSS 3.4
+tailwind-merge
+clsx
+shadcn/ui (latest — copy components into codebase)
+
+# Charts
+recharts 2.10 (primary — revenue, bar charts, area charts)
+react-circular-progressbar (for donut/radial stats)
+
+# Tables
+@tanstack/react-table v8 (all data tables)
+
+# Forms
+react-hook-form 7.5
+zod 3.22
+
+# State
+zustand 4.5
+@tanstack/react-query 5.17
+
+# Date/Calendar
+date-fns 3.3
+react-day-picker 8.10
+FullCalendar (booking calendar — @fullcalendar/react, @fullcalendar/daygrid, 
+               @fullcalendar/timegrid, @fullcalendar/interaction)
+
+# Animations
+framer-motion 11.0
+
+# Icons
+lucide-react (primary icon library — consistent, clean)
+
+# Notifications
+react-hot-toast (clean toasts, not shadcn default)
+
+# Utilities
+axios
+dayjs (for display formatting)
+numeral (Pakistani Rs. formatting)
+
+COLOR SYSTEM — DESIGN TOKENS
+typescript// tailwind.config.ts — extend with these exact values
+const colors = {
+  // Brand
+  brand: {
+    50:  '#eef2ff',
+    100: '#e0e7ff',
+    200: '#c7d2fe',
+    400: '#818cf8',
+    500: '#556ee6',   // Primary — Skote blue
+    600: '#4f63cf',
+    700: '#3b4db5',
+    900: '#1e2a7a',
+  },
+  
+  // Sidebar
+  sidebar: {
+    bg:         '#2a3042',   // Main sidebar bg
+    hover:      '#2e3548',   // Hover state
+    active:     '#374151',   // Active item bg
+    border:     '#343a52',   // Subtle divider
+    text:       '#a6b0cf',   // Default nav text
+    textActive: '#ffffff',   // Active nav text
+    icon:       '#6a7187',   // Default icon
+    iconActive: '#ffffff',   // Active icon
+  },
+  
+  // Content area
+  content: {
+    bg:      '#f8f9fa',    // Page background
+    card:    '#ffffff',    // Card background
+    border:  '#e9ecef',    // Card border
+    input:   '#ffffff',    // Input background
+    muted:   '#74788d',    // Muted text
+    heading: '#343a40',    // Page headings
+  },
+  
+  // Status colors (semantic)
+  status: {
+    success:     '#34c38f',   // Paid, completed, active
+    successBg:   '#d4edda',
+    warning:     '#f1b44c',   // Pending, partial
+    warningBg:   '#fff3cd',
+    danger:      '#f46a6a',   // Overdue, cancelled, failed
+    dangerBg:    '#f8d7da',
+    info:        '#50a5f1',   // Confirmed, in progress
+    infoBg:      '#d1ecf1',
+    purple:      '#6f42c1',   // Outsourcing, external
+    purpleBg:    '#e9d8fd',
+  },
+  
+  // Event type colors
+  event: {
+    barat:   { bg: '#e7f5ff', text: '#1971c2', border: '#74c0fc' },
+    mehndi:  { bg: '#fff9db', text: '#e67700', border: '#ffe066' },
+    valima:  { bg: '#f3fbe8', text: '#2f9e44', border: '#8ce99a' },
+    dholki:  { bg: '#fff0f6', text: '#c2255c', border: '#faa2c1' },
+    nikah:   { bg: '#f8f0ff', text: '#7048e8', border: '#d0bfff' },
+    other:   { bg: '#f8f9fa', text: '#495057', border: '#dee2e6' },
+  }
+}
+
+TYPOGRAPHY SYSTEM
+typescript// globals.css additions
+// Font: Poppins (matches Skote exactly)
+// Import via next/font or Google Fonts
+
+const typography = {
+  // Page title (h1 in content area)
+  pageTitle: 'text-[18px] font-semibold text-[#343a40] uppercase tracking-wide',
+  
+  // Card titles
+  cardTitle: 'text-[15px] font-semibold text-[#343a40]',
+  
+  // Section labels / stat labels
+  label: 'text-[13px] font-medium text-[#74788d]',
+  
+  // Large stat numbers
+  statNumber: 'text-[24px] font-semibold text-[#343a40]',
+  
+  // Table headers
+  tableHeader: 'text-[12px] font-semibold text-[#74788d] uppercase tracking-wider',
+  
+  // Table body
+  tableBody: 'text-[13px] text-[#495057]',
+  
+  // Sidebar nav items
+  navItem: 'text-[13px] font-medium',
+  
+  // Badges
+  badge: 'text-[11px] font-semibold',
+}
+
+COMPLETE FOLDER STRUCTURE
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── (auth)/
+│   │   │   ├── login/
+│   │   │   │   └── page.tsx
+│   │   │   └── register/
+│   │   │       └── page.tsx
+│   │   ├── (dashboard)/
+│   │   │   ├── layout.tsx              ← Root dashboard layout
+│   │   │   ├── loading.tsx             ← Page-level skeleton
+│   │   │   ├── error.tsx
+│   │   │   │
+│   │   │   ├── page.tsx                ← Main Dashboard
+│   │   │   │
+│   │   │   ├── calendar/
+│   │   │   │   └── page.tsx            ← Full booking calendar
+│   │   │   │
+│   │   │   ├── bookings/
+│   │   │   │   ├── page.tsx            ← Bookings list
+│   │   │   │   ├── new/
+│   │   │   │   │   └── page.tsx        ← New booking form
+│   │   │   │   └── [id]/
+│   │   │   │       ├── page.tsx        ← Booking detail
+│   │   │   │       └── edit/
+│   │   │   │           └── page.tsx
+│   │   │   │
+│   │   │   ├── inquiries/
+│   │   │   │   ├── page.tsx            ← Inquiry kanban
+│   │   │   │   └── [id]/
+│   │   │   │       └── page.tsx
+│   │   │   │
+│   │   │   ├── payments/
+│   │   │   │   └── page.tsx            ← Payment tracker
+│   │   │   │
+│   │   │   ├── workers/
+│   │   │   │   ├── page.tsx            ← Workers roster
+│   │   │   │   ├── new/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── [id]/
+│   │   │   │       └── page.tsx        ← Worker profile
+│   │   │   │
+│   │   │   ├── staff-deployment/
+│   │   │   │   └── page.tsx            ← Event ↔ Staff assignment
+│   │   │   │
+│   │   │   ├── outsourcing/
+│   │   │   │   ├── page.tsx            ← Outsourcing jobs list
+│   │   │   │   ├── new/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── [id]/
+│   │   │   │       └── page.tsx        ← Outsourcing job detail
+│   │   │   │
+│   │   │   ├── expenses/
+│   │   │   │   └── page.tsx            ← Event expense tracker
+│   │   │   │
+│   │   │   ├── reports/
+│   │   │   │   ├── page.tsx            ← Reports hub
+│   │   │   │   ├── financial/
+│   │   │   │   │   └── page.tsx        ← P&L reports
+│   │   │   │   ├── workers/
+│   │   │   │   │   └── page.tsx        ← Worker salary reports
+│   │   │   │   └── events/
+│   │   │   │       └── page.tsx        ← Event performance
+│   │   │   │
+│   │   │   └── settings/
+│   │   │       └── page.tsx
+│   │   │
+│   │   ├── layout.tsx                  ← Root layout + providers
+│   │   └── globals.css
+│   │
+│   ├── components/
+│   │   ├── ui/                         ← shadcn/ui (customized)
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── badge.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── sheet.tsx               ← Slide-over panels
+│   │   │   ├── table.tsx
+│   │   │   ├── form.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── select.tsx
+│   │   │   ├── tabs.tsx
+│   │   │   ├── progress.tsx
+│   │   │   ├── skeleton.tsx
+│   │   │   ├── tooltip.tsx
+│   │   │   ├── avatar.tsx
+│   │   │   └── dropdown-menu.tsx
+│   │   │
+│   │   ├── layout/
+│   │   │   ├── Sidebar.tsx             ← Dark sidebar (Skote style)
+│   │   │   ├── SidebarNav.tsx          ← Nav items with sub-menus
+│   │   │   ├── TopBar.tsx              ← Header bar
+│   │   │   ├── TopBarSearch.tsx        ← Global search
+│   │   │   ├── TopBarNotifications.tsx ← Bell dropdown
+│   │   │   ├── TopBarProfile.tsx       ← User avatar dropdown
+│   │   │   ├── PageHeader.tsx          ← Page title + breadcrumb
+│   │   │   └── MobileBottomNav.tsx     ← Mobile bottom navigation
+│   │   │
+│   │   ├── dashboard/
+│   │   │   ├── WelcomeCard.tsx         ← Vendor profile card
+│   │   │   ├── StatsGrid.tsx           ← 4-card stats row
+│   │   │   ├── StatCard.tsx            ← Individual stat card
+│   │   │   ├── RevenueChart.tsx        ← Monthly revenue area chart
+│   │   │   ├── EventTypeChart.tsx      ← Pie chart by event type
+│   │   │   ├── UpcomingEventsList.tsx  ← Next 7 days events
+│   │   │   ├── OutstandingPayments.tsx ← Overdue payments widget
+│   │   │   ├── RecentActivity.tsx      ← Timeline of recent actions
+│   │   │   └── WorkerDeployment.tsx    ← Today's worker assignments
+│   │   │
+│   │   ├── bookings/
+│   │   │   ├── BookingCard.tsx
+│   │   │   ├── BookingTable.tsx
+│   │   │   ├── BookingForm.tsx         ← Multi-step form
+│   │   │   ├── BookingDetail.tsx
+│   │   │   ├── BookingStatusBadge.tsx
+│   │   │   ├── PaymentTimeline.tsx
+│   │   │   ├── BookingNotes.tsx
+│   │   │   ├── ConflictAlert.tsx       ← Double booking warning
+│   │   │   └── EventTypeSelect.tsx
+│   │   │
+│   │   ├── calendar/
+│   │   │   ├── EventCalendar.tsx       ← FullCalendar wrapper
+│   │   │   ├── CalendarEventCard.tsx   ← Event tooltip popup
+│   │   │   └── CalendarLegend.tsx
+│   │   │
+│   │   ├── workers/
+│   │   │   ├── WorkerCard.tsx          ← Grid card view
+│   │   │   ├── WorkerTable.tsx         ← Table view
+│   │   │   ├── WorkerForm.tsx          ← Add/edit worker form
+│   │   │   ├── WorkerProfile.tsx       ← Full profile page
+│   │   │   ├── WorkerTypeBadge.tsx     ← Permanent/Temp/Contractor
+│   │   │   ├── WorkerRoleBadge.tsx     ← Waiter/Chef/Electrician etc
+│   │   │   ├── SalaryCard.tsx          ← Salary/payment card
+│   │   │   ├── WorkerEventHistory.tsx  ← Events worked timeline
+│   │   │   ├── WorkerCollaborations.tsx← Who they worked with
+│   │   │   ├── AttendanceStrip.tsx     ← Monthly attendance visual
+│   │   │   └── SalarySlipModal.tsx     ← Printable salary slip
+│   │   │
+│   │   ├── deployment/
+│   │   │   ├── DeploymentBoard.tsx     ← Event ↔ Worker kanban
+│   │   │   ├── AssignWorkerModal.tsx
+│   │   │   ├── WorkerAvailability.tsx  ← Who's free on this date
+│   │   │   └── DeploymentSummary.tsx   ← Staffing completeness
+│   │   │
+│   │   ├── outsourcing/
+│   │   │   ├── OutsourcingCard.tsx
+│   │   │   ├── OutsourcingForm.tsx
+│   │   │   ├── OutsourcingDetail.tsx
+│   │   │   ├── EquipmentList.tsx       ← Track equipment deployed
+│   │   │   └── OutsourcingInvoice.tsx  ← Invoice for external client
+│   │   │
+│   │   ├── expenses/
+│   │   │   ├── ExpenseTable.tsx
+│   │   │   ├── ExpenseForm.tsx
+│   │   │   ├── ExpenseCategoryChart.tsx← Donut chart by category
+│   │   │   └── EventPnLCard.tsx        ← Revenue vs expense card
+│   │   │
+│   │   ├── reports/
+│   │   │   ├── RevenueAreaChart.tsx
+│   │   │   ├── ProfitBarChart.tsx
+│   │   │   ├── EventVolumeChart.tsx
+│   │   │   ├── TopWorkersList.tsx
+│   │   │   ├── ExpenseBreakdown.tsx
+│   │   │   ├── MonthlyComparison.tsx
+│   │   │   └── ReportExportButton.tsx
+│   │   │
+│   │   └── shared/
+│   │       ├── DataTable.tsx           ← Generic TanStack table
+│   │       ├── SearchInput.tsx
+│   │       ├── FilterBar.tsx
+│   │       ├── DateRangePicker.tsx
+│   │       ├── EmptyState.tsx          ← Custom empty state
+│   │       ├── LoadingSkeleton.tsx
+│   │       ├── ConfirmDialog.tsx
+│   │       ├── CurrencyDisplay.tsx     ← Rs. formatted number
+│   │       ├── PhoneDisplay.tsx        ← Pakistani phone format
+│   │       ├── StatusDot.tsx           ← Green/yellow/red dot
+│   │       ├── AvatarGroup.tsx         ← Stacked worker avatars
+│   │       └── PageWrapper.tsx         ← Consistent page container
+│   │
+│   ├── lib/
+│   │   ├── api/
+│   │   │   ├── axios.ts
+│   │   │   ├── bookings.api.ts
+│   │   │   ├── workers.api.ts
+│   │   │   ├── outsourcing.api.ts
+│   │   │   ├── expenses.api.ts
+│   │   │   ├── reports.api.ts
+│   │   │   └── dashboard.api.ts
+│   │   │
+│   │   ├── hooks/
+│   │   │   ├── useBookings.ts
+│   │   │   ├── useWorkers.ts
+│   │   │   ├── useOutsourcing.ts
+│   │   │   ├── useExpenses.ts
+│   │   │   ├── useDeployment.ts
+│   │   │   ├── useReports.ts
+│   │   │   └── useAuth.ts
+│   │   │
+│   │   ├── store/
+│   │   │   ├── authStore.ts
+│   │   │   ├── uiStore.ts
+│   │   │   └── filterStore.ts
+│   │   │
+│   │   └── utils/
+│   │       ├── currency.ts             ← formatRs(1500000) → "Rs. 15,00,000"
+│   │       ├── dates.ts
+│   │       ├── eventColors.ts          ← Event type → color mapping
+│   │       ├── workerRoles.ts          ← Role definitions
+│   │       └── cn.ts
+│   │
+│   └── types/
+│       ├── booking.types.ts
+│       ├── worker.types.ts
+│       ├── outsourcing.types.ts
+│       ├── expense.types.ts
+│       └── report.types.ts
+
+SIDEBAR NAVIGATION — EXACT STRUCTURE
+typescript// Build the sidebar EXACTLY like Skote:
+// - Fixed left, 250px wide
+// - Dark background #2a3042
+// - Logo area at top (logo-light version on dark bg)
+// - Scrollable nav with SimpleBar
+// - Collapsible sub-menus with smooth height animation
+// - Active item: white text + colored left border (3px #556ee6)
+// - Menu section labels: uppercase, muted color, small font
+// - Collapse button on topbar toggles to 70px icon-only mode
+
+const navigation = [
+  {
+    label: 'MAIN',
+    items: [
+      {
+        icon: LayoutDashboard,
+        label: 'Dashboard',
+        href: '/',
+      },
+      {
+        icon: Calendar,
+        label: 'Event Calendar',
+        href: '/calendar',
+      },
+    ]
+  },
+  {
+    label: 'BOOKINGS',
+    items: [
+      {
+        icon: BookOpen,
+        label: 'Bookings',
+        href: '/bookings',
+        badge: { text: 'Live', color: 'success' },
+        children: [
+          { label: 'All Bookings', href: '/bookings' },
+          { label: 'New Booking', href: '/bookings/new' },
+          { label: 'Payment Schedule', href: '/payments' },
+        ]
+      },
+      {
+        icon: MessageSquare,
+        label: 'Inquiries',
+        href: '/inquiries',
+      },
+    ]
+  },
+  {
+    label: 'WORKFORCE',
+    items: [
+      {
+        icon: Users,
+        label: 'Workers',
+        href: '/workers',
+        children: [
+          { label: 'All Workers', href: '/workers' },
+          { label: 'Add Worker', href: '/workers/new' },
+          { label: 'Salary Management', href: '/workers/salaries' },
+        ]
+      },
+      {
+        icon: ClipboardList,
+        label: 'Staff Deployment',
+        href: '/staff-deployment',
+      },
+    ]
+  },
+  {
+    label: 'SERVICES',
+    items: [
+      {
+        icon: ExternalLink,
+        label: 'Outsourcing',
+        href: '/outsourcing',
+        badge: { text: 'New', color: 'info' },
+      },
+      {
+        icon: Receipt,
+        label: 'Expenses',
+        href: '/expenses',
+      },
+    ]
+  },
+  {
+    label: 'ANALYTICS',
+    items: [
+      {
+        icon: BarChart3,
+        label: 'Reports',
+        href: '/reports',
+        children: [
+          { label: 'Financial Report', href: '/reports/financial' },
+          { label: 'Worker Report', href: '/reports/workers' },
+          { label: 'Event Performance', href: '/reports/events' },
+        ]
+      },
+    ]
+  },
+  {
+    label: 'ACCOUNT',
+    items: [
+      { icon: Settings, label: 'Settings', href: '/settings' },
+    ]
+  }
+]
+
+TOPBAR — EXACT COMPONENTS
+typescript// TopBar should include (left to right):
+// [Hamburger toggle] [Logo box] [Search bar] | [Notifications bell] [Profile avatar]
+
+// Hamburger: toggles sidebar between 250px and 70px (icon-only) on desktop
+//            toggles mobile drawer on mobile
+
+// Search: full-width input, appears as overlay on mobile, 
+//         shows recent searches and quick links
+
+// Notifications bell: 
+//   - Badge with count (red, rounded pill)
+//   - Dropdown: max-height 300px scrollable
+//   - Each notification: avatar/icon + title + time
+//   - "Payment overdue" → red icon
+//   - "New inquiry" → blue icon
+//   - "Worker assigned" → green icon
+//   - "View All" link at bottom
+
+// Profile avatar:
+//   - Small avatar (36px circle)
+//   - Vendor name next to it (hidden on mobile)
+//   - Dropdown: Profile, Settings, Logout
+//   - Subscription badge (Trial / Pro)
+
+PAGE 1: DASHBOARD
+typescript// Layout: Skote default dashboard structure
+// Mobile: single column stack
+// Desktop: asymmetric grid
+
+// ── ROW 1: Welcome Card (col-4) + Stats (col-8) ──
+
+// WelcomeCard:
+// - Gradient header (brand-500 to brand-700)
+// - Decorative illustration (SVG wedding icon, right side)
+// - Owner avatar (overlapping header, circular, 60px)
+// - Vendor name + type badge
+// - 2 mini stats: This Month Events + This Month Revenue
+// - "View Profile" button
+
+// Stats Grid (4 cards, horizontal on the col-8 side):
+// Card 1 — Total Bookings This Month
+//   icon: BookOpen (bg: brand-500)
+//   value: "14"
+//   trend: "+2 vs last month"
+//
+// Card 2 — Revenue Collected
+//   icon: Banknote (bg: success)
+//   value: "Rs. 6,12,000"
+//   trend: "73% collection rate"
+//
+// Card 3 — Outstanding Payments
+//   icon: AlertTriangle (bg: warning)
+//   value: "Rs. 2,38,000"
+//   subtext: "3 bookings overdue"
+//
+// Card 4 — Active Workers Today
+//   icon: Users (bg: info)
+//   value: "18"
+//   subtext: "Across 3 events"
+
+// StatCard component design:
+// White card, subtle shadow
+// Left side: label + large number + trend indicator
+// Right side: colored circle with icon (mini-stat-icon style like Skote)
+// Trend: green arrow up OR red arrow down + text
+// Hover: very subtle shadow lift (translateY -2px)
+
+// ── ROW 2: Revenue Chart (col-8) + Event Type Donut (col-4) ──
+
+// Revenue Chart (Recharts AreaChart):
+// - Title: "Revenue Overview" + Week/Month/Year toggle pills
+// - Area chart with gradient fill
+// - Two lines: Revenue (brand-500) + Collected (success)
+// - X-axis: Month names
+// - Y-axis: Rs. formatted
+// - Custom tooltip: card-style, shows both values
+// - Smooth curve (type="monotone")
+// - Animation on mount (500ms)
+
+// Event Type Donut (Recharts PieChart):
+// - Title: "Bookings by Event Type"
+// - Center label: total count
+// - Colors: use event type colors from design tokens
+// - Legend below with count + percentage per type
+// - Custom label on segments
+
+// ── ROW 3: Upcoming Events (col-6) + Activity Timeline (col-3) + Worker Deployment (col-3) ──
+
+// Upcoming Events list:
+// - Title: "Upcoming Events" (next 7 days)
+// - Each item: colored left border by event type
+//   [Date badge] [Client name] [Event type] [Venue] [Payment status]
+// - Payment status: color-coded badge
+// - Hover: very light bg change
+// - "View All" button
+
+// Activity Timeline (vertical):
+// - Recent actions: booking created, payment received, 
+//   worker assigned, inquiry converted
+// - Each item: colored dot + action text + timestamp
+// - Max 6 items, "View More" link
+
+// Worker Deployment Today:
+// - Shows today's events with worker counts
+// - Each event: event name + [avatars of assigned workers] + "X workers"
+// - Progress bar: assigned / required
+// - Red if understaffed, green if fully staffed
+
+PAGE 2: EVENT CALENDAR
+typescript// Full-page FullCalendar implementation
+
+// FullCalendar config:
+// - initialView: 'dayGridMonth'
+// - headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,listWeek' }
+// - Events: each booking rendered as colored event block
+// - Event colors: match event type colors from design tokens
+// - Click on event: opens BookingDetailSheet (slide-over, not navigation)
+// - Click on empty date: opens NewBookingSheet with date pre-filled
+
+// Event display on calendar:
+// [Event type emoji] Client Name — Event Type
+// Colors match the event.barat, event.mehndi etc from tokens
+
+// Conflict indicator:
+// If 2+ confirmed bookings on same date:
+// Red pulsing dot on that date
+// Tooltip: "⚠ Booking conflict on this date"
+
+// Sidebar panel (right side, 300px):
+// - Date picker for navigation
+// - Filter by event type (checkboxes with colored dots)
+// - Filter by status
+// - Mini list of today's events
+// - Quick stats: events this month, next month
+
+// Mobile view: listWeek by default
+
+// Legend bar at bottom:
+// [● Barat] [● Mehndi] [● Valima] [● Dholki] [● Nikah] [⚠ Conflict]
+
+PAGE 3: BOOKINGS LIST
+typescript// Layout: PageHeader + FilterBar + DataTable + Pagination
+
+// PageHeader:
+// Title: "Bookings"  Breadcrumb: Dashboard > Bookings
+// Right: [Export CSV button] [+ New Booking button (brand primary)]
+
+// FilterBar (horizontal, card):
+// [Search: client name or phone] [Status dropdown] [Event Type dropdown] [Date Range picker] [Clear filters]
+// Active filters show as removable chips below the bar
+
+// DataTable columns:
+// □  REF#       CLIENT          EVENT           VENUE          DATE      GUESTS  CONTRACT   PAID    STATUS    ACTIONS
+// □  BK-25-001  Imran Ahmed     🎊 Barat         PC Hotel        Dec 20   350     Rs.7.7L   Rs.2L   ⬤ Partial  [⋮]
+// □  BK-25-002  Sara Khan       🌿 Mehndi         Residence      Dec 22   150     Rs.1.8L   Rs.1.8L  ✓ Paid    [⋮]
+// □  BK-25-003  Rahul Shaikh    🌙 Nikah          Mosque+Hall    Dec 25   200     Rs.3.2L   Rs.0     ✕ Unpaid  [⋮]
+
+// Column details:
+// REF#: monospace font, clickable → booking detail
+// CLIENT: name bold + phone below in muted
+// EVENT: emoji icon + event type chip (colored background)
+// DATE: formatted "20 Dec 2025" + days until ("+42 days" in muted)
+// CONTRACT: bold currency
+// PAID: progress bar below (collected / total), percentage in badge
+// STATUS: color-coded badge (Paid/Partial/Unpaid/Overdue/Cancelled)
+// ACTIONS: dots menu → View Detail / Edit / Record Payment / Cancel
+
+// Row hover: very light blue-grey bg (#f8f9fa)
+// Selected rows: light brand color bg (#eef2ff)
+// Sticky header
+
+// Pagination: "Showing 1-20 of 147 bookings" + prev/next + page size selector
+
+// Empty state (no bookings):
+// SVG illustration of calendar with no events
+// "No bookings found"
+// "Try adjusting your filters or create your first booking"
+// [+ Create Booking] button
+
+PAGE 4: BOOKING DETAIL
+typescript// Full-page detail view (not slide-over)
+// Two-column layout: main content (col-8) + sidebar panel (col-4)
+
+// ── HEADER SECTION ──
+// Breadcrumb: Dashboard > Bookings > BK-2025-001
+// [← Back to Bookings]
+// Left: Reference # + Status badge + Event type badge
+// Right: [Edit Booking] [Record Payment] [⋮ More actions]
+
+// ── MAIN CONTENT (col-8) ──
+
+// Client & Event Card:
+// [Client avatar initials] Client Name (large)
+// Phone | WhatsApp | Email
+// Event Type | Date | Time | Venue | Guests
+// Special Requests (if any)
+
+// Financial Summary Card:
+// Horizontal: Contract Value | Discount | Net Value | Paid | Outstanding
+// Visual payment progress bar (full width, color from green→orange→red based on %)
+// Below bar: "Rs. 2,00,000 deposit paid on Oct 28" (timeline)
+
+// Payment Schedule Table:
+// Type    | Amount Due  | Due Date   | Status      | Action
+// Deposit | Rs. 2,00,000 | Nov 1     | ✓ Paid      | View Receipt
+// Balance | Rs. 5,50,000 | Dec 13    | ⚠ Pending   | [Mark as Received]
+// Per row: colored status, action buttons
+
+// Booking Notes (version history):
+// Chronological feed
+// [Oct 15 · Ahmed Ali (Owner)] "Client requested extra dessert table..."
+// [Oct 20 · Fatima (Manager)] "Menu updated: seekh kabab → reshmi kebab"
+// Each note: avatar + name + role + date + content
+// [+ Add Note] button opens inline text area
+// Note type selector: Menu / Service Change / Client Request / Internal / Agreement
+
+// Documents Section:
+// Upload slots: Agreement Scan, Receipt, Other
+// Drag & drop zone or click to upload
+// Uploaded files: filename + upload date + [View] [Delete]
+
+// ── SIDEBAR PANEL (col-4) ──
+
+// Worker Assignments Card:
+// "Workers Assigned to This Event"
+// Each worker: [Avatar] Name | Role | Report Time | [SMS sent ✓]
+// Completeness indicator: 8/12 required positions filled
+// [+ Assign Worker] [Notify All via SMS]
+
+// Event Costs Card (mini):
+// "Event Cost Summary"
+// Food/Catering: Rs. X
+// Worker Wages: Rs. X
+// Transport: Rs. X
+// Equipment: Rs. X
+// Other: Rs. X
+// ─────────────────────
+// Total Cost: Rs. X
+// Net Profit: Rs. X (green if positive)
+// [View Full Expense Report]
+
+// Quick Actions Card:
+// [Send Balance Reminder SMS]
+// [Generate Invoice PDF]
+// [Add to Calendar]
+// [Mark as Completed]
+
+PAGE 5: WORKERS MODULE
+typescript// This is the most important and complex module.
+// Three sub-views: Roster, Salaries, and individual Worker Profile
+
+// ── WORKERS ROSTER PAGE ──
+
+// PageHeader: "Workforce" | [+ Add Worker] [Export]
+
+// View toggle: [Grid view] [Table view] — both available
+
+// FilterBar:
+// [Search name/phone] [Type: All/Permanent/Temporary/Contractor] 
+// [Role: All/Waiter/Chef/Electrician/Manager/Helper/Driver]
+// [Status: Active/Inactive] [Availability: Available Today]
+
+// ── GRID VIEW ──
+// Card grid (3 cols desktop, 2 cols tablet, 1 col mobile)
+
+// WorkerCard:
+// Top colored strip: role-based color (waiter=blue, chef=orange, electrician=yellow)
+// [Large initials avatar, 60px] Worker Name (bold)
+// Role badge (colored pill)
+// Type badge (Permanent / Temporary / Contractor)
+// ─────────────────────────────
+// Phone number (clickable → WhatsApp)
+// [Events this month: 8] [Salary: Rs. 25,000]
+// Status dot: green (available) / yellow (busy today) / grey (inactive)
+// Bottom: [View Profile] [Assign to Event]
+
+// ── TABLE VIEW ──
+// Columns: Avatar+Name | Role | Type | Phone | Events This Month | Total Earned | Status | Actions
+// Sortable columns
+// Bulk select → bulk actions (deactivate, export)
+
+// ── WORKER PROFILE PAGE ──
+// Full profile — think of this as a LinkedIn profile meets HR dashboard
+
+// Header section:
+// Large avatar (100px, colored bg with initials)
+// Worker Name (H1)
+// Role | Type | Status badge | Member since date
+// [Edit Profile] [Deactivate Worker]
+// Quick stats bar: Total Events Worked | Total Earned | Last Event | Rating/Notes
+
+// ── TAB NAVIGATION ──
+
+// Tab 1: Overview
+// Personal Details card:
+// - CNIC, Phone, WhatsApp, Emergency Contact
+// - Address
+// - Special skills (dropdown chips: can drive, can operate generator, etc.)
+// - Worker notes (internal)
+
+// Employment Details card:
+// - Type: Permanent / Temporary / Contractor
+// - If Permanent: Monthly salary, joining date, department
+// - If Temporary: Default daily wage, default event wage
+// - If Contractor: Rate card (hourly/daily/per-event)
+
+// Tab 2: Event History
+// Timeline of all events this worker participated in:
+// [Event date] [Event type] [Venue] [Role played at event] [Hours worked] [Amount paid]
+// Each row clickable → booking detail
+// Filter by date range
+// Summary bar: X events | X total hours | Rs. X total earned
+
+// Collaborations section:
+// "Frequently Works With"
+// [Avatar] Co-worker name | Role | X events together
+// Shows the top 5 co-workers by events worked together
+// (This data comes from events where both workers were deployed)
+
+// Tab 3: Salary & Payments
+// Monthly salary ledger:
+// Month     | Base Salary | Events | Event Bonus | Advance | Deductions | Net Paid | Status
+// Jan 2025  | Rs.25,000   | 8      | Rs.4,000    | -Rs.5K  | -Rs.500    | Rs.23,500| ✓ Paid
+// Feb 2025  | Rs.25,000   | 6      | Rs.3,000    | —       | —          | Rs.28,000| ✓ Paid
+// Mar 2025  | Rs.25,000   | 10     | Rs.5,000    | -Rs.10K | —          | Rs.20,000| ⚠ Partial
+
+// [Generate Salary Slip] button per row → modal with printable slip
+// [Record Payment] → modal to mark salary as paid
+// [Give Advance] → modal with amount + notes
+// [Add Deduction] → modal with reason
+
+// Monthly earnings chart (bar chart):
+// Shows last 6 months earnings bar chart
+
+// Tab 4: Attendance
+// Monthly calendar view (like a heatmap):
+// Green = worked, yellow = partial, grey = absent, red = no-show
+// Days with events shown with event type color
+// Monthly stats: X days worked, X events, X absent
+// Export attendance sheet (PDF/CSV)
+
+// Tab 5: Documents
+// Upload/view: CNIC scan, Agreement, Bank details
+// Each document: type + upload date + [View] [Replace]
+
+// ── SALARY MANAGEMENT PAGE ──
+// Accessed via /workers/salaries
+
+// Monthly overview:
+// "Salary Month: January 2025" [← Prev] [Next →]
+// Summary: Total Workers | Permanent (salary) | Temporary (wage) | Total Payout
+
+// Bulk payment table:
+// Worker Name | Type | Events | Base | Bonus | Advance | Deductions | Net | Status | Action
+// Allows bulk "Mark as Paid" for all selected workers
+
+// Payroll export: PDF or Excel
+
+PAGE 6: STAFF DEPLOYMENT
+typescript// This page answers: "For each upcoming event, are we properly staffed?"
+
+// Layout: Date filter + Events list + Worker assignment panel
+
+// Date selector: week view (Mon-Sun), clickable days
+// Shows events happening on selected day/week
+
+// For each event: expandable card
+// [Event name] [Date] [Status badge] [Required: 12 workers | Assigned: 8 | ⚠ 4 missing]
+
+// When expanded:
+// Left: Required Positions list
+//   Waiter (4) → Assigned: Ali, Ahmed, Rahul, [+ Add]
+//   Head Waiter (1) → Assigned: Mustafa
+//   Cook (2) → Assigned: [Not assigned ×2] [+ Add] [+ Add]
+//   Electrician (1) → Assigned: [Not assigned] [+ Add]
+//   Driver (1) → Assigned: [Not assigned] [+ Add]
+//   Helper (2) → Assigned: Hassan, [+ Add]
+//   Manager (1) → Assigned: Owner
+
+// Right panel: Worker Availability Browser
+//   Search available workers for this date
+//   Filter by role
+//   Each available worker: Name | Role | [+ Assign] button
+//   Busy workers shown as greyed out with "Busy: [Other Event Name]"
+
+// Bulk actions:
+// [Send SMS to All Assigned Workers] → preview SMS modal
+// [Export Deployment Sheet] → PDF with event details + worker names + reporting times
+
+// Color coding:
+// Event fully staffed: green progress bar (100%)
+// Event understaffed: orange/red progress bar
+// Unstaffed required position: red dashed placeholder box
+
+PAGE 7: OUTSOURCING MODULE
+typescript// This module tracks when the vendor PROVIDES services to external clients
+// (Hotels, beach venues, corporate offices, other banquet halls)
+
+// Outsourcing vs Booking:
+// Booking = someone hires YOU for your venue
+// Outsourcing = YOU send YOUR staff/equipment to THEIR venue for THEIR event
+
+// ── OUTSOURCING LIST ──
+
+// Cards or table view
+
+// OutsourcingCard:
+// Top: [External client name] [Date] [External venue name]
+// Type badges: [Staff ×12] [AC Units ×3] [Equipment] [Full Catering]
+// Revenue: Rs. X (what external client pays YOU)
+// Cost: Rs. X (wages of YOUR workers deployed)
+// Profit: Rs. X (green or red)
+// Status: [Draft / Confirmed / In Progress / Completed / Invoiced]
+
+// ── OUTSOURCING DETAIL ──
+
+// Header:
+// "Pearl Continental — Corporate Annual Dinner"
+// Date: Dec 15, 2025 | Venue: PC Hotel, Club Road
+// Client Contact: Bilal Khan (PC Events Manager) | Phone
+
+// Services Provided Tab:
+// Workers Deployed section:
+//   [Avatar] Name | Role | Deployed at | Hours | Daily Wage | Total
+//   [+ Add Worker from our roster]
+//
+// Equipment Deployed section:
+//   Item | Quantity | Daily Rate | Days | Total
+//   Standing AC Unit | 5 | Rs.2,000/day | 1 | Rs.10,000
+//   Tables (round) | 20 | Rs.50/day | 1 | Rs.1,000
+//   [+ Add Equipment]
+
+// Financial Summary:
+// Total Revenue from External Client: Rs. X
+// Worker Wages (cost): Rs. X
+// Equipment opportunity cost: Rs. X
+// Transport: Rs. X
+// ─────────────────────────
+// Net Profit: Rs. X
+
+// Invoice tab:
+// Generate invoice for external client
+// Shows: services provided, quantities, rates, total
+// [Generate PDF Invoice] [Mark as Invoiced]
+
+// Notes tab:
+// Event notes, special requirements from external client
+
+PAGE 8: EXPENSES MODULE
+typescript// Tracks costs PER EVENT and overall
+
+// ── EXPENSES LIST PAGE ──
+
+// Filter: [All Expenses] [By Event] [By Category] [Date Range]
+
+// Summary bar (top):
+// This Month Total Expenses: Rs. X
+// Categories: [Food: Rs.X] [Wages: Rs.X] [Transport: Rs.X] [Equipment: Rs.X] [Other: Rs.X]
+
+// Expense table:
+// Date | Event | Category | Description | Amount | Paid To | Status | Receipt
+// Each row: color-coded category chip
+
+// Category colors:
+// Food/Catering: orange
+// Worker Wages: blue
+// Transport: purple
+// Equipment/Rental: teal
+// Electricity/Generator: yellow
+// Decoration: pink
+// Miscellaneous: grey
+
+// ── ADD EXPENSE MODAL/FORM ──
+// Date | Event (select from dropdown) | Category | Description | Amount | 
+// Paid To (person/vendor name) | Payment Method | Receipt Upload
+
+// ── PER-EVENT P&L VIEW ──
+// Select event → shows full breakdown:
+
+// Revenue from Client: Rs. 7,70,000
+// ─────────────────────────────────
+// Food & Catering Cost:   Rs. 2,80,000
+// Worker Wages:           Rs. 85,000
+// Transport:              Rs. 12,000
+// Decoration:             Rs. 45,000
+// Equipment:              Rs. 22,000
+// Generator/Electricity:  Rs. 8,000
+// Miscellaneous:          Rs. 5,000
+// ─────────────────────────────────
+// Total Expenses:         Rs. 4,57,000
+// ─────────────────────────────────
+// NET PROFIT:             Rs. 3,13,000 ✓ (40.6% margin)
+
+// Donut chart: expense breakdown by category
+// Color-coded segments matching category colors
+
+// Export: PDF profit report per event
+
+PAGE 9: REPORTS MODULE
+typescript// Three sub-pages: Financial, Workers, Events
+
+// ── REPORTS HUB (index) ──
+// 3-column card grid:
+// [Financial Reports] → monthly P&L, revenue trends, expense breakdown
+// [Worker Reports] → salary summary, top performers, event counts
+// [Event Reports] → event type analysis, venue analysis, seasonal trends
+// Each card: icon + description + [View Report] button
+
+// ── FINANCIAL REPORTS PAGE ──
+
+// Date range selector: This Month / Last 3 Months / This Year / Custom
+
+// KPI row (4 cards):
+// Total Revenue | Total Expenses | Net Profit | Profit Margin %
+
+// Chart 1: Revenue vs Expenses (Recharts ComposedChart)
+// - Bar chart: monthly expenses by category (stacked bars)
+// - Line: monthly revenue
+// - Legend clearly labeled
+// - Y-axis: Rs. formatted
+
+// Chart 2: Profit Trend (AreaChart)
+// - Shows monthly net profit
+// - Green fill if profit, red fill if loss
+// - Reference line at 0
+
+// Chart 3: Revenue Breakdown (PieChart)
+// - In-house events vs Outsourcing revenue
+// - Labeled segments
+
+// Payment Collection Table:
+// Month | Invoiced | Collected | Outstanding | Collection %
+// Color-coded collection % (green > 80%, yellow 60-80%, red < 60%)
+
+// ── WORKER REPORTS PAGE ──
+
+// Period selector + Download button
+
+// Summary: Total Workers | Total Salary Paid | Total Event Wages | 
+//          Avg Workers Per Event | Most Active Worker
+
+// Chart: Worker Utilization (horizontal bar chart)
+// Each worker: name + bar showing events worked this month
+// Sorted by most active
+
+// Top Performers table:
+// Rank | Worker Name | Role | Events | Hours | Total Earned | Punctuality
+// Punctuality = no-shows / total assignments (lower = better)
+
+// Collaboration Matrix (small heatmap-style):
+// Shows which workers frequently work together
+// Great for planning team assignments
+
+// ── EVENT PERFORMANCE REPORTS ──
+
+// Event Type Analysis:
+// Event Type | Count | Avg Revenue | Avg Cost | Avg Profit | % of Total
+// Bar chart by event type
+
+// Seasonal Analysis (line chart):
+// Shows event count by month, last 2 years overlay
+// Helps identify peak wedding season (Oct-Mar in Karachi)
+
+// Venue Analysis:
+// Which venues are most booked, avg revenue per venue
+
+// Client Retention:
+// New clients vs returning clients (donut)
+
+COMPONENT SPECIFICATIONS — KEY COMPONENTS
+typescript// ── StatCard Component ──
+// Exactly like Skote "mini-stats-wid"
+
+interface StatCardProps {
+  label: string
+  value: string
+  trend?: { value: string; direction: 'up' | 'down'; label: string }
+  icon: LucideIcon
+  iconColor: 'primary' | 'success' | 'warning' | 'danger' | 'info'
+  loading?: boolean
+}
+
+// Skeleton: Shows grey animated placeholder rectangles 
+// matching exact dimensions of loaded content
+
+// ── DataTable Component ──
+// Built on @tanstack/react-table v8
+
+// Features required:
+// - Column sorting (click header → asc/desc/none)
+// - Column visibility toggle (show/hide columns)
+// - Pagination with customizable page size (10/20/50)
+// - Row selection with checkboxes (bulk actions)
+// - Global search filter
+// - Per-column filter
+// - Sticky header (position: sticky, top: 0)
+// - Responsive: horizontal scroll on small screens
+// - Empty state: custom EmptyState component
+// - Loading state: skeleton rows (10 rows of grey shimmer)
+
+// ── Badge/Status Components ──
+
+// BookingStatusBadge:
+// inquiry     → grey pill: "Inquiry"
+// confirmed   → blue pill: "Confirmed"
+// deposit_received → teal pill: "Deposit Paid"
+// balance_pending → orange pill: "Balance Due"
+// completed   → green pill: "Completed"
+// cancelled   → red pill: "Cancelled"
+// overdue     → dark red pill with pulse: "OVERDUE"
+
+// WorkerTypeBadge:
+// permanent   → solid brand-500: "Permanent"
+// temporary   → outline warning: "Temporary"
+// contractor  → outline purple: "Contractor"
+
+// WorkerRoleBadge with emoji:
+// waiter       → 🍽 Waiter
+// head_waiter  → 👨‍🍳 Head Waiter
+// cook/chef    → 🧑‍🍳 Chef
+// electrician  → ⚡ Electrician
+// manager      → 👔 Manager
+// driver       → 🚗 Driver
+// helper       → 🤝 Helper
+// ac_operator  → ❄️ AC Operator
+// generator    → ⚙️ Generator Op
+// security     → 🔒 Security
+// cleaner      → 🧹 Cleaner
+// photographer → 📸 Photographer
+// decorator    → 🎨 Decorator
+
+// ── CurrencyDisplay Component ──
+// formatRs(value: number, compact = false): string
+// 1500000 → "Rs. 15,00,000"
+// 1500000 compact → "Rs. 15.0L"
+// 75000 → "Rs. 75,000"
+// 75000 compact → "Rs. 75K"
+
+// ── EmptyState Component ──
+// Props: illustration (SVG), title, description, action?
+
+// Variations:
+// no-bookings: Calendar with X mark
+// no-workers: People silhouettes with plus sign
+// no-payments: Wallet with nothing inside
+// no-data: Magnifying glass finding nothing
+// no-expenses: Receipt with question mark
+// search-empty: Search with no results
+
+// Always: centered, 200px min-height, icon 80px, title 16px bold, 
+//         description 13px muted, optional CTA button below
+
+// ── ConflictAlert Component ──
+// Shown inside booking form when double booking detected
+
+// Severity = critical (barat/valima clash):
+// [🚨 RED ALERT BOX]
+// "Double Booking Conflict!"
+// "You already have a Barat booking (Imran Ahmed) on Dec 20, 2025."
+// [View Conflicting Booking] [Cancel]
+// (Cannot proceed — button disabled)
+
+// Severity = warning (mehndi same day):
+// [⚠️ YELLOW WARNING BOX]
+// "Booking Conflict Warning"
+// "You have a Mehndi booking on this date. Are you sure you have capacity?"
+// [Continue Anyway] [Choose Different Date]
+// (Can proceed with confirmation)
+
+// ── Sheet (Slide-over) Component ──
+// Used for quick views without full navigation
+
+// BookingDetailSheet: 600px wide, from right
+// NewBookingSheet: 700px wide, from right (multi-step form)
+// WorkerAssignSheet: 480px wide, from right
+// NotificationsSheet: 400px wide, from right
+
+// Sheet always has:
+// - Header with title + close button
+// - Scrollable body
+// - Optional footer with actions
+
+// ── PaymentTimeline Component ──
+// Visual representation of payment schedule
+
+// ─── Payment Progress ──────────────────────────
+// ●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━○
+// Deposit            Balance Due           Total
+// Rs.2L ✓           Rs.5.5L (Dec 13)      Rs.7.5L
+// Paid Oct 28        ⚠ 15 days remaining
+
+// Progress bar: filled portion = % paid (brand color)
+// Payment events shown as dots on timeline
+// Hover on dot: shows payment details tooltip
+
+FORMS — MULTI-STEP BOOKING FORM
+typescript// New Booking: 4-step wizard
+// Progress indicator at top: Step 1 → Step 2 → Step 3 → Step 4
+
+// Step 1: Client Information
+// Client Name* | Phone* (Pakistani format validation)
+// WhatsApp Number | Email (optional)
+// How did they find us? (Instagram/Referral/Walk-in/Google)
+
+// Step 2: Event Details
+// Event Type* (visual card selector with emoji icons — not just a dropdown)
+// Event Date* → date picker (blocks past dates, shows existing bookings on calendar)
+// ← CONFLICT CHECK fires here in real-time
+// Event Time | Venue Name | Venue Address | Expected Guests
+
+// Step 3: Financial Terms
+// Package Type: [Per Head ●] [Fixed Price ○]
+// If per head: Price/head | Guests | Total (auto-calculated, editable)
+// If fixed: Total amount
+// Discount Amount | Reason (required if discount > 0)
+// Deposit Required | Deposit Due Date
+// Balance Due Date (auto: event date - 7 days)
+
+// Step 4: Additional
+// Special Requests (textarea)
+// Initial menu/service notes
+// Internal notes (not visible to client)
+// Status: Inquiry / Confirmed
+
+// Form validation:
+// Real-time Zod validation per field
+// Pakistani phone: must start with 03, 11 digits
+// Contract value: must be positive
+// Event date: cannot be in the past
+// Balance due date: must be before event date
+
+// Step navigation:
+// [Back] [Next →] — Next disabled if current step has errors
+// Last step: [Create Booking] with loading state
+
+NEW WORKER FORM
+typescript// Single-page form, not multi-step (simpler)
+
+// Section 1: Basic Information
+// Full Name* | CNIC* (xxxxx-xxxxxxx-x format)
+// Phone* | WhatsApp (optional)
+// Emergency Contact Name | Emergency Contact Phone
+
+// Section 2: Role & Employment
+// Worker Type*: [Permanent] [Temporary] [Contractor]
+// Primary Role*: visual grid of role cards with emojis
+//   Select one of: Waiter / Head Waiter / Chef / Electrician / Manager / 
+//                  Driver / Helper / AC Operator / Generator Operator / 
+//                  Security / Cleaner / Decorator / Other
+// Secondary Skills: multi-select chips
+//   Can Drive | Operates Generator | AC Technician | Basic First Aid | etc.
+
+// Section 3: Compensation
+// If Permanent:
+//   Monthly Salary (Rs.) | Joining Date | Department/Team
+// If Temporary:
+//   Default Daily Wage (Rs.) | Default Event Wage (Rs.) | Notes
+// If Contractor:
+//   Hourly Rate | Daily Rate | Per-Event Rate
+
+// Section 4: Notes
+// Internal notes about this worker
+// Any restrictions or special requirements
+
+// [Cancel] [Save Worker]
+// On save: redirect to worker profile page
+
+MOBILE EXPERIENCE
+typescript// Mobile-first design decisions:
+
+// Navigation:
+// - Sidebar HIDDEN on mobile (< 768px)
+// - Bottom navigation bar: 5 icons
+//   [Dashboard] [Calendar] [Bookings] [Workers] [More...]
+// - "More" opens a bottom sheet with remaining nav items
+
+// TopBar on mobile:
+// - Shows just: Hamburger | Logo | Notification bell | Avatar
+// - Search: tap → full-screen overlay search
+// - No app search bar (saves space)
+
+// Tables on mobile:
+// - Horizontal scroll with visible scrollbar
+// - OR: Card-based list view instead of table
+//   Each card shows only: name, key status, key amount, action button
+// - Full table accessible via "Switch to table view" toggle
+
+// Forms on mobile:
+// - Full-screen slide-in
+// - Large tap targets (min 44px)
+// - Bottom-placed primary action button (fixed footer)
+// - Date picker: native mobile date input OR beautiful custom
+
+// Charts on mobile:
+// - Recharts responsive containers
+// - Simplified charts (fewer data points)
+// - Swipeable chart gallery on dashboard
+
+// Workers Page on mobile:
+// - Grid of 1 column (full-width cards)
+// - Worker card: compact version (smaller avatar, fewer stats)
+
+// Performance on mobile:
+// - Lazy load charts (only render when in viewport)
+// - Virtual scrolling for long lists (> 100 items)
+// - Optimistic updates for instant feedback
+// - Native-feeling swipe interactions where appropriate
+
+INTERACTION & ANIMATION GUIDE
+typescript// Framer Motion usage — subtle, purposeful animations
+
+// Page transitions:
+// Pages fade in (opacity 0→1, translateY 8px→0, 200ms ease-out)
+
+// Card hover:
+// translateY: -2px, shadow increase, 200ms
+
+// Button interactions:
+// Press: scale(0.97), 100ms
+// Loading: spinner replaces text, button dims
+
+// Modal/Sheet open:
+// Sheet: slides from right (x: 100%→0, 300ms spring)
+// Dialog: scale(0.95→1) + fade, 200ms
+
+// Toast notifications (react-hot-toast):
+// Slides from top-right
+// Success: green border-left, checkmark icon
+// Error: red border-left, X icon
+// Warning: yellow border-left, triangle icon
+
+// Table row interactions:
+// Hover: bg change, 100ms
+// New row appearing: fade-in + slide down, 300ms
+
+// Sidebar menu:
+// Sub-menu expand: height animation, 250ms ease-in-out
+// Active item: blue left border slides in, 150ms
+
+// Stat card number changes:
+// Animate number count-up when data loads (react-countup)
+// 1000ms duration
+
+// Conflict warning:
+// Pulses gently (CSS animation) until dismissed
+
+// Progress bars:
+// Animate width from 0 to final value on mount (600ms)
+
+// Charts:
+// Recharts built-in animation (animationBegin: 0, animationDuration: 800)
+// Custom tooltip: appear with scale(0.9→1) + fade
+
+ERROR STATES AND LOADING STATES
+typescript// Every async operation must have ALL THREE states:
+// Loading → Success → Error
+
+// ── Loading States ──
+
+// Skeleton pattern: 
+// Use <Skeleton> component (shadcn) with exact same dimensions as content
+// StatCard skeleton: two grey rectangles (label + number)
+// Table skeleton: grey bars for each cell, 10 rows
+// Chart skeleton: grey rounded rectangle, same height as chart
+
+// Global page loading (loading.tsx):
+// Skeleton version of the entire page layout
+// NOT a spinner in the center — that feels slow
+
+// Data refetching (background):
+// Small spinner in top-right of card
+// NOT blocking the existing data display
+
+// ── Error States ──
+
+// API error (ErrorState component):
+// Icon: exclamation triangle (red)
+// Title: "Failed to load [data name]"
+// Message: human-readable (not "Error 500")
+// Actions: [Try Again] [Go Back]
+
+// Form validation errors:
+// Inline below each field (NOT toast)
+// Red text, 12px, with error icon
+// Input gets red border
+
+// Conflict errors (double booking):
+// Shown inline in form — NOT toast
+// Red/yellow alert box with details
+
+// Network offline:
+// Banner at top: "You're offline. Changes will sync when reconnected."
+// Soft yellow background, not intrusive
+
+TYPES — ALL INTERFACES
+typescript// worker.types.ts — Build these exact interfaces
+
+type WorkerType = 'permanent' | 'temporary' | 'contractor'
+
+type WorkerRole = 
+  | 'waiter' | 'head_waiter' | 'chef' | 'electrician'
+  | 'manager' | 'driver' | 'helper' | 'ac_operator'
+  | 'generator_operator' | 'security' | 'cleaner' 
+  | 'decorator' | 'photographer' | 'other'
+
+interface Worker {
+  _id: string
+  vendorId: string
+  name: string
+  cnic: string
+  phone: string
+  whatsapp?: string
+  emergencyContact?: { name: string; phone: string }
+  type: WorkerType
+  primaryRole: WorkerRole
+  secondarySkills: string[]
+  compensation: {
+    // Permanent
+    monthlySalary?: number
+    joiningDate?: Date
+    // Temporary
+    dailyWage?: number
+    eventWage?: number
+    // Contractor
+    hourlyRate?: number
+    dailyRate?: number
+    perEventRate?: number
+  }
+  isActive: boolean
+  notes?: string
+  createdAt: Date
+}
+
+interface EventAssignment {
+  _id: string
+  bookingId: string
+  workerId: string
+  worker: Worker
+  role: string  // role at this specific event (may differ from primary role)
+  reportingTime: string
+  reportingLocation: string
+  hoursWorked?: number
+  amountPaid?: number
+  paymentMethod?: 'cash' | 'easypaisa' | 'jazzcash' | 'bank'
+  specialInstructions?: string
+  smsSent: boolean
+  attended: boolean | null  // null = not yet marked
+  notes?: string
+}
+
+interface MonthlySalary {
+  _id: string
+  workerId: string
+  month: number  // 1-12
+  year: number
+  baseSalary: number
+  eventsWorked: number
+  eventBonus: number
+  advancePaid: number
+  deductions: number
+  netAmount: number
+  status: 'pending' | 'partial' | 'paid'
+  paidAt?: Date
+  paidBy?: string  // user who marked it paid
+  notes?: string
+}
+
+interface OutsourcingJob {
+  _id: string
+  vendorId: string
+  referenceNumber: string  // OS-2025-001
+  
+  // External client
+  clientName: string
+  clientPhone: string
+  clientOrganization?: string  // "Pearl Continental Hotel"
+  
+  // External venue details
+  venueName: string
+  venueAddress: string
+  eventDate: Date
+  eventDescription?: string  // "Corporate Annual Dinner"
+  
+  // Services provided
+  workersDeployed: {
+    workerId: string
+    worker?: Worker
+    role: string
+    hoursWorked: number
+    wageForEvent: number
+  }[]
+  
+  equipmentDeployed: {
+    itemName: string  // "Standing AC Unit", "Round Table"
+    quantity: number
+    dailyRate: number
+    days: number
+    totalCost: number
+  }[]
+  
+  // Financial
+  totalRevenue: number  // what external client pays us
+  totalWorkerCost: number  // wages of our workers
+  totalEquipmentCost: number  // opportunity cost / wear
+  transportCost: number
+  netProfit: number
+  
+  status: 'draft' | 'confirmed' | 'in_progress' | 'completed' | 'invoiced' | 'paid'
+  
+  invoiceGenerated: boolean
+  invoicePaidAt?: Date
+  
+  notes?: string
+  createdBy: string
+  createdAt: Date
+}
+
+interface EventExpense {
+  _id: string
+  vendorId: string
+  bookingId?: string  // if tied to specific event
+  outsourcingJobId?: string  // if tied to outsourcing
+  
+  date: Date
+  category: 
+    | 'food_catering' | 'worker_wages' | 'transport' 
+    | 'equipment_rental' | 'electricity_generator'
+    | 'decoration' | 'miscellaneous'
+  
+  description: string
+  amount: number
+  paidTo?: string  // vendor/person name
+  paymentMethod?: 'cash' | 'easypaisa' | 'jazzcash' | 'bank'
+  receiptUrl?: string
+  
+  createdBy: string
+  createdAt: Date
+}
+
+interface EventPnL {
+  bookingId: string
+  clientName: string
+  eventType: string
+  eventDate: Date
+  
+  revenue: number
+  discount: number
+  netRevenue: number
+  
+  expenses: {
+    foodCatering: number
+    workerWages: number
+    transport: number
+    equipment: number
+    electricity: number
+    decoration: number
+    miscellaneous: number
+    total: number
+  }
+  
+  netProfit: number
+  profitMargin: number  // percentage
+}
+
+SPECIFIC IMPLEMENTATION RULES
+typescript// RULE 1: Currency Formatting
+// Never use toLocaleString() directly. Use the utility:
+// import { formatRs, formatRsCompact } from '@/lib/utils/currency'
+// formatRs(770000) === "Rs. 7,70,000"   ← Pakistani lakh formatting
+// formatRsCompact(770000) === "Rs. 7.7L"
+// formatRs(75000) === "Rs. 75,000"
+// formatRsCompact(75000) === "Rs. 75K"
+
+// RULE 2: Pakistani Number Format
+// 1,23,456 (not 123,456)
+// Lakhs and crores: 1L = 1,00,000  1Cr = 1,00,00,000
+
+// RULE 3: Date Display
+// Dates always shown as: "20 Dec 2025" or "20 Dec" (no year if current year)
+// Relative: "in 42 days" or "3 days ago"
+// Use dayjs consistently, not date-fns mixing
+
+// RULE 4: Phone numbers
+// Display as: 0312-1234567
+// WhatsApp link: href={`https://wa.me/92${phone.slice(1)}`}
+
+// RULE 5: Loading states
+// EVERY query must have: isLoading → skeleton, isError → error state, data → content
+// No "undefined" renders — always handle all states
+
+// RULE 6: Optimistic updates
+// Marking payment as paid → immediately update UI, rollback on error
+// Assigning worker → immediately show in list, rollback on error
+// Changing booking status → immediate badge change
+
+// RULE 7: Infinite scroll vs Pagination
+// Use Pagination (not infinite scroll) for all data tables
+// Reason: Pakistani connection speeds make loading more data slow
+// Exception: Activity feeds and notification lists → infinite scroll
+
+// RULE 8: Right-click context menus
+// On table rows: right-click → native-feeling context menu
+// Options: Open in new tab | Edit | Delete | Copy reference
+// Use @radix-ui/react-context-menu
+
+// RULE 9: Keyboard shortcuts
+// Cmd/Ctrl + K → global search
+// Cmd/Ctrl + N → new booking (from any bookings page)
+// Escape → close any open modal/sheet
+// Show shortcut hints in tooltips
+
+// RULE 10: Print/PDF generation
+// Salary slips, invoices, event deployment sheets
+// Use react-to-print for print dialogs
+// Separate print-specific CSS: @media print
+// Clean layout without sidebar/nav for printing
+
+SAMPLE MOCK DATA — USE FOR DEVELOPMENT
+typescript// Use this realistic data for UI development
+// Data is in Pakistani context (Karachi)
+
+const mockWorkers: Worker[] = [
+  { name: "Ahmed Ali", role: "head_waiter", type: "permanent", phone: "03212345678", monthlySalary: 30000 },
+  { name: "Rashid Hussain", role: "waiter", type: "temporary", phone: "03001234567", eventWage: 1500 },
+  { name: "Muhammad Aslam", role: "chef", type: "permanent", phone: "03451234567", monthlySalary: 45000 },
+  { name: "Tariq Mehmood", role: "electrician", type: "contractor", phone: "03211234567", perEventRate: 3000 },
+  { name: "Naveed Ahmed", role: "driver", type: "permanent", phone: "03341234567", monthlySalary: 25000 },
+  { name: "Imtiaz Khan", role: "generator_operator", type: "temporary", phone: "03121234567", eventWage: 2000 },
+  { name: "Saleem Butt", role: "manager", type: "permanent", phone: "03231234567", monthlySalary: 55000 },
+  { name: "Hassan Ali", role: "helper", type: "temporary", phone: "03091234567", dailyWage: 800 },
+]
+
+const mockEvents = [
+  { type: "barat", client: "Imran Ahmed", venue: "Pearl Continental Hotel", date: "2025-12-20", guests: 350 },
+  { type: "mehndi", client: "Sara Khan", venue: "Residence, DHA Phase 6", date: "2025-12-22", guests: 150 },
+  { type: "valima", client: "Ali Raza", venue: "Avari Towers", date: "2025-12-24", guests: 250 },
+  { type: "nikah", client: "Faiza Malik", venue: "Mosque + Reception Hall", date: "2025-12-26", guests: 200 },
+]
+
+const mockOutsourcingJobs = [
+  { 
+    client: "Pearl Continental Hotel",
+    event: "Corporate Annual Dinner",
+    date: "2025-12-15",
+    workersDeployed: 8,
+    revenue: 85000,
+    workerCost: 32000,
+    profit: 53000
+  },
+  {
+    client: "Emaar Beach Front",
+    event: "Beach Wedding",
+    date: "2025-12-18", 
+    workersDeployed: 12,
+    equipmentDeployed: ["Standing AC ×5", "Generator ×1"],
+    revenue: 145000,
+    workerCost: 48000,
+    profit: 97000
+  }
+]
+
+FINAL QUALITY CHECKLIST
+Before considering any component "done", verify:
+
+DESIGN:
+□ Does it match the Skote dark-sidebar aesthetic?
+□ Are all colors from the design tokens? (no hardcoded hex values)
+□ Is typography consistent with the type scale?
+□ Are all interactive elements accessible (keyboard nav, focus rings)?
+□ Does the layout work at 375px, 768px, 1024px, 1440px?
+□ Are hover/active/focus states implemented for all interactive elements?
+□ Are empty states beautiful, not just "No data found"?
+□ Are loading skeletons the exact shape of loaded content?
+
+CODE QUALITY:
+□ Is the component fully typed (no any types)?
+□ Are all props documented with JSDoc?
+□ Is the component reusable (not tightly coupled to one page)?
+□ Are side effects properly cleaned up in useEffect?
+□ Are mutations optimistic with proper rollback?
+□ Is error handling implemented (not just console.log)?
+□ Are expensive calculations memoized?
+
+DATA:
+□ Is currency formatted in Pakistani format (Rs. X,XX,XXX)?
+□ Are dates displayed in Pakistani readable format (20 Dec 2025)?
+□ Are Pakistani phone numbers formatted correctly (0312-1234567)?
+□ Are all financial figures accurate (no floating point display bugs)?
+
+PERFORMANCE:
+□ Are images lazy loaded?
+□ Are charts only rendered when in viewport?
+□ Are long lists virtualized (> 100 items)?
+□ Is the bundle size reasonable? (no unnecessary imports)
+□ Are API calls deduplicated via TanStack Query?
+
+Build this frontend exactly as specified. 
+Do not simplify. Do not skip sections. 
+Do not use generic placeholder components.
+
+This is a real SaaS product used by real business owners in Karachi 
+to manage millions of rupees in transactions and dozens of workers.
+It must look and feel like software that costs money and justifies that cost.
+
+The UI should make a banquet hall owner think:
+"This is exactly what I needed. This was clearly built by someone 
+who understands my business."
+
+Not: "This looks like another generic dashboard template."

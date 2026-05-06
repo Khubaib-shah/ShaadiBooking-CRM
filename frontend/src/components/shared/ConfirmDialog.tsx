@@ -1,6 +1,6 @@
 'use client'
 
-import * as Dialog from '@radix-ui/react-dialog'
+import ResponsiveModal from './ResponsiveModal'
 
 interface ConfirmDialogProps {
   open: boolean
@@ -12,19 +12,26 @@ interface ConfirmDialogProps {
 
 export default function ConfirmDialog({ open, title, description, onCancel, onConfirm }: ConfirmDialogProps) {
   return (
-    <Dialog.Root open={open} onOpenChange={(next) => !next && onCancel()}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl border border-[#e9ecef] bg-white p-5">
-          <Dialog.Title className="text-[16px] font-semibold text-[#343a40]">{title}</Dialog.Title>
-          <Dialog.Description className="mt-2 text-[13px] text-[#74788d]">{description}</Dialog.Description>
-          <div className="mt-4 flex justify-end gap-2">
-            <button onClick={onCancel} className="rounded-lg border border-[#e9ecef] px-3 py-2 text-[12px] font-semibold text-[#74788d]">Cancel</button>
-            <button onClick={onConfirm} className="rounded-lg bg-[#556ee6] px-3 py-2 text-[12px] font-semibold text-white">Confirm</button>
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <ResponsiveModal
+      isOpen={open}
+      onClose={onCancel}
+      title={title}
+      description={description}
+    >
+      <div className="flex justify-end gap-2 pt-2">
+        <button
+          onClick={onCancel}
+          className="rounded-lg border border-[var(--color-border)] px-4 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)]"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={onConfirm}
+          className="rounded-lg bg-[var(--color-accent)] hover:brightness-110 px-4 py-2 text-xs font-semibold text-white shadow-sm"
+        >
+          Confirm
+        </button>
+      </div>
+    </ResponsiveModal>
   )
 }
-
