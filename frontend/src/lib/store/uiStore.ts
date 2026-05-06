@@ -3,6 +3,7 @@ import { create } from 'zustand'
 interface UIState {
   sidebarCollapsed: boolean
   toggleSidebar: () => void
+  setSidebarCollapsed: (collapsed: boolean) => void
 
   newBookingOpen: boolean
   newInquiryOpen: boolean
@@ -48,6 +49,7 @@ export const useUIStore = create<UIState>((set) => ({
   selectedCalendarDate: null,
 
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+  setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
   openNewBooking: () => set({ newBookingOpen: true }),
   closeNewBooking: () => set({ newBookingOpen: false }),
   openMarkPayment: (id) => set({ markPaymentOpen: true, selectedBookingId: id }),

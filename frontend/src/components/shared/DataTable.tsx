@@ -55,7 +55,7 @@ export default function DataTable<TData>({ columns, data, emptyMessage = 'No rec
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-[#e9ecef] bg-white">
-        <table className="w-full min-w-[980px]">
+        <table className="w-full min-w-[800px]">
           <thead className="sticky top-0 bg-[#f8f9fa]">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>

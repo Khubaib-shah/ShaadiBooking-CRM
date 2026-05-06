@@ -3,22 +3,22 @@ import { z } from 'zod'
 export const createBookingSchema = z.object({
   clientName:          z.string().min(2, 'Name required').max(100),
   clientPhone:         z.string().regex(/^03[0-9]{9}$/, 'Enter valid Pakistani number (03xx...)'),
-  clientWhatsapp:      z.string().regex(/^03[0-9]{9}$/).optional().or(z.literal('')),
+  clientWhatsapp:      z.string().optional().or(z.literal('')),
   eventType:           z.enum(['mayun','dholki','mehndi','nikah','barat','valima','other']),
   eventDate:           z.string().min(1, 'Event date required'),
-  venueName:           z.string().optional(),
-  guestCount:          z.number().min(1).optional(),
+  venueName:           z.string().min(1, 'Venue name required'),
+  guestCount:          z.number().min(1, 'Guests count must be at least 1'),
   packageType:         z.enum(['per_head', 'fixed']),
-  perHeadPrice:        z.number().min(1).optional(),
+  perHeadPrice:        z.number().min(0),
   totalContractValue:  z.number().min(1, 'Contract value required'),
-  discountAmount:      z.number().min(0).default(0),
-  discountReason:      z.string().optional(),
+  discountAmount:      z.number().min(0),
+  discountReason:      z.string().optional().or(z.literal('')),
   status:              z.enum(['inquiry', 'confirmed']),
   paymentSchedules:    z.array(z.object({
     type:      z.enum(['deposit', 'balance']),
     amountDue: z.number().min(1),
     dueDate:   z.string().min(1),
-  })).min(1, 'Add at least one payment schedule'),
+  })).min(1).optional(),
 })
 
 export const recordPaymentSchema = z.object({
