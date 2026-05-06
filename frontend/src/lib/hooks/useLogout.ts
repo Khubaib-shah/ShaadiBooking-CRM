@@ -10,25 +10,20 @@ export const useLogout = () => {
   const { clearAuth } = useAuthStore()
 
   const logout = async () => {
-    try {
-      // 1. Call server-side logout to clear cookies
-      await authApi.logout()
-    } catch (error) {
-      console.error('Logout error:', error)
-      // We continue with client-side cleanup even if server call fails
-    } finally {
-      // 2. Clear Zustand auth store
-      clearAuth()
+    // 1. Remove the mock cookie
+    document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+    
+    // 2. Clear Zustand auth store
+    clearAuth()
 
-      // 3. Reset TanStack Query cache to clear sensitive data
-      queryClient.clear()
+    // 3. Reset TanStack Query cache to clear sensitive data
+    queryClient.clear()
 
-      // 4. Show feedback
-      toast.success('Successfully logged out')
+    // 4. Show feedback
+    toast.success('Successfully logged out')
 
-      // 5. Redirect to login
-      router.push('/login')
-    }
+    // 5. Redirect to login using window.location to ensure fresh state
+    window.location.href = '/login'
   }
 
   return { logout }

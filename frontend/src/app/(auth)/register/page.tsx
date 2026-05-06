@@ -36,27 +36,33 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterForm) => {
     setIsSubmitting(true)
-    try {
-      const response = await authApi.register(data)
-      
-      if (response.success && response.data) {
-        const { accessToken, user, vendor } = response.data
-        setAuth(accessToken, user as unknown as User, vendor as unknown as Vendor)
-        
-        toast.success('Account created successfully!')
-        
-        // Robust redirect for mobile
-        window.location.href = '/'
-      } else {
-        toast.error((response as any).message || 'Registration failed')
+    
+    // FRONTEND-ONLY MOCK REGISTER
+    setTimeout(() => {
+      const mockUser = {
+        id: '2',
+        email: data.email,
+        name: data.ownerName,
+        role: 'owner'
       }
-    } catch (error: any) {
-      console.error('Registration error:', error)
-      const message = error.response?.data?.message || 'Error creating account. Please try again.'
-      toast.error(message)
-    } finally {
-      setIsSubmitting(false)
-    }
+      
+      const mockVendor = {
+        id: 'v2',
+        name: data.vendorName,
+        type: data.vendorType,
+        subscription: { plan: 'trial', daysRemaining: 30, status: 'active' }
+      }
+      
+      setAuth('mock-access-token', mockUser as unknown as User, mockVendor as unknown as Vendor)
+      
+      // Set a dummy cookie so the Next.js middleware allows access to the dashboard
+      document.cookie = "refreshToken=mock-refresh-token; path=/; max-age=86400; SameSite=Lax"
+      
+      toast.success('Account created successfully!')
+      
+      // Robust redirect for mobile
+      window.location.href = '/'
+    }, 1000)
   }
 
   const inputStyle = (hasError: boolean) => ({
