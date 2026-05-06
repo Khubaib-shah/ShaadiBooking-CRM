@@ -7,7 +7,12 @@ import { Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema } from '@/lib/utils/validation'
+import { authApi } from '@/lib/api/auth.api'
+import { useAuthStore } from '@/lib/store/authStore'
+import { toast } from 'sonner'
 import type { z } from 'zod'
+import type { User } from '@/types/user.types'
+import type { Vendor } from '@/types/vendor.types'
 
 type LoginForm = z.infer<typeof loginSchema>
 
@@ -24,13 +29,34 @@ export default function LoginPage() {
     },
   })
 
+  const { setAuth } = useAuthStore()
+
   const onSubmit = async (data: LoginForm) => {
     setIsSubmitting(true)
-    // TODO: connect to authApi.login
-    setTimeout(() => {
+    try {
+      const response = await authApi.login(data)
+      
+      if (response.success && response.data) {
+        const { accessToken, user, vendor } = response.data
+        // Update global auth state
+        setAuth(accessToken, user as unknown as User, vendor as unknown as Vendor)
+        
+        toast.success('Welcome back!')
+        
+        // Use window.location.href for a full page reload to ensure 
+        // the middleware and server components correctly detect the new session cookies.
+        // This is often more reliable on mobile browsers.
+        window.location.href = '/'
+      } else {
+        toast.error((response as any).message || 'Login failed')
+      }
+    } catch (error: any) {
+      console.error('Login error:', error)
+      const message = error.response?.data?.message || 'Invalid credentials or server error'
+      toast.error(message)
+    } finally {
       setIsSubmitting(false)
-      router.push('/')
-    }, 1500)
+    }
   }
 
   return (
