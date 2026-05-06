@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..400&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* ══════════════════════════════════════════════════════
@@ -10,51 +10,51 @@
 
 :root {
   /* ── Primary — Deep Warm Slate ── */
-  --color-bg:          #0F0E0C;
-  --color-bg-elevated: #1A1917;
-  --color-bg-sunken:   #0B0A09;
-  --color-border:      #2C2A27;
-  --color-border-mid:  #3D3A35;
+  --color-bg:          #f8f9fa;
+  --color-bg-elevated: #ffffff;
+  --color-bg-sunken:   #f1f3f5;
+  --color-border:      #e9ecef;
+  --color-border-mid:  #dee2e6;
 
   /* ── Accent — Muted Saffron / Turmeric Gold ── */
-  --color-accent:        #C9922A;
-  --color-accent-soft:   #C9922A22;
-  --color-accent-bright: #E8AB3B;
+  --color-accent:        #556ee6;
+  --color-accent-soft:   #eef2ff;
+  --color-accent-bright: #4f63cf;
 
   /* ── Semantic ── */
-  --color-success:    #3D8B5E;
-  --color-success-bg: #1A3329;
-  --color-warning:    #C97A2A;
-  --color-warning-bg: #2E2010;
-  --color-danger:     #C94A3A;
-  --color-danger-bg:  #2E1510;
-  --color-info:       #3A7EC9;
-  --color-info-bg:    #111E2E;
+  --color-success:    #34c38f;
+  --color-success-bg: #d4edda;
+  --color-warning:    #f1b44c;
+  --color-warning-bg: #fff3cd;
+  --color-danger:     #f46a6a;
+  --color-danger-bg:  #f8d7da;
+  --color-info:       #50a5f1;
+  --color-info-bg:    #d1ecf1;
 
   /* ── Text ── */
-  --color-text-primary:   #F0EDE8;
-  --color-text-secondary: #9E9891;
-  --color-text-muted:     #635F58;
-  --color-text-inverse:   #0F0E0C;
+  --color-text-primary:   #343a40;
+  --color-text-secondary: #495057;
+  --color-text-muted:     #74788d;
+  --color-text-inverse:   #ffffff;
 
   /* ── Status Badge Fills ── */
-  --status-inquiry:         #1E2535;
-  --status-inquiry-text:    #5B8DD9;
-  --status-confirmed:       #1A2E20;
-  --status-confirmed-text:  #5BAD80;
-  --status-deposit:         #2A2010;
-  --status-deposit-text:    #C9922A;
-  --status-balance:         #2E1F10;
-  --status-balance-text:    #E07B30;
-  --status-completed:       #1A2E1A;
-  --status-completed-text:  #4DBF7F;
-  --status-cancelled:       #2E1515;
-  --status-cancelled-text:  #C94A3A;
+  --status-inquiry:         #f1f3f5;
+  --status-inquiry-text:    #74788d;
+  --status-confirmed:       #d1ecf1;
+  --status-confirmed-text:  #50a5f1;
+  --status-deposit:         #d4edda;
+  --status-deposit-text:    #34c38f;
+  --status-balance:         #fff3cd;
+  --status-balance-text:    #f1b44c;
+  --status-completed:       #d4edda;
+  --status-completed-text:  #34c38f;
+  --status-cancelled:       #f8d7da;
+  --status-cancelled-text:  #f46a6a;
 
   /* ── Typography ── */
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body:    'Geist', 'Helvetica Neue', sans-serif;
-  --font-mono:    'DM Mono', 'Courier New', monospace;
+  --font-display: 'Poppins', 'Helvetica Neue', sans-serif;
+  --font-body:    'Poppins', 'Helvetica Neue', sans-serif;
+  --font-mono:    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* ── Text Scale ── */
   --text-xs:   0.6875rem;
@@ -87,8 +87,8 @@
   --radius-xl: 22px;
 
   /* ── Layout ── */
-  --sidebar-width: 240px;
-  --topnav-height: 56px;
+  --sidebar-width: 250px;
+  --topnav-height: 64px;
   --content-max-w: 1280px;
 }
 
@@ -270,3 +270,62 @@ h4 { font-size: var(--text-lg); }
   backdrop-filter: blur(16px) saturate(1.6);
   border: 1px solid var(--color-border);
 }
+
+/* ✍️ ShaadiBook Typography System Utility Classes */
+.sb-page-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sb-card-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.sb-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.sb-stat-number {
+  font-family: var(--font-body);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.sb-table-header {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sb-table-body {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.sb-nav-item {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.sb-badge {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+}
+

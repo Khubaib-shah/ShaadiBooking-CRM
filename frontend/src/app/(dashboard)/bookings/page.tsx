@@ -1,13 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { Plus, Eye, Download, BookOpen } from 'lucide-react'
+import { Plus, Download, BookOpen } from 'lucide-react'
 import { toast } from 'sonner'
+import type { ColumnDef } from '@tanstack/react-table'
 import PageHeader from '@/components/shared/PageHeader'
 import StatusBadge from '@/components/shared/StatusBadge'
 import EmptyState from '@/components/shared/EmptyState'
 import SearchInput from '@/components/shared/SearchInput'
+import DataTable from '@/components/shared/DataTable'
 import { formatRupees } from '@/lib/utils/currency'
 import { formatDate, relativeTime } from '@/lib/utils/dates'
 import { EVENT_TYPE_LABELS } from '@/lib/utils/booking'
@@ -35,6 +37,65 @@ export default function BookingsPage() {
     return true
   })
 
+  const columns = useMemo<ColumnDef<(typeof DEMO)[number]>[]>(
+    () => [
+      {
+        header: 'Ref',
+        accessorKey: 'ref',
+        cell: ({ row }) => <span className="text-xs font-medium text-[#556ee6]" style={{ fontFamily: 'var(--font-mono)' }}>{row.original.ref}</span>,
+      },
+      {
+        header: 'Client',
+        accessorKey: 'client',
+        cell: ({ row }) => <span className="font-medium text-[#343a40]">{row.original.client}</span>,
+      },
+      {
+        header: 'Event',
+        accessorKey: 'type',
+        cell: ({ row }) => (
+          <span className="rounded px-1.5 py-0.5 text-[10px] font-medium" style={{ background: 'var(--color-accent-soft)', color: 'var(--color-accent)' }}>
+            {EVENT_TYPE_LABELS[row.original.type]}
+          </span>
+        ),
+      },
+      {
+        header: 'Date',
+        accessorKey: 'date',
+        cell: ({ row }) => (
+          <div>
+            <p className="text-[13px] text-[#343a40]">{formatDate(row.original.date)}</p>
+            <p className="text-[11px] text-[#74788d]">{relativeTime(row.original.date)}</p>
+          </div>
+        ),
+      },
+      {
+        header: 'Status',
+        accessorKey: 'status',
+        cell: ({ row }) => <StatusBadge status={row.original.status} />,
+      },
+      {
+        header: 'Contract',
+        accessorKey: 'contract',
+        cell: ({ row }) => <span style={{ fontFamily: 'var(--font-mono)' }}>{formatRupees(row.original.contract, true)}</span>,
+      },
+      {
+        header: 'Outstanding',
+        accessorKey: 'outstanding',
+        cell: ({ row }) => <span className="text-[#f1b44c]" style={{ fontFamily: 'var(--font-mono)' }}>{formatRupees(row.original.outstanding, true)}</span>,
+      },
+      {
+        header: 'Actions',
+        id: 'actions',
+        cell: ({ row }) => (
+          <Link href={`/bookings/${row.original._id}`} className="rounded-md px-2 py-1 text-[11px] font-semibold text-[#74788d] hover:bg-[#f1f3f5]">
+            View
+          </Link>
+        ),
+      },
+    ],
+    []
+  )
+
   return (
     <div>
       <PageHeader title="Bookings" description="Manage all your wedding bookings"
@@ -61,29 +122,7 @@ export default function BookingsPage() {
 
       {filtered.length === 0 ? (
         <EmptyState icon={BookOpen} title="No bookings yet" description="Create your first booking to get started" action={{ label:'Create Booking', onClick: openNewBooking }} />
-      ) : (
-        <div className="rounded-xl border overflow-hidden" style={{ borderColor:'var(--color-border)' }}>
-          <table className="w-full">
-            <thead><tr style={{ background:'var(--color-bg-sunken)' }}>
-              {['Ref','Client','Event','Date','Status','Contract','Outstanding',''].map(h => (
-                <th key={h} className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider" style={{ color:'var(--color-text-muted)' }}>{h}</th>
-              ))}
-            </tr></thead>
-            <tbody>{filtered.map(b => (
-              <tr key={b._id} className="border-t transition-all duration-150 hover:bg-[var(--color-bg-elevated)] hover:translate-x-[2px]" style={{ borderColor:'var(--color-border)' }}>
-                <td className="px-4 py-3"><span className="text-xs font-medium" style={{ fontFamily:'var(--font-mono)', color:'var(--color-accent)' }}>{b.ref}</span></td>
-                <td className="px-4 py-3"><span className="text-[var(--text-sm)] font-medium" style={{ color:'var(--color-text-primary)' }}>{b.client}</span></td>
-                <td className="px-4 py-3"><span className="text-[10px] font-medium px-1.5 py-0.5 rounded" style={{ background:'var(--color-accent-soft)', color:'var(--color-accent)' }}>{EVENT_TYPE_LABELS[b.type]}</span></td>
-                <td className="px-4 py-3"><p className="text-[var(--text-sm)]" style={{ color:'var(--color-text-primary)' }}>{formatDate(b.date)}</p><p className="text-[10px]" style={{ color:'var(--color-text-muted)' }}>{relativeTime(b.date)}</p></td>
-                <td className="px-4 py-3"><StatusBadge status={b.status} /></td>
-                <td className="px-4 py-3"><span style={{ fontFamily:'var(--font-mono)', color:'var(--color-text-primary)', fontSize:'var(--text-sm)' }}>{formatRupees(b.contract, true)}</span></td>
-                <td className="px-4 py-3"><span style={{ fontFamily:'var(--font-mono)', color:'var(--color-warning)', fontSize:'var(--text-sm)' }}>{formatRupees(b.outstanding, true)}</span></td>
-                <td className="px-4 py-3"><Link href={`/bookings/${b._id}`} className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium transition-colors hover:bg-[var(--color-border)]" style={{ color:'var(--color-text-secondary)' }}><Eye className="h-3 w-3" />View</Link></td>
-              </tr>
-            ))}</tbody>
-          </table>
-        </div>
-      )}
+      ) : <DataTable columns={columns} data={filtered} emptyMessage="No bookings found for current filters." />}
     </div>
   )
 }

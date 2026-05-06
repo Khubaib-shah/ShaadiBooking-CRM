@@ -2,7 +2,7 @@ import type { StaffMember } from './staff.types'
 
 export type BookingStatus =
   | 'inquiry' | 'confirmed' | 'deposit_received'
-  | 'balance_pending' | 'completed' | 'cancelled'
+  | 'balance_pending' | 'completed' | 'cancelled' | 'overdue'
 
 export type EventType =
   | 'mayun' | 'dholki' | 'mehndi' | 'nikah'
@@ -23,7 +23,7 @@ export interface PaymentSchedule {
 export interface Payment {
   _id: string
   amount: number
-  method: 'cash' | 'easypaisa' | 'jazzcash' | 'bank_transfer'
+  method: 'cash' | 'easypaisa' | 'jazzcash' | 'bank'
   referenceNumber?: string
   receivedBy: string
   receivedAt: string
@@ -33,7 +33,7 @@ export interface Payment {
 export interface BookingNote {
   _id: string
   content: string
-  noteType: 'menu' | 'service_change' | 'client_request' | 'agreement'
+  noteType: 'menu' | 'service_change' | 'client_request' | 'internal' | 'agreement'
   createdBy: string
   createdAt: string
 }

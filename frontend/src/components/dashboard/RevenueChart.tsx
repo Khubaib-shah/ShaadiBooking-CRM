@@ -1,14 +1,14 @@
 'use client'
 
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts'
 
 const DEMO_DATA = [
-  { month: 'Dec', collected: 520000, outstanding: 180000 },
-  { month: 'Jan', collected: 680000, outstanding: 120000 },
-  { month: 'Feb', collected: 450000, outstanding: 250000 },
-  { month: 'Mar', collected: 710000, outstanding: 90000 },
-  { month: 'Apr', collected: 590000, outstanding: 210000 },
-  { month: 'May', collected: 610000, outstanding: 230000 },
+  { month: 'Dec', revenue: 700000, collected: 520000 },
+  { month: 'Jan', revenue: 800000, collected: 680000 },
+  { month: 'Feb', revenue: 700000, collected: 450000 },
+  { month: 'Mar', revenue: 800000, collected: 710000 },
+  { month: 'Apr', revenue: 800000, collected: 590000 },
+  { month: 'May', revenue: 840000, collected: 610000 },
 ]
 
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number; name: string }>; label?: string }) {
@@ -18,8 +18,8 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
          style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)' }}>
       <p className="text-xs font-medium mb-2" style={{ color: 'var(--color-text-secondary)' }}>{label}</p>
       {payload.map((entry) => (
-        <p key={entry.name} className="text-xs" style={{ color: entry.name === 'collected' ? 'var(--color-accent)' : 'var(--color-warning)' }}>
-          {entry.name === 'collected' ? 'Collected' : 'Outstanding'}: Rs. {(entry.value / 1000).toFixed(0)}K
+        <p key={entry.name} className="text-xs" style={{ color: entry.name === 'collected' ? 'var(--color-success)' : 'var(--color-accent)' }}>
+          {entry.name === 'collected' ? 'Collected' : 'Revenue'}: Rs. {(entry.value / 1000).toFixed(0)}K
         </p>
       ))}
     </div>
@@ -34,7 +34,7 @@ export default function RevenueChart() {
       </h3>
       <div className="h-[250px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={DEMO_DATA} barGap={4}>
+          <AreaChart data={DEMO_DATA}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
             <XAxis
               dataKey="month"
@@ -49,9 +49,10 @@ export default function RevenueChart() {
               tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}K`}
             />
             <Tooltip content={<CustomTooltip />} cursor={{ fill: 'var(--color-accent-soft)' }} />
-            <Bar dataKey="collected" fill="var(--color-accent)" radius={[4, 4, 0, 0]} stackId="stack" />
-            <Bar dataKey="outstanding" fill="var(--color-warning)" radius={[4, 4, 0, 0]} stackId="stack" />
-          </BarChart>
+            <Legend />
+            <Area type="monotone" dataKey="revenue" stroke="#556ee6" fill="#eef2ff" strokeWidth={2} />
+            <Area type="monotone" dataKey="collected" stroke="#34c38f" fill="#d4edda" strokeWidth={2} />
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>
