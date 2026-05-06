@@ -4,11 +4,12 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  LayoutDashboard, CalendarDays, BookOpen, MessageSquare, CreditCard, Users, Settings2, ChevronLeft, X, ClipboardList, ExternalLink, Receipt, BarChart3
+  LayoutDashboard, CalendarDays, BookOpen, MessageSquare, CreditCard, Users, Settings2, ChevronLeft, X, ClipboardList, ExternalLink, Receipt, BarChart3, LogOut
 } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import { useUIStore } from '@/lib/store/uiStore'
 import { useAuthStore } from '@/lib/store/authStore'
+import { useLogout } from '@/lib/hooks/useLogout'
 
 const NAV_ITEMS = [
   { label: 'MAIN', items: [
@@ -40,6 +41,7 @@ export default function Sidebar() {
   const pathname = usePathname()
   const { sidebarCollapsed, toggleSidebar, setSidebarCollapsed } = useUIStore()
   const { user, vendor } = useAuthStore()
+  const { logout } = useLogout()
 
   // Auto-collapse sidebar on route change for mobile screens
   useEffect(() => {
@@ -160,24 +162,37 @@ export default function Sidebar() {
               }
             </div>
           )}
-          {/* User */}
-          <div className={cn('flex items-center gap-3', sidebarCollapsed && 'justify-center')}>
-            <div
-              className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
-              style={{ background: '#374151', color: '#ffffff' }}
-            >
-              {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-            </div>
-            {!sidebarCollapsed && (
-              <div className="min-w-0">
-                <p className="truncate text-[13px] font-medium" style={{ color: '#ffffff' }}>
-                  {user?.name || 'User'}
-                </p>
-                <p className="text-[10px] uppercase tracking-wider" style={{ color: '#a6b0cf' }}>
-                  {user?.role || 'owner'}
-                </p>
+          {/* User & Logout */}
+          <div className={cn('flex items-center justify-between gap-3', sidebarCollapsed && 'flex-col')}>
+            <div className={cn('flex items-center gap-3', sidebarCollapsed && 'justify-center')}>
+              <div
+                className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold shrink-0"
+                style={{ background: '#374151', color: '#ffffff' }}
+              >
+                {user?.name?.charAt(0)?.toUpperCase() || 'U'}
               </div>
-            )}
+              {!sidebarCollapsed && (
+                <div className="min-w-0">
+                  <p className="truncate text-[13px] font-medium" style={{ color: '#ffffff' }}>
+                    {user?.name || 'User'}
+                  </p>
+                  <p className="text-[10px] uppercase tracking-wider" style={{ color: '#a6b0cf' }}>
+                    {user?.role || 'owner'}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={logout}
+              className={cn(
+                "flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-red-500/10 hover:text-red-500",
+                !sidebarCollapsed && "ml-auto"
+              )}
+              title="Logout"
+            >
+              <LogOut className="h-4 w-4" style={{ color: '#a6b0cf' }} />
+            </button>
           </div>
         </div>
       </aside>
