@@ -33,30 +33,35 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginForm) => {
     setIsSubmitting(true)
-    try {
-      const response = await authApi.login(data)
-      
-      if (response.success && response.data) {
-        const { accessToken, user, vendor } = response.data
-        // Update global auth state
-        setAuth(accessToken, user as unknown as User, vendor as unknown as Vendor)
-        
-        toast.success('Welcome back!')
-        
-        // Use window.location.href for a full page reload to ensure 
-        // the middleware and server components correctly detect the new session cookies.
-        // This is often more reliable on mobile browsers.
-        window.location.href = '/'
-      } else {
-        toast.error((response as any).message || 'Login failed')
+    
+    // FRONTEND-ONLY MOCK LOGIN
+    setTimeout(() => {
+      const mockUser = {
+        id: '1',
+        email: data.email,
+        name: 'Demo Admin',
+        role: 'owner'
       }
-    } catch (error: any) {
-      console.error('Login error:', error)
-      const message = error.response?.data?.message || 'Invalid credentials or server error'
-      toast.error(message)
-    } finally {
-      setIsSubmitting(false)
-    }
+      
+      const mockVendor = {
+        id: 'v1',
+        name: 'ShaadiBook Demo',
+        type: 'event_management',
+        subscription: { plan: 'pro', daysRemaining: 365, status: 'active' }
+      }
+      
+      // Update global auth state with mock data
+      setAuth('mock-access-token', mockUser as unknown as User, mockVendor as unknown as Vendor)
+      
+      // Set a dummy cookie so the Next.js middleware allows access to the dashboard in production
+      document.cookie = "refreshToken=mock-refresh-token; path=/; max-age=86400; SameSite=Lax"
+      
+      toast.success('Welcome back!')
+      
+      // Use window.location.href for a full page reload to ensure 
+      // the middleware detects the new session cookie.
+      window.location.href = '/'
+    }, 1000)
   }
 
   return (
