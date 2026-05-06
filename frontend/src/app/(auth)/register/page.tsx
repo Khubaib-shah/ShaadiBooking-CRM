@@ -7,7 +7,12 @@ import { Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema } from '@/lib/utils/validation'
+import { authApi } from '@/lib/api/auth.api'
+import { useAuthStore } from '@/lib/store/authStore'
+import { toast } from 'sonner'
 import type { z } from 'zod'
+import type { User } from '@/types/user.types'
+import type { Vendor } from '@/types/vendor.types'
 
 type RegisterForm = z.infer<typeof registerSchema>
 
@@ -27,12 +32,31 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   })
 
+  const { setAuth } = useAuthStore()
+
   const onSubmit = async (data: RegisterForm) => {
     setIsSubmitting(true)
-    setTimeout(() => {
+    try {
+      const response = await authApi.register(data)
+      
+      if (response.success && response.data) {
+        const { accessToken, user, vendor } = response.data
+        setAuth(accessToken, user as unknown as User, vendor as unknown as Vendor)
+        
+        toast.success('Account created successfully!')
+        
+        // Robust redirect for mobile
+        window.location.href = '/'
+      } else {
+        toast.error((response as any).message || 'Registration failed')
+      }
+    } catch (error: any) {
+      console.error('Registration error:', error)
+      const message = error.response?.data?.message || 'Error creating account. Please try again.'
+      toast.error(message)
+    } finally {
       setIsSubmitting(false)
-      router.push('/')
-    }, 1500)
+    }
   }
 
   const inputStyle = (hasError: boolean) => ({
