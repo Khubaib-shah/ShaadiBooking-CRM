@@ -1,0 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..400&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════
+   ShaadiBook Design System — "Refined Karachi Professional"
+   ──────────────────────────────────────────────────────
+   Warm, premium, data-dense dark palette.
+   Muted saffron / turmeric gold accent.
+   ══════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Primary — Deep Warm Slate ── */
+  --color-bg:          #0F0E0C;
+  --color-bg-elevated: #1A1917;
+  --color-bg-sunken:   #0B0A09;
+  --color-border:      #2C2A27;
+  --color-border-mid:  #3D3A35;
+
+  /* ── Accent — Muted Saffron / Turmeric Gold ── */
+  --color-accent:        #C9922A;
+  --color-accent-soft:   #C9922A22;
+  --color-accent-bright: #E8AB3B;
+
+  /* ── Semantic ── */
+  --color-success:    #3D8B5E;
+  --color-success-bg: #1A3329;
+  --color-warning:    #C97A2A;
+  --color-warning-bg: #2E2010;
+  --color-danger:     #C94A3A;
+  --color-danger-bg:  #2E1510;
+  --color-info:       #3A7EC9;
+  --color-info-bg:    #111E2E;
+
+  /* ── Text ── */
+  --color-text-primary:   #F0EDE8;
+  --color-text-secondary: #9E9891;
+  --color-text-muted:     #635F58;
+  --color-text-inverse:   #0F0E0C;
+
+  /* ── Status Badge Fills ── */
+  --status-inquiry:         #1E2535;
+  --status-inquiry-text:    #5B8DD9;
+  --status-confirmed:       #1A2E20;
+  --status-confirmed-text:  #5BAD80;
+  --status-deposit:         #2A2010;
+  --status-deposit-text:    #C9922A;
+  --status-balance:         #2E1F10;
+  --status-balance-text:    #E07B30;
+  --status-completed:       #1A2E1A;
+  --status-completed-text:  #4DBF7F;
+  --status-cancelled:       #2E1515;
+  --status-cancelled-text:  #C94A3A;
+
+  /* ── Typography ── */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Geist', 'Helvetica Neue', sans-serif;
+  --font-mono:    'DM Mono', 'Courier New', monospace;
+
+  /* ── Text Scale ── */
+  --text-xs:   0.6875rem;
+  --text-sm:   0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg:   1.0625rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5625rem;
+  --text-3xl:  2rem;
+  --text-4xl:  2.75rem;
+
+  /* ── Motion ── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast:   120ms;
+  --duration-base:   220ms;
+  --duration-slow:   380ms;
+  --duration-xslow:  600ms;
+
+  /* ── Spacing ── */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
+  --space-4: 16px; --space-5: 20px; --space-6: 24px;
+  --space-8: 32px; --space-10: 40px; --space-12: 48px;
+
+  /* ── Radius ── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+
+  /* ── Layout ── */
+  --sidebar-width: 240px;
+  --topnav-height: 56px;
+  --content-max-w: 1280px;
+}
+
+/* ── Tailwind v4 Theme Tokens ── */
+@theme inline {
+  --color-background:    var(--color-bg);
+  --color-foreground:    var(--color-text-primary);
+  --color-elevated:      var(--color-bg-elevated);
+  --color-sunken:        var(--color-bg-sunken);
+  --color-border:        var(--color-border);
+  --color-border-mid:    var(--color-border-mid);
+
+  --color-accent:        var(--color-accent);
+  --color-accent-soft:   var(--color-accent-soft);
+  --color-accent-bright: var(--color-accent-bright);
+
+  --color-success:       var(--color-success);
+  --color-success-bg:    var(--color-success-bg);
+  --color-warning:       var(--color-warning);
+  --color-warning-bg:    var(--color-warning-bg);
+  --color-danger:        var(--color-danger);
+  --color-danger-bg:     var(--color-danger-bg);
+  --color-info:          var(--color-info);
+  --color-info-bg:       var(--color-info-bg);
+
+  --color-text-primary:   var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted:     var(--color-text-muted);
+  --color-text-inverse:   var(--color-text-inverse);
+
+  --font-sans:    var(--font-body);
+  --font-serif:   var(--font-display);
+  --font-mono:    var(--font-mono);
+}
+
+/* ══════════════════════════════════════════════════════
+   Base Styles
+   ══════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.65;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+}
+
+/* ── Headings: Editorial Display Font ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+h1 { font-size: var(--text-4xl); font-weight: 700; }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+
+/* ── Focus Styles ── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-mid);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ── Selection ── */
+::selection {
+  background: hsla(38, 80%, 50%, 0.2);
+  color: var(--color-accent-bright);
+}
+
+/* ══════════════════════════════════════════════════════
+   Animations
+   ══════════════════════════════════════════════════════ */
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+.animate-in {
+  animation: fadeInUp var(--duration-slow) var(--ease-out-expo) both;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-elevated) 25%,
+    var(--color-border) 50%,
+    var(--color-bg-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+.skeleton {
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-sm);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ══════════════════════════════════════════════════════
+   Utility Classes
+   ══════════════════════════════════════════════════════ */
+
+/* Accent line — animated gradient */
+.accent-line {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent) 0%,
+    var(--color-accent-bright) 50%,
+    var(--color-accent) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Glassmorphism panel (dark) */
+.glass {
+  background: hsla(30, 10%, 7%, 0.7);
+  backdrop-filter: blur(16px) saturate(1.6);
+  border: 1px solid var(--color-border);
+}
