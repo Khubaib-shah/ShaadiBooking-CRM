@@ -18,6 +18,10 @@ export default function LoginPage() {
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: 'admin@shaadibook.com',
+      password: 'password123',
+    },
   })
 
   const onSubmit = async (data: LoginForm) => {
@@ -84,6 +88,9 @@ export default function LoginPage() {
           </h2>
           <p className="mb-8 text-[var(--text-sm)]" style={{ color: 'var(--color-text-secondary)' }}>
             Sign in to manage your bookings
+          </p>
+          <p className="mb-6 text-[var(--text-xs)]" style={{ color: 'var(--color-text-muted)' }}>
+            Demo credentials: admin@shaadibook.com / password123
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
