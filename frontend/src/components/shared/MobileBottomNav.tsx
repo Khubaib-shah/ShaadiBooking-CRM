@@ -5,10 +5,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   CalendarDays, LayoutDashboard, BookOpen, Users, Ellipsis,
-  MessageSquare, CreditCard, ClipboardList, ExternalLink, Receipt, BarChart3, Settings2
+  MessageSquare, CreditCard, ClipboardList, ExternalLink, Receipt, BarChart3, Settings2, LogOut
 } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import ResponsiveModal from './ResponsiveModal'
+import { useLogout } from '@/lib/hooks/useLogout'
 
 const PRIMARY_ITEMS = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -30,6 +31,7 @@ const SECONDARY_ITEMS = [
 export default function MobileBottomNav() {
   const pathname = usePathname()
   const [moreOpen, setMoreOpen] = useState(false)
+  const { logout } = useLogout()
 
   // Automatically close sheet on navigation
   useEffect(() => {
@@ -114,6 +116,22 @@ export default function MobileBottomNav() {
               </Link>
             )
           })}
+
+          <button
+            onClick={() => {
+              setMoreOpen(false)
+              logout()
+            }}
+            className="flex items-center gap-4 rounded-xl border p-3 transition-all duration-150 bg-red-50 hover:bg-red-100 border-red-200 active:scale-[0.98] mt-2"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500 text-white">
+              <LogOut className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1 text-left">
+              <p className="text-sm font-bold text-red-600">Logout</p>
+              <p className="text-xs truncate text-red-400">Sign out of your account</p>
+            </div>
+          </button>
         </div>
       </ResponsiveModal>
     </>

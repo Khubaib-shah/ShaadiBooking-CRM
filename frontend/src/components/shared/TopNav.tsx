@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { Search, Bell, Menu, Plus, Calendar, Users, Landmark, FileText, CheckCircle, X, ShieldAlert } from 'lucide-react'
+import { Search, Bell, Menu, Plus, Calendar, Users, Landmark, FileText, CheckCircle, X, ShieldAlert, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import { useUIStore } from '@/lib/store/uiStore'
 import { useAuthStore } from '@/lib/store/authStore'
+import { useLogout } from '@/lib/hooks/useLogout'
 import { toast } from 'sonner'
 import { mockDb } from '@/lib/utils/mockDb'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -41,6 +42,7 @@ export default function TopNav() {
   const router = useRouter()
   const { toggleSidebar, sidebarCollapsed, openNewBooking } = useUIStore()
   const { vendor } = useAuthStore()
+  const { logout } = useLogout()
 
   const pageTitle = PAGE_TITLES[pathname] || (pathname.startsWith('/bookings/') ? 'Booking Detail' : 'ShaadiBook')
 
@@ -258,6 +260,14 @@ export default function TopNav() {
             <span className="text-xs font-semibold text-[var(--color-text-secondary)]">
               {vendor.name}
             </span>
+            <div className="w-px h-3 bg-[#e9ecef] mx-1" />
+            <button
+              onClick={logout}
+              className="flex items-center justify-center rounded transition-colors hover:text-red-500"
+              title="Logout"
+            >
+              <LogOut className="h-3.5 w-3.5 text-[#74788d] hover:text-inherit" />
+            </button>
           </div>
         )}
       </div>
