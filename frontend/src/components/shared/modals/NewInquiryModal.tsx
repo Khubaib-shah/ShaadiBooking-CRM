@@ -1,7 +1,7 @@
 'use client'
 
 import { useForm } from 'react-hook-form'
-import { X, Loader2 } from 'lucide-react'
+import { X } from 'lucide-react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useUIStore } from '@/lib/store/uiStore'
 import { toast } from 'sonner'
@@ -19,7 +19,7 @@ export default function NewInquiryModal() {
     }
   })
 
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
     // Mocking the creation logic since we're in development
     toast.success('Inquiry saved successfully')
     reset()

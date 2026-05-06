@@ -3,12 +3,13 @@ import type { BookingStatus, EventType } from '@/types/booking.types'
 export const STATUS_CONFIG: Record<BookingStatus, {
   label: string; color: string; bg: string; dot: string
 }> = {
-  inquiry:          { label: 'Inquiry',       color: '#5B8DD9', bg: '#1E2535', dot: '#5B8DD9' },
-  confirmed:        { label: 'Confirmed',     color: '#5BAD80', bg: '#1A2E20', dot: '#5BAD80' },
-  deposit_received: { label: 'Deposit Paid',  color: '#C9922A', bg: '#2A2010', dot: '#C9922A' },
-  balance_pending:  { label: 'Balance Due',   color: '#E07B30', bg: '#2E1F10', dot: '#E07B30' },
-  completed:        { label: 'Completed',     color: '#4DBF7F', bg: '#1A2E1A', dot: '#4DBF7F' },
-  cancelled:        { label: 'Cancelled',     color: '#C94A3A', bg: '#2E1515', dot: '#C94A3A' },
+  inquiry:          { label: 'Inquiry',       color: '#74788d', bg: '#f1f3f5', dot: '#74788d' },
+  confirmed:        { label: 'Confirmed',     color: '#50a5f1', bg: '#d1ecf1', dot: '#50a5f1' },
+  deposit_received: { label: 'Deposit Paid',  color: '#34c38f', bg: '#d4edda', dot: '#34c38f' },
+  balance_pending:  { label: 'Balance Due',   color: '#f1b44c', bg: '#fff3cd', dot: '#f1b44c' },
+  completed:        { label: 'Completed',     color: '#34c38f', bg: '#d4edda', dot: '#34c38f' },
+  cancelled:        { label: 'Cancelled',     color: '#f46a6a', bg: '#f8d7da', dot: '#f46a6a' },
+  overdue:          { label: 'Overdue',       color: '#f46a6a', bg: '#f8d7da', dot: '#f46a6a' },
 }
 
 export const EVENT_TYPE_LABELS: Record<EventType, string> = {

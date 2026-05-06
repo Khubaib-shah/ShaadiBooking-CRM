@@ -8,13 +8,13 @@ interface PageHeaderProps {
 
 export default function PageHeader({ title, description, actions }: PageHeaderProps) {
   return (
-    <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between mb-8">
+    <div className="mb-8 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h2 className="text-[var(--text-2xl)]" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--color-text-primary)' }}>
+        <h2 className="text-[18px] font-semibold uppercase tracking-wide" style={{ color: '#343a40' }}>
           {title}
         </h2>
         {description && (
-          <p className="mt-1 text-[var(--text-sm)]" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="mt-1 text-[13px] font-medium" style={{ color: '#74788d' }}>
             {description}
           </p>
         )}

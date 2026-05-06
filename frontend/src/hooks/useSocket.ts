@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { useAuthStore } from "@/lib/stores/auth";
 
@@ -25,6 +25,7 @@ const SOCKET_URL =
  */
 export function useSocket() {
   const socketRef = useRef<Socket | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
   const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
@@ -46,6 +47,7 @@ export function useSocket() {
     });
 
     socket.on("connect", () => {
+      setIsConnected(true);
       console.info("[Socket] Connected:", socket.id);
     });
 
@@ -54,6 +56,7 @@ export function useSocket() {
     });
 
     socket.on("disconnect", (reason) => {
+      setIsConnected(false);
       console.info("[Socket] Disconnected:", reason);
     });
 
@@ -62,6 +65,7 @@ export function useSocket() {
     return () => {
       socket.disconnect();
       socketRef.current = null;
+      setIsConnected(false);
     };
   }, [token]);
 
@@ -97,5 +101,5 @@ export function useSocket() {
     []
   );
 
-  return { subscribe, emit, isConnected: !!socketRef.current?.connected };
+  return { subscribe, emit, isConnected };
 }

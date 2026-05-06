@@ -4,10 +4,14 @@ import { useForm } from 'react-hook-form'
 import { X } from 'lucide-react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { toast } from 'sonner'
-import { useState } from 'react'
+interface AddStaffFormValues {
+  name: string
+  phone: string
+  role: string
+}
 
 export default function AddStaffModal({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset } = useForm<AddStaffFormValues>({
     defaultValues: {
       name: '',
       phone: '',
@@ -15,7 +19,7 @@ export default function AddStaffModal({ open, onOpenChange }: { open: boolean, o
     }
   })
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: AddStaffFormValues) => {
     toast.success(`${data.name} added to staff list`)
     reset()
     onOpenChange(false)
