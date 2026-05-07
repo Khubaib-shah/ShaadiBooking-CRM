@@ -2,19 +2,32 @@
 
 import StatCard from '@/components/shared/StatCard'
 import { formatRupees } from '@/lib/utils/currency'
-
-// Demo data — will be replaced with useQuery from dashboard API
-const DEMO_STATS = [
-  { label: 'Total Booked', value: formatRupees(840000, true), subvalue: 'this month', accent: 'blue' as const, trend: { value: 12, positive: true } },
-  { label: 'Collected', value: formatRupees(610000, true), subvalue: '73%', accent: 'green' as const, trend: { value: 8, positive: true } },
-  { label: 'Outstanding', value: formatRupees(230000, true), subvalue: '3 pending', accent: 'amber' as const },
-  { label: 'Events This Month', value: '14', subvalue: '3 this week', accent: 'gold' as const, trend: { value: 5, positive: true } },
-]
+import { useDashboardStats } from '@/lib/hooks/useDashboard'
 
 export default function StatsGrid() {
+  const { data: response, isLoading } = useDashboardStats()
+  const stats = response?.data
+
+  const dynamicStats = [
+    { label: 'Total Booked', value: formatRupees(stats?.totalBooked || 0, true), subvalue: 'all time', accent: 'blue' as const },
+    { label: 'Collected', value: formatRupees(stats?.collected || 0, true), subvalue: `${stats?.collectedPercentage || 0}%`, accent: 'green' as const },
+    { label: 'Outstanding', value: formatRupees(stats?.outstanding || 0, true), subvalue: 'pending balance', accent: 'amber' as const },
+    { label: 'Events This Month', value: String(stats?.eventsThisMonth || 0), subvalue: 'scheduled', accent: 'gold' as const },
+  ]
+
+  if (isLoading) {
+    return (
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 animate-pulse">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="h-[120px] rounded-xl border bg-[var(--color-bg-elevated)]" style={{ borderColor: 'var(--color-border)' }} />
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {DEMO_STATS.map((stat, i) => (
+      {dynamicStats.map((stat, i) => (
         <StatCard key={stat.label} {...stat} index={i} />
       ))}
     </div>

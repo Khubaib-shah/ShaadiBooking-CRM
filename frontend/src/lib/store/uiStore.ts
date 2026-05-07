@@ -6,11 +6,13 @@ interface UIState {
   setSidebarCollapsed: (collapsed: boolean) => void
 
   newBookingOpen: boolean
+  editBookingOpen: boolean
   newInquiryOpen: boolean
   markPaymentOpen: boolean
   assignStaffOpen: boolean
   confirmDialogOpen: boolean
   selectedBookingId: string | null
+  selectedEditBookingId: string | null
   selectedInquiryId: string | null
   confirmAction: (() => Promise<void>) | null
   confirmTitle: string
@@ -21,6 +23,8 @@ interface UIState {
 
   openNewBooking: () => void
   closeNewBooking: () => void
+  openEditBooking: (bookingId: string) => void
+  closeEditBooking: () => void
   openMarkPayment: (bookingId: string) => void
   closeMarkPayment: () => void
   openAssignStaff: (bookingId: string) => void
@@ -36,11 +40,13 @@ interface UIState {
 export const useUIStore = create<UIState>((set) => ({
   sidebarCollapsed: false,
   newBookingOpen: false,
+  editBookingOpen: false,
   newInquiryOpen: false,
   markPaymentOpen: false,
   assignStaffOpen: false,
   confirmDialogOpen: false,
   selectedBookingId: null,
+  selectedEditBookingId: null,
   selectedInquiryId: null,
   confirmAction: null,
   confirmTitle: '',
@@ -52,6 +58,8 @@ export const useUIStore = create<UIState>((set) => ({
   setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
   openNewBooking: () => set({ newBookingOpen: true }),
   closeNewBooking: () => set({ newBookingOpen: false }),
+  openEditBooking: (id) => set({ editBookingOpen: true, selectedEditBookingId: id }),
+  closeEditBooking: () => set({ editBookingOpen: false, selectedEditBookingId: null }),
   openMarkPayment: (id) => set({ markPaymentOpen: true, selectedBookingId: id }),
   closeMarkPayment: () => set({ markPaymentOpen: false, selectedBookingId: null }),
   openAssignStaff: (id) => set({ assignStaffOpen: true, selectedBookingId: id }),
