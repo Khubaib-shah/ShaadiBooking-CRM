@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { ArrowLeft, Phone, MessageSquare, CheckCircle, Clock, Send, Check } from 'lucide-react'
+import { ArrowLeft, Phone, MessageSquare, CheckCircle, Clock, Send, Check, Edit } from 'lucide-react'
 import Link from 'next/link'
 import StatusBadge from '@/components/shared/StatusBadge'
 import PageWrapper from '@/components/shared/PageWrapper'
@@ -10,11 +10,13 @@ import { formatRupees } from '@/lib/utils/currency'
 import { formatDate } from '@/lib/utils/dates'
 import { EVENT_TYPE_LABELS } from '@/lib/utils/booking'
 import { mockDb, type MockBooking } from '@/lib/utils/mockDb'
+import { useUIStore } from '@/lib/store/uiStore'
 import { toast } from 'sonner'
 
 export default function BookingDetailPage() {
   const { id } = useParams()
   const router = useRouter()
+  const { openEditBooking } = useUIStore()
   const [b, setB] = useState<MockBooking | null>(null)
 
   // Load from persistent localstorage database
@@ -106,12 +108,21 @@ export default function BookingDetailPage() {
           
           {/* Header Overview Card */}
           <div className="rounded-xl border p-6 bg-white shadow-sm" style={{ borderColor: 'var(--color-border)' }}>
-            <div className="flex items-center gap-3 mb-3">
-              <span className="text-xs font-black font-mono text-[var(--color-accent)]">{b.ref}</span>
-              <StatusBadge status={b.status} />
-              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-                {EVENT_TYPE_LABELS[b.type] || b.type}
-              </span>
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-black font-mono text-[var(--color-accent)]">{b.ref}</span>
+                <StatusBadge status={b.status} />
+                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                  {EVENT_TYPE_LABELS[b.type] || b.type}
+                </span>
+              </div>
+              <button
+                onClick={() => openEditBooking(b._id)}
+                className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-md border transition-all hover:bg-[var(--color-bg-sunken)] active:scale-95"
+                style={{ color: 'var(--color-text-secondary)', borderColor: 'var(--color-border)' }}
+              >
+                <Edit className="h-3 w-3" /> Edit Details
+              </button>
             </div>
             <h2 className="text-xl font-bold mb-1 text-[var(--color-text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
               {b.client}
