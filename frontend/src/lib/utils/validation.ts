@@ -14,6 +14,7 @@ export const createBookingSchema = z.object({
   discountAmount:      z.number().min(0),
   discountReason:      z.string().optional().or(z.literal('')),
   status:              z.enum(['inquiry', 'confirmed']),
+  expenses:            z.number().min(0),
   paymentSchedules:    z.array(z.object({
     type:      z.enum(['deposit', 'balance']),
     amountDue: z.number().min(1),

@@ -27,6 +27,22 @@ export default function EditBookingModal() {
     formState: { errors },
   } = useForm<BookingFormValues>({
     resolver: zodResolver(createBookingSchema),
+    defaultValues: {
+      clientName: '',
+      clientPhone: '',
+      clientWhatsapp: '',
+      eventType: 'barat',
+      eventDate: '',
+      venueName: '',
+      guestCount: 200,
+      packageType: 'per_head',
+      perHeadPrice: 0,
+      totalContractValue: 0,
+      discountAmount: 0,
+      discountReason: '',
+      expenses: 0,
+      status: 'confirmed',
+    },
   })
 
   // Pre-fill form when booking data loads
@@ -46,6 +62,7 @@ export default function EditBookingModal() {
         totalContractValue: b.totalContractValue || 0,
         discountAmount: b.discountAmount || 0,
         discountReason: b.discountReason || '',
+        expenses: (b as any).expenses || 0,
         status: b.status as any,
       })
     }
@@ -91,22 +108,22 @@ export default function EditBookingModal() {
           
           {/* Section: Client */}
           <div className="space-y-3">
-            <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">Client Particulars</p>
+            <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">Client Information</p>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Client Name</label>
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Name</label>
                 <input required {...register('clientName')} placeholder="e.g. Imran Khan" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                        style={{ background: 'var(--color-bg-sunken)', borderColor: errors.clientName ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }} />
                 {errors.clientName && <span className="text-[10px] text-[var(--color-danger)] font-bold">{errors.clientName.message}</span>}
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Phone Number</label>
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Phone</label>
                 <input required {...register('clientPhone')} placeholder="03xxxxxxxxx" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                        style={{ background: 'var(--color-bg-sunken)', borderColor: errors.clientPhone ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }} />
                 {errors.clientPhone && <span className="text-[10px] text-[var(--color-danger)] font-bold">{errors.clientPhone.message}</span>}
               </div>
               <div className="space-y-1.5 col-span-2">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>WhatsApp Link Number (Optional)</label>
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>WhatsApp Number (Optional)</label>
                 <input {...register('clientWhatsapp')} placeholder="03xxxxxxxxx" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                        style={{ background: 'var(--color-bg-sunken)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }} />
               </div>
@@ -115,7 +132,7 @@ export default function EditBookingModal() {
 
           {/* Section: Event Parameters */}
           <div className="space-y-3 pt-2">
-            <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">Event Settings</p>
+            <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">Event Details</p>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Event Type</label>
@@ -127,17 +144,17 @@ export default function EditBookingModal() {
                 </select>
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Event Date</label>
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Date</label>
                 <input required type="date" {...register('eventDate')} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                        style={{ background: 'var(--color-bg-sunken)', borderColor: errors.eventDate ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }} />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Venue / Hall Location</label>
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Venue Name</label>
                 <input required {...register('venueName')} placeholder="e.g. Shalimar Marquee" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                        style={{ background: 'var(--color-bg-sunken)', borderColor: errors.venueName ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }} />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Guests Count</label>
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Number of Guests</label>
                 <input required type="number" {...register('guestCount', { valueAsNumber: true })} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                        style={{ background: 'var(--color-bg-sunken)', borderColor: errors.guestCount ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }} />
               </div>
@@ -146,40 +163,40 @@ export default function EditBookingModal() {
 
           {/* Section: Financial Sheet */}
           <div className="rounded-xl p-4.5 space-y-4" style={{ background: 'var(--color-bg-sunken)', border: '1px solid var(--color-border)' }}>
-            <p className="text-[10px] font-black uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Financial Quotation & Pricing</p>
+            <p className="text-[10px] font-black uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Payment & Price</p>
             
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Pricing Quotation Model</label>
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Pricing Type</label>
                 <select {...register('packageType')} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                         style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}>
-                  <option value="per_head">Per Head Charge Pricing</option>
-                  <option value="fixed">Fixed Contract Value Sum</option>
+                  <option value="per_head">Price per Head</option>
+                  <option value="fixed">Fixed Price</option>
                 </select>
               </div>
 
               {watched.packageType === 'per_head' ? (
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Price Per Head (Rs.)</label>
+                  <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Rate (Rs.)</label>
                   <input required type="number" {...register('perHeadPrice', { valueAsNumber: true })} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                          style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)' }} />
                 </div>
               ) : (
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Fixed Base Price (Rs.)</label>
+                  <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Total Price (Rs.)</label>
                   <input required type="number" {...register('totalContractValue', { valueAsNumber: true })} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                          style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)' }} />
                 </div>
               )}
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Discount Allowed (Rs.)</label>
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Discount (Rs.)</label>
                 <input type="number" {...register('discountAmount', { valueAsNumber: true })} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                        style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)' }} />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Contract Booking Status</label>
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Booking Status</label>
                 <select {...register('status')} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                         style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}>
                   <option value="confirmed">Confirmed</option>
@@ -191,15 +208,21 @@ export default function EditBookingModal() {
               </div>
 
               <div className="space-y-1.5 col-span-2">
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Actual Operational Expenses (Rs.)</label>
+                <input type="number" {...register('expenses', { valueAsNumber: true })} placeholder="Total cost of food, staff, and logistics" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
+                       style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)' }} />
+              </div>
+
+              <div className="space-y-1.5 col-span-2">
                 <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Discount Reason (Optional)</label>
-                <input {...register('discountReason')} placeholder="e.g. Special off-season discount" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
+                <input {...register('discountReason')} placeholder="e.g. Friends & Family" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
                        style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }} />
               </div>
             </div>
 
             {/* Dynamic live calculation output card */}
             <div className="pt-2 border-t border-[var(--color-border)] flex items-center justify-between">
-              <span className="text-xs font-bold text-[var(--color-text-secondary)]">Calculated Contract Value Liability:</span>
+              <span className="text-xs font-bold text-[var(--color-text-secondary)]">Net Amount:</span>
               <span className="text-base font-black font-mono text-[var(--color-accent)]">{formatRupees(calculatedTotal)}</span>
             </div>
           </div>
