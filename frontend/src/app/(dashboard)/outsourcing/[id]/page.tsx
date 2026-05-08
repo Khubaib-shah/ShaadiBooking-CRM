@@ -11,9 +11,9 @@ import CurrencyDisplay from '@/components/shared/CurrencyDisplay'
 import { formatDate } from '@/lib/utils/dates'
 
 const TABS = [
-  { id: 'services', label: 'Services Ledger', icon: Clipboard },
-  { id: 'financials', label: 'Financial Summary', icon: CreditCard },
-  { id: 'invoice', label: 'Client Invoice', icon: FileText },
+  { id: 'services', label: 'Items & Staff', icon: Clipboard },
+  { id: 'financials', label: 'Money Summary', icon: CreditCard },
+  { id: 'invoice', label: 'Bill for Client', icon: FileText },
 ]
 
 const JOBS_DATA: Record<string, any> = {
@@ -98,7 +98,7 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
 
         <PageHeader 
           title={job.client} 
-          description={`Subcontract Details: ${job.id.toUpperCase()} · ${job.event}`} 
+          description={`Job Details: ${job.id.toUpperCase()} · ${job.event}`} 
         />
 
         {/* Tab Selection */}
@@ -142,7 +142,7 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
                 <div className="grid gap-6 md:grid-cols-2">
                   {/* Equipment deployed card */}
                   <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm space-y-4">
-                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Operational Equipment Deployed</h3>
+                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Items Used</h3>
                     <div className="space-y-3">
                       {job.equipment.map((eq: any, idx: number) => (
                         <div key={idx} className="flex justify-between items-center text-xs border-b pb-2 last:border-0 border-[var(--color-border)]">
@@ -158,7 +158,7 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
 
                   {/* Labor and crew card */}
                   <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm space-y-4">
-                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Outsourced Labor & Crew</h3>
+                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Staff Used</h3>
                     <div className="space-y-3">
                       {job.labor.map((lb: any, idx: number) => (
                         <div key={idx} className="flex justify-between items-center text-xs border-b pb-2 last:border-0 border-[var(--color-border)]">
@@ -178,44 +178,44 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
               {activeTab === 'financials' && (
                 <div className="grid gap-6 md:grid-cols-3">
                   <div className="md:col-span-2 rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm space-y-5">
-                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Contractual Financial Summary</h3>
+                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Money Details</h3>
                     
                     <div className="grid gap-4 sm:grid-cols-2 text-sm">
                       <div>
-                        <p className="text-xs font-semibold text-[var(--color-text-muted)]">Subcontract Job Revenue</p>
+                        <p className="text-xs font-semibold text-[var(--color-text-muted)]">Total Charged to Client</p>
                         <p className="font-bold text-2xl text-[var(--color-text-primary)] font-mono mt-1"><CurrencyDisplay value={job.financials.revenue} /></p>
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-[var(--color-text-muted)]">Total Direct Hire Costs</p>
+                        <p className="text-xs font-semibold text-[var(--color-text-muted)]">Total Costs</p>
                         <p className="font-bold text-2xl text-[var(--color-text-primary)] font-mono mt-1"><CurrencyDisplay value={totals.directCost} /></p>
                       </div>
                     </div>
 
                     <div className="border-t pt-4 border-[var(--color-border)] text-xs space-y-2">
                       <div className="flex justify-between text-[var(--color-text-secondary)]">
-                        <span>Equipment Rental Costs</span>
+                        <span>Rentals Cost</span>
                         <span className="font-mono font-bold"><CurrencyDisplay value={job.financials.equipCost} /></span>
                       </div>
                       <div className="flex justify-between text-[var(--color-text-secondary)]">
-                        <span>Labor & Wages Cost</span>
+                        <span>Staff Wages</span>
                         <span className="font-mono font-bold"><CurrencyDisplay value={job.financials.laborCost} /></span>
                       </div>
                       <div className="flex justify-between text-[var(--color-text-secondary)]">
-                        <span>Transport & Fuel Charges</span>
+                        <span>Fuel & Transport</span>
                         <span className="font-mono font-bold"><CurrencyDisplay value={job.financials.transport} /></span>
                       </div>
                     </div>
                   </div>
 
                   <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm space-y-5">
-                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Business Margins</h3>
+                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Profit Summary</h3>
                     <div className="space-y-4">
                       <div>
-                        <p className="text-xs font-semibold text-[var(--color-text-muted)]">Net Job Profit</p>
+                        <p className="text-xs font-semibold text-[var(--color-text-muted)]">Total Profit</p>
                         <p className="font-black text-2xl text-[#34c38f] font-mono mt-1"><CurrencyDisplay value={totals.netProfit} /></p>
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-[var(--color-text-muted)]">P&L Profit Margin</p>
+                        <p className="text-xs font-semibold text-[var(--color-text-muted)]">Profit Margin %</p>
                         <p className="font-black text-2xl text-[#34c38f] font-mono mt-1">{totals.margin}%</p>
                       </div>
                       <div className="h-2 rounded-full bg-[var(--color-bg-sunken)]">
@@ -238,7 +238,7 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
                       onClick={printInvoice}
                       className="inline-flex items-center gap-1.5 rounded-lg bg-[#556ee6] px-4 py-2 text-xs font-semibold text-white hover:brightness-110 transition-all"
                     >
-                      <Printer className="h-4 w-4" /> Print Invoice
+                      <Printer className="h-4 w-4" /> Print Bill
                     </button>
                   </div>
                 </div>
@@ -257,23 +257,23 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
             <p className="text-[11px] text-slate-400 mt-0.5">Off Club Road, North Karachi, Pakistan</p>
           </div>
           <div className="text-right">
-            <h1 className="text-lg font-black text-slate-700 uppercase tracking-widest bg-slate-100 px-3 py-1 rounded">TAX INVOICE</h1>
-            <p className="text-xs font-mono text-slate-500 mt-2">Invoice Ref: SB-INV-2025-001</p>
+            <h1 className="text-lg font-black text-slate-700 uppercase tracking-widest bg-slate-100 px-3 py-1 rounded">BILL</h1>
+            <p className="text-xs font-mono text-slate-500 mt-2">Bill Ref: SB-INV-2025-001</p>
             <p className="text-xs font-mono text-slate-500 mt-0.5">Date Issued: {formatDate(job.date)}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-8 my-6 text-xs">
           <div>
-            <p className="text-[10px] font-bold uppercase text-slate-400">Billed Customer</p>
+            <p className="text-[10px] font-bold uppercase text-slate-400">Client</p>
             <p className="font-bold text-slate-800 mt-1">{job.client}</p>
             <p className="text-slate-600 font-medium mt-0.5">Venue: {job.venue}</p>
-            <p className="text-slate-500 mt-0.5">Subcontract: {job.event}</p>
+            <p className="text-slate-500 mt-0.5">Event: {job.event}</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] font-bold uppercase text-slate-400">Operational Supervisor</p>
+            <p className="text-[10px] font-bold uppercase text-slate-400">Manager</p>
             <p className="font-bold text-slate-800 mt-1">{job.supervisor}</p>
-            <p className="text-slate-500 mt-0.5">Deployed Workers: {job.workersDeployed} pax</p>
+            <p className="text-slate-500 mt-0.5">Staff Used: {job.workersDeployed} people</p>
           </div>
         </div>
 
@@ -281,10 +281,10 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
         <table className="w-full text-xs my-6 border-t border-b border-slate-200">
           <thead>
             <tr className="border-b border-slate-200 text-[10px] font-bold uppercase text-slate-400">
-              <th className="py-3 text-left">Service Line Description</th>
+              <th className="py-3 text-left">Item / Service</th>
               <th className="py-3 text-right">Quantity</th>
-              <th className="py-3 text-right">Unit Rate</th>
-              <th className="py-3 text-right">Line Subtotal</th>
+              <th className="py-3 text-right">Price each</th>
+              <th className="py-3 text-right">Total</th>
             </tr>
           </thead>
           <tbody>
@@ -302,15 +302,15 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
         {/* Totals side section */}
         <div className="w-64 ml-auto text-xs space-y-2 border-b-2 pb-4 border-slate-200">
           <div className="flex justify-between text-slate-600 font-medium">
-            <span>Services Subtotal</span>
+            <span>Subtotal</span>
             <span className="font-mono text-slate-800"><CurrencyDisplay value={job.financials.revenue} /></span>
           </div>
           <div className="flex justify-between text-slate-600 font-medium">
-            <span>Sindh Sales Tax ({job.financials.taxRate}%)</span>
+            <span>Tax ({job.financials.taxRate}%)</span>
             <span className="font-mono text-slate-800"><CurrencyDisplay value={totals.gst} /></span>
           </div>
           <div className="flex justify-between border-t pt-2 font-bold text-sm text-slate-800">
-            <span>Invoice Total Due</span>
+            <span>Total Bill</span>
             <span className="font-mono text-slate-900"><CurrencyDisplay value={totals.invoiceTotal} /></span>
           </div>
         </div>

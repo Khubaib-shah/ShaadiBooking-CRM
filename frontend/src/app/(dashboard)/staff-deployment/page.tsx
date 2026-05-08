@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { Calendar, UserCheck, AlertTriangle, CheckCircle, ChevronLeft, ChevronRight, Plus, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -8,60 +8,72 @@ import PageHeader from '@/components/shared/PageHeader'
 import PageWrapper from '@/components/shared/PageWrapper'
 import StatusDot from '@/components/shared/StatusDot'
 
-// Calendar week-days representation
-const DAYS = [
-  { label: 'Mon', num: '19', date: '2025-05-19' },
-  { label: 'Tue', num: '20', date: '2025-05-20' },
-  { label: 'Wed', num: '21', date: '2025-05-21' },
-  { label: 'Thu', num: '22', date: '2025-05-22' },
-  { label: 'Fri', num: '23', date: '2025-05-23' },
-  { label: 'Sat', num: '24', date: '2025-05-24' },
-  { label: 'Sun', num: '25', date: '2025-05-25' },
-]
+import { mockDb, type MockBooking } from '@/lib/utils/mockDb'
+import { formatDate } from 'date-fns'
 
-// Mock Deployment active data
-const INITIAL_DEPLOYMENTS = [
-  {
-    id: 'dep-1',
-    eventName: 'Imran Barat Banquet',
-    date: '2025-05-20',
-    venue: 'Pearl Continental Hall A',
-    required: 12,
-    assigned: 9,
-    rolesNeeded: [
-      { role: 'waiter', label: 'Waiters', req: 8, asg: 6, workers: ['Ahmed Ali', 'Rashid Hussain', 'Hassan Ali', 'Bilal Shah', 'Farooq Khan', 'Yasir Malik'] },
-      { role: 'chef', label: 'Chefs', req: 2, asg: 2, workers: ['Muhammad Aslam', 'Sajid Butt'] },
-      { role: 'manager', label: 'Managers', req: 1, asg: 1, workers: ['Saleem Butt'] },
-      { role: 'electrician', label: 'Electricians', req: 1, asg: 0, workers: [] },
-    ]
-  },
-  {
-    id: 'dep-2',
-    eventName: 'Sara Mehndi Lawn',
-    date: '2025-05-22',
-    venue: 'Emaar Beach Front Lawn',
-    required: 9,
-    assigned: 9,
-    rolesNeeded: [
-      { role: 'waiter', label: 'Waiters', req: 6, asg: 6, workers: ['Ahmed Ali', 'Rashid Hussain', 'Hassan Ali', 'Farooq Khan', 'Yasir Malik', 'Sajid Ali'] },
-      { role: 'chef', label: 'Chefs', req: 1, asg: 1, workers: ['Muhammad Aslam'] },
-      { role: 'manager', label: 'Managers', req: 1, asg: 1, workers: ['Saleem Butt'] },
-      { role: 'electrician', label: 'Electricians', req: 1, asg: 1, workers: ['Tariq Mehmood'] },
-    ]
-  }
-]
 
-// Available workers list for instant assignments
-const AVAILABLE_WORKERS = [
-  { id: 'w10', name: 'Naveed Ahmed', role: 'driver', emoji: '🚗' },
-  { id: 'w4', name: 'Tariq Mehmood', role: 'electrician', emoji: '⚡' },
-  { id: 'w11', name: 'Imtiaz Khan', role: 'generator_operator', emoji: '⚙️' },
-  { id: 'w12', name: 'Zia-ur-Rehman', role: 'waiter', emoji: '🍽' },
-]
+// Staffing requirements logic based on event type and guests
+const calculateRequirements = (booking: MockBooking) => {
+  const guests = booking.guests || 200
+
+  // Basic Karachi banquet staffing rule-of-thumb:
+  const waiterReq = Math.ceil(guests / 25)
+  const chefReq = Math.ceil(guests / 100)
+
+  return [
+    { role: 'waiter', label: 'Waiters', req: waiterReq, asg: 0, workers: [] as string[] },
+    { role: 'chef', label: 'Chefs', req: chefReq, asg: 0, workers: [] as string[] },
+    { role: 'manager', label: 'Managers', req: 1, asg: 0, workers: [] as string[] },
+    { role: 'electrician', label: 'Electricians', req: 1, asg: 0, workers: [] as string[] },
+  ]
+}
 
 export default function StaffDeploymentPage() {
-  const [selectedDate, setSelectedDate] = useState('2025-05-20')
-  const [deployments, setDeployments] = useState(INITIAL_DEPLOYMENTS)
+  const [deployments, setDeployments] = useState(() => {
+    const bookings = mockDb.getBookings()
+    return bookings.map(b => ({
+      id: b._id,
+      eventName: `${b.client}'s ${b.type}`,
+      date: b.date,
+      venue: b.venue,
+      guests: b.guests,
+      menuItems: b.menu?.length || 0,
+      rolesNeeded: calculateRequirements(b),
+      required: calculateRequirements(b).reduce((sum, r) => sum + r.req, 0),
+      assigned: 0
+    }))
+  })
+
+  // Get unique sorted dates that have events
+  const eventDates = useMemo(() => {
+    const dates = Array.from(new Set(deployments.map(d => d.date)))
+    return dates
+      .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+      .map(date => {
+        const [year, month, day] = date.split('-').map(Number)
+        const d = new Date(year, month - 1, day) // Local time to avoid timezone shifts
+        return {
+          label: formatDate(d, 'EEE'),
+          num: formatDate(d, 'd'),
+          month: formatDate(d, 'MMM'),
+          date: date
+        }
+      })
+  }, [deployments])
+
+  const [selectedDate, setSelectedDate] = useState('')
+
+  // Sync selected date on load or when eventDates change
+  useEffect(() => {
+    if (!selectedDate || !eventDates.some(d => d.date === selectedDate)) {
+      const today = formatDate(new Date(), 'yyyy-MM-dd')
+      const upcoming = eventDates.find(d => d.date >= today)
+      setSelectedDate(upcoming?.date || eventDates[0]?.date || '')
+    }
+  }, [eventDates, selectedDate])
+
+  const availableWorkers = useMemo(() => mockDb.getWorkers().filter(w => w.active), [])
+
   const [activeEventToAssign, setActiveEventToAssign] = useState<any>(null)
   const [activeRoleToAssign, setActiveRoleToAssign] = useState<string | null>(null)
 
@@ -148,6 +160,7 @@ export default function StaffDeploymentPage() {
     )
   }
 
+
   return (
     <PageWrapper>
       <PageHeader
@@ -155,13 +168,13 @@ export default function StaffDeploymentPage() {
         description="Assign, deploy, and monitor event-level staffing completeness"
       />
 
-      {/* Deployments Quick Status KPIs */}
+      {/* Staffing Status KPIs */}
       <div className="grid gap-4 sm:grid-cols-3 mb-6">
         <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
-          <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Staffing Completeness Rate</p>
+          <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Staffing Progress</p>
           <div className="flex items-baseline gap-2">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">{stats.percent}%</p>
-            <p className="text-xs text-[var(--color-text-muted)]">average across events</p>
+            <p className="text-xs text-[var(--color-text-muted)]">average filled</p>
           </div>
           <div className="h-2 rounded-full bg-[var(--color-bg-sunken)] mt-3">
             <div className="h-2 rounded-full bg-[#34c38f]" style={{ width: `${stats.percent}%` }} />
@@ -172,7 +185,7 @@ export default function StaffDeploymentPage() {
             <UserCheck className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Assigned Positions</p>
+            <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Staff Assigned</p>
             <p className="text-xl font-black text-[var(--color-text-primary)] font-mono mt-0.5">{stats.totalAsg}</p>
           </div>
         </div>
@@ -181,39 +194,52 @@ export default function StaffDeploymentPage() {
             <AlertTriangle className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Unstaffed Gaps</p>
-            <p className="text-xl font-black text-[var(--color-text-primary)] font-mono mt-0.5">{stats.totalReq - stats.totalAsg} positions</p>
+            <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Empty Spots</p>
+            <p className="text-xl font-black text-[var(--color-text-primary)] font-mono mt-0.5">{stats.totalReq - stats.totalAsg}</p>
           </div>
         </div>
       </div>
 
-      {/* Calendar Week Slider Navigator */}
-      <div className="rounded-xl border border-[var(--color-border)] bg-white p-4 shadow-sm mb-6">
+      {/* Booked Dates Navigator */}
+      <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm mb-6">
         <div className="flex items-center justify-between mb-4">
-          <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Select Operational Date</p>
-          <div className="flex gap-1">
-            <button className="p-1 rounded hover:bg-[var(--color-bg-sunken)] border border-[var(--color-border)]" aria-label="Previous Week"><ChevronLeft className="h-4 w-4" /></button>
-            <button className="p-1 rounded hover:bg-[var(--color-bg-sunken)] border border-[var(--color-border)]" aria-label="Next Week"><ChevronRight className="h-4 w-4" /></button>
+          <div className="flex flex-col">
+            <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Event Dates</p>
+            <p className="text-[10px] font-bold text-[var(--color-accent)] mt-1">SELECT A DATE TO ADD STAFF</p>
           </div>
+          <Calendar className="h-4 w-4 text-[var(--color-text-muted)]" />
         </div>
-        <div className="grid grid-cols-7 gap-2">
-          {DAYS.map((day) => {
+
+        <div className="flex flex-wrap gap-3">
+          {eventDates.map((day) => {
             const isSelected = selectedDate === day.date
+            const eventCount = deployments.filter(d => d.date === day.date).length
+
             return (
               <button
                 key={day.date}
                 onClick={() => setSelectedDate(day.date)}
-                className={`flex flex-col items-center py-2.5 rounded-lg border transition-all ${
-                  isSelected 
-                    ? 'border-[#556ee6] bg-[#eef2ff]/60 text-[#556ee6] shadow-sm' 
-                    : 'border-[var(--color-border)] hover:bg-[var(--color-bg-sunken)] text-[var(--color-text-secondary)]'
-                }`}
+                className={`flex items-center gap-3 py-2 px-4 rounded-xl border transition-all text-left ${isSelected
+                  ? 'border-[#556ee6] bg-[#eef2ff]/60 text-[#556ee6]'
+                  : 'border-[var(--color-border)] hover:bg-[var(--color-bg-sunken)] text-[var(--color-text-secondary)]'
+                  }`}
               >
-                <span className="text-[10px] font-bold uppercase tracking-wider mb-1">{day.label}</span>
-                <span className="text-sm font-black font-mono">{day.num}</span>
+                <div className={`flex flex-col items-center justify-center h-10 w-10 rounded-lg ${isSelected ? 'bg-[#556ee6] text-white' : 'bg-[var(--color-bg-sunken)]'}`}>
+                  <span className="text-[9px] font-bold uppercase leading-none mb-0.5">{day.month}</span>
+                  <span className="text-sm font-black font-mono leading-none">{day.num}</span>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider opacity-70">{day.label}</p>
+                  <p className="text-xs font-black mt-0.5">
+                    {eventCount} Event{eventCount > 1 ? 's' : ''}
+                  </p>
+                </div>
               </button>
             )
           })}
+          {eventDates.length === 0 && (
+            <p className="text-sm font-medium text-[var(--color-text-muted)] py-4 w-full text-center">No bookings found in the database.</p>
+          )}
         </div>
       </div>
 
@@ -238,24 +264,24 @@ export default function StaffDeploymentPage() {
                     </h3>
                     <p className="text-xs text-[var(--color-text-muted)] mt-0.5">{event.venue}</p>
                   </div>
-                  <StatusDot 
-                    tone={isFullyStaffed ? 'success' : 'warning'} 
-                    label={isFullyStaffed ? 'Fully Staffed' : `${event.required - event.assigned} spots empty`} 
+                  <StatusDot
+                    tone={isFullyStaffed ? 'success' : 'warning'}
+                    label={isFullyStaffed ? 'Ready' : `${event.required - event.assigned} spots left`}
                   />
                 </div>
 
-                {/* Staffing completion progress */}
+                {/* Staffing progress bar */}
                 <div>
                   <div className="flex justify-between text-xs font-semibold mb-1">
-                    <span className="text-[var(--color-text-secondary)]">Staffing Completeness</span>
-                    <span className="font-mono text-[var(--color-text-primary)]">{completeness}% ({event.assigned}/{event.required})</span>
+                    <span className="text-[var(--color-text-secondary)]">Progress</span>
+                    <span className="font-mono text-[var(--color-text-primary)]">{completeness}% filled</span>
                   </div>
                   <div className="h-2.5 rounded-full bg-[var(--color-bg-sunken)]">
-                    <div className="h-2.5 rounded-full transition-all duration-300" 
-                         style={{ 
-                           width: `${completeness}%`, 
-                           background: isFullyStaffed ? '#34c38f' : '#f1b44c' 
-                         }} 
+                    <div className="h-2.5 rounded-full transition-all duration-300"
+                      style={{
+                        width: `${completeness}%`,
+                        background: isFullyStaffed ? '#34c38f' : '#f1b44c'
+                      }}
                     />
                   </div>
                 </div>
@@ -283,7 +309,7 @@ export default function StaffDeploymentPage() {
                         {rn.workers.map((worker) => (
                           <div key={worker} className="flex justify-between items-center text-xs px-2.5 py-1.5 rounded bg-white border border-[var(--color-border)] text-[var(--color-text-primary)]">
                             <span className="font-medium">{worker}</span>
-                            <button 
+                            <button
                               onClick={() => removeWorker(event.id, rn.role, worker)}
                               className="text-[10px] text-[#f46a6a] font-bold hover:underline"
                             >
@@ -294,8 +320,8 @@ export default function StaffDeploymentPage() {
 
                         {/* Dashed placeholder elements if gaps exist */}
                         {Array.from({ length: rn.req - rn.asg }).map((_, idx) => (
-                          <div 
-                            key={idx} 
+                          <div
+                            key={idx}
                             onClick={() => openAssignPanel(event, rn.role)}
                             className="text-center py-2 text-[11px] font-semibold rounded-lg border-2 border-dashed border-[var(--color-border-mid)] text-[var(--color-text-muted)] cursor-pointer hover:border-[#556ee6] hover:text-[#556ee6] transition-all bg-white"
                           >
@@ -315,12 +341,16 @@ export default function StaffDeploymentPage() {
       {/* INTERACTIVE ASG SHEET SLIDE (radix style popup) */}
       <AnimatePresence>
         {activeEventToAssign && activeRoleToAssign && (
-          <div className="fixed inset-0 z-50 flex items-center justify-end bg-black/60 backdrop-blur-sm">
-            <motion.div 
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-end bg-black/60 backdrop-blur-sm"
+            onClick={closeAssignPanel}
+          >
+            <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              onClick={(e) => e.stopPropagation()}
               className="w-full max-w-sm h-full bg-white border-l shadow-2xl p-6 flex flex-col justify-between"
             >
               <div>
@@ -331,8 +361,8 @@ export default function StaffDeploymentPage() {
                     </h4>
                     <p className="text-[11px] text-[var(--color-text-muted)] font-medium mt-0.5">Event: {activeEventToAssign.eventName}</p>
                   </div>
-                  <button 
-                    onClick={closeAssignPanel} 
+                  <button
+                    onClick={closeAssignPanel}
                     className="p-1 rounded-full border border-[var(--color-border)] hover:bg-[var(--color-bg-sunken)] transition-all"
                     aria-label="Close"
                   >
@@ -342,22 +372,31 @@ export default function StaffDeploymentPage() {
 
                 <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-3">Available & Free Workers</p>
                 <div className="space-y-2">
-                  {AVAILABLE_WORKERS.map((worker) => (
-                    <button
-                      key={worker.id}
-                      onClick={() => assignWorker(worker.name)}
-                      className="w-full flex items-center justify-between p-3 rounded-xl border border-[var(--color-border)] bg-white hover:bg-[var(--color-bg-sunken)] hover:border-[var(--color-border-mid)] text-left transition-all"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-lg">{worker.emoji}</span>
-                        <div>
-                          <p className="text-xs font-bold text-[var(--color-text-primary)]">{worker.name}</p>
-                          <p className="text-[10px] text-[var(--color-text-muted)] capitalize font-semibold mt-0.5">{worker.role}</p>
+                  {availableWorkers
+                    .filter(w => w.role === activeRoleToAssign)
+                    .map((worker) => (
+                      <button
+                        key={worker.id}
+                        onClick={() => assignWorker(worker.name)}
+                        className="w-full flex items-center justify-between p-3 rounded-xl border border-[var(--color-border)] bg-white hover:bg-[var(--color-bg-sunken)] hover:border-[var(--color-border-mid)] text-left transition-all"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-bg-sunken)] text-sm">
+                            {worker.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-[var(--color-text-primary)]">{worker.name}</p>
+                            <p className="text-[10px] text-[var(--color-text-muted)] capitalize font-semibold mt-0.5">{worker.role} · {worker.type}</p>
+                          </div>
                         </div>
-                      </div>
-                      <span className="text-[10px] font-bold text-[#34c38f] bg-[#34c38f]/10 px-2.5 py-1 rounded-full">Available</span>
-                    </button>
-                  ))}
+                        <span className="text-[10px] font-bold text-[#34c38f] bg-[#34c38f]/10 px-2.5 py-1 rounded-full">Available</span>
+                      </button>
+                    ))}
+                  {availableWorkers.filter(w => w.role === activeRoleToAssign).length === 0 && (
+                    <div className="p-8 text-center border-2 border-dashed border-[var(--color-border)] rounded-xl">
+                      <p className="text-xs font-bold text-[var(--color-text-muted)]">No available {activeRoleToAssign}s found in roster.</p>
+                    </div>
+                  )}
                 </div>
               </div>
 

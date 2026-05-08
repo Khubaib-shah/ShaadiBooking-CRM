@@ -70,6 +70,7 @@ export function useUpdateBooking(id: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: bookingKeys.detail(id) })
       queryClient.invalidateQueries({ queryKey: bookingKeys.all() })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Booking updated')
     },
     onError: (err: unknown) => {

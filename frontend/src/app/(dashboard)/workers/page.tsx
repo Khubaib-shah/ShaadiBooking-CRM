@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Plus, Download, Grid, List, Phone, Users, Calendar, Banknote } from 'lucide-react'
 import { toast } from 'sonner'
@@ -15,17 +15,7 @@ import SearchInput from '@/components/shared/SearchInput'
 import DataTable from '@/components/shared/DataTable'
 import StatCard from '@/components/shared/StatCard'
 
-// Comprehensive mock data in Karachi context
-const WORKERS_DATA = [
-  { id: 'w1', name: 'Ahmed Ali', role: 'waiter', type: 'permanent', phone: '03212345678', salary: 30000, events: 8, active: true },
-  { id: 'w2', name: 'Rashid Hussain', role: 'waiter', type: 'temporary', phone: '03001234567', salary: 1500, events: 6, active: true },
-  { id: 'w3', name: 'Muhammad Aslam', role: 'chef', type: 'permanent', phone: '03451234567', salary: 45000, events: 10, active: true },
-  { id: 'w4', name: 'Tariq Mehmood', role: 'electrician', type: 'contractor', phone: '03211234567', salary: 3000, events: 4, active: false },
-  { id: 'w5', name: 'Naveed Ahmed', role: 'driver', type: 'permanent', phone: '03341234567', salary: 25000, events: 12, active: true },
-  { id: 'w6', name: 'Imtiaz Khan', role: 'generator_operator', type: 'temporary', phone: '03121234567', salary: 2000, events: 5, active: false },
-  { id: 'w7', name: 'Saleem Butt', role: 'manager', type: 'permanent', phone: '03231234567', salary: 55000, events: 14, active: true },
-  { id: 'w8', name: 'Hassan Ali', role: 'helper', type: 'temporary', phone: '03091234567', salary: 800, events: 3, active: true },
-]
+import { mockDb, type MockWorker } from '@/lib/utils/mockDb'
 
 const ROLE_LABELS: Record<string, string> = {
   waiter: '🍽 Waiter',
@@ -52,27 +42,38 @@ const ROLE_STRIP_COLORS: Record<string, string> = {
 export default function WorkersPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid')
   const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('all')
   const [roleFilter, setRoleFilter] = useState('all')
 
+  // Debounce search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [search])
+  
+  const workersData = useMemo(() => mockDb.getWorkers(), [])
+
   const filtered = useMemo(() => {
-    return WORKERS_DATA.filter(w => {
-      const matchSearch = w.name.toLowerCase().includes(search.toLowerCase()) || w.phone.includes(search)
+    return workersData.filter(w => {
+      const matchSearch = w.name.toLowerCase().includes(debouncedSearch.toLowerCase()) || w.phone.includes(debouncedSearch)
       const matchType = typeFilter === 'all' || w.type === typeFilter
       const matchRole = roleFilter === 'all' || w.role === roleFilter
       return matchSearch && matchType && matchRole
     })
-  }, [search, typeFilter, roleFilter])
+  }, [workersData, debouncedSearch, typeFilter, roleFilter])
 
   const stats = useMemo(() => {
-    const total = WORKERS_DATA.length
-    const active = WORKERS_DATA.filter(w => w.active).length
-    const permanent = WORKERS_DATA.filter(w => w.type === 'permanent').length
-    const temporary = WORKERS_DATA.filter(w => w.type === 'temporary').length
+    const total = workersData.length
+    const active = workersData.filter(w => w.active).length
+    const permanent = workersData.filter(w => w.type === 'permanent').length
+    const temporary = workersData.filter(w => w.type === 'temporary').length
     return { total, active, permanent, temporary }
-  }, [])
+  }, [workersData])
 
-  const columns = useMemo<ColumnDef<(typeof WORKERS_DATA)[number]>[]>(
+  const columns = useMemo<ColumnDef<MockWorker>[]>(
     () => [
       {
         header: 'Worker Name',

@@ -97,15 +97,26 @@ export const bookingsApi = {
     } as ApiResponse<Booking>
   },
 
-  update: async (id: string, data: Partial<CreateBookingInput>) => {
+  update: async (id: string, data: any) => {
     const list = mockDb.getBookings()
     const target = list.find(x => x._id === id)
     if (!target) throw new Error('Booking not found')
     
+    // Explicitly map incoming frontend types to mockDb fields
     const updated = mockDb.saveBooking({
       ...target,
-      ...data,
-      _id: id
+      _id: id,
+      client: data.clientName ?? target.client,
+      clientPhone: data.clientPhone ?? target.clientPhone,
+      clientWhatsapp: data.clientWhatsapp ?? target.clientWhatsapp,
+      type: data.eventType ?? target.type,
+      date: data.eventDate ?? target.date,
+      venue: data.venueName ?? target.venue,
+      guests: data.guestCount ?? target.guests,
+      perHeadPrice: data.perHeadPrice ?? target.perHeadPrice,
+      contract: data.totalContractValue ?? target.contract,
+      status: data.status ?? target.status,
+      outstanding: (data.totalContractValue ?? target.contract) - target.paid
     } as any)
 
     return {

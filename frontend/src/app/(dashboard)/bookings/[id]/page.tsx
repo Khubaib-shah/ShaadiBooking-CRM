@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { ArrowLeft, Phone, MessageSquare, CheckCircle, Clock, Send, Check, Edit } from 'lucide-react'
 import Link from 'next/link'
 import StatusBadge from '@/components/shared/StatusBadge'
@@ -18,6 +18,8 @@ export default function BookingDetailPage() {
   const router = useRouter()
   const { openEditBooking } = useUIStore()
   const [b, setB] = useState<MockBooking | null>(null)
+  const [isMenuEditing, setIsMenuEditing] = useState(false)
+  const masterMenu = useMemo(() => mockDb.getMenuItems(), [])
 
   // Load from persistent localstorage database
   useEffect(() => {
@@ -77,8 +79,8 @@ export default function BookingDetailPage() {
   const handleSendReminder = (amount: number, type: string) => {
     const cleanPhone = b.clientPhone.replace(/[^0-9]/g, '')
     // Pre-fill premium customized Urdu/English WhatsApp template
-    const msg = `السلام عليكم ${b.client} Saheb, gentle reminder from Royal Caterers. Your installment of ${formatRupees(amount)} for the ${EVENT_TYPE_LABELS[b.type] || b.type} event on ${formatDate(b.date, 'dd MMMM yyyy')} is due. Kindly let us know when to collect, or transfer directly to Bank Al Habib Acc: 1042-0095-11042. JazakAllah!`
-    
+    const msg = `السلام عليكم ${b.client} Saheb, gentle reminder from Royal Caterers. Your installment of ${formatRupees(amount)} for the ${EVENT_TYPE_LABELS[b.type] || b.type} event on ${formatDate(b.date, 'DD MMMM YYYY')} is due. Kindly let us know when to collect, or transfer directly to Bank Al Habib Acc: 1042-0095-11042. JazakAllah!`
+
     const waUrl = `https://wa.me/92${cleanPhone.slice(1)}?text=${encodeURIComponent(msg)}`
     window.open(waUrl, '_blank')
     toast.success(`WhatsApp pre-filled reminder template triggered for ${b.client}!`)
@@ -95,6 +97,23 @@ export default function BookingDetailPage() {
     toast.error('Booking contract has been marked as Cancelled.')
   }
 
+  const toggleMenuItem = (item: any) => {
+    if (!b) return
+    const currentMenu = b.menu || []
+    const exists = currentMenu.find(m => m._id === item._id)
+
+    let updatedMenu
+    if (exists) {
+      updatedMenu = currentMenu.filter(m => m._id !== item._id)
+    } else {
+      updatedMenu = [...currentMenu, item]
+    }
+
+    const updatedBooking = { ...b, menu: updatedMenu }
+    mockDb.saveBooking(updatedBooking)
+    setB(updatedBooking)
+  }
+
   return (
     <PageWrapper>
       <Link href="/bookings" className="inline-flex items-center gap-1.5 text-xs font-bold mb-4 transition-colors hover:text-[var(--color-accent)]" style={{ color: 'var(--color-text-secondary)' }}>
@@ -102,10 +121,10 @@ export default function BookingDetailPage() {
       </Link>
 
       <div className="grid gap-6 lg:grid-cols-5">
-        
+
         {/* Left Grid: 3/5 width */}
         <div className="lg:col-span-3 space-y-6">
-          
+
           {/* Header Overview Card */}
           <div className="rounded-xl border p-6 bg-white shadow-sm" style={{ borderColor: 'var(--color-border)' }}>
             <div className="flex items-start justify-between mb-3">
@@ -128,7 +147,7 @@ export default function BookingDetailPage() {
               {b.client}
             </h2>
             <p className="text-sm text-[var(--color-text-secondary)]">
-              {formatDate(b.date, 'EEEE, dd MMMM yyyy')} · {b.venue}
+              {formatDate(b.date, 'dddd, DD MMMM YYYY')} · {b.venue}
             </p>
             <div className="flex gap-3 mt-4">
               <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-[var(--color-bg-sunken)] text-[var(--color-text-secondary)]">{b.guests} guests</span>
@@ -169,7 +188,7 @@ export default function BookingDetailPage() {
                     <p className="text-xs mt-0.5 text-[var(--color-text-muted)] font-medium">
                       {ps.isPaid ? `Received on ${formatDate(ps.paidAt || b.date)}` : `Outstanding. Due before ${formatDate(ps.dueDate || b.date)}`}
                     </p>
-                    
+
                     {/* Action buttons work dynamically on click! */}
                     {!ps.isPaid && (
                       <div className="flex gap-2 mt-3 animate-fade-in">
@@ -203,6 +222,93 @@ export default function BookingDetailPage() {
             </div>
           </div>
 
+          {/* Wedding Menu & Dish Selection */}
+          <div className="rounded-xl border p-6 bg-white shadow-sm" style={{ borderColor: 'var(--color-border)' }}>
+            <div className="flex items-center justify-between border-b pb-2 mb-4">
+              <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)]">Wedding Menu & Dish Selection</h3>
+              <span className="text-[10px] font-bold bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-2 py-0.5 rounded-full">
+                {b.menu?.length || 0} items
+              </span>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              {isMenuEditing ? (
+                masterMenu.map((item) => {
+                  const isSelected = b.menu?.some(m => m._id === item._id)
+                  return (
+                    <button
+                      key={item._id}
+                      onClick={() => toggleMenuItem(item)}
+                      className={`flex items-center gap-3 p-3 rounded-xl border transition-all text-left ${isSelected
+                          ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)]'
+                          : 'border-[var(--color-border)] bg-white hover:bg-[var(--color-bg-sunken)]'
+                        }`}
+                    >
+                      <div className="text-lg">
+                        {item.category === 'main' && '🍖'}
+                        {item.category === 'sweet' && '🍰'}
+                        {item.category === 'bread' && '🫓'}
+                        {item.category === 'drink' && '🥤'}
+                        {item.category === 'starter' && '🥗'}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-[var(--color-text-primary)]">{item.name}</p>
+                        <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">{item.category}</p>
+                      </div>
+                      {isSelected && <CheckCircle className="h-4 w-4 text-[var(--color-accent)]" />}
+                    </button>
+                  )
+                })
+              ) : (
+                b.menu?.map((item) => (
+                  <div key={item._id} className="flex items-center gap-3 p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-sunken)]/30 group hover:border-[var(--color-accent)] transition-all">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white border border-[var(--color-border)] shadow-sm group-hover:bg-[var(--color-accent-soft)] group-hover:text-[var(--color-accent)] transition-colors">
+                      {item.category === 'main' && '🍖'}
+                      {item.category === 'sweet' && '🍰'}
+                      {item.category === 'bread' && '🫓'}
+                      {item.category === 'drink' && '🥤'}
+                      {item.category === 'starter' && '🥗'}
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-[var(--color-text-primary)]">{item.name}</p>
+                      <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">{item.category}</p>
+                    </div>
+                  </div>
+                ))
+              )}
+
+              {(!isMenuEditing && (!b.menu || b.menu.length === 0)) && (
+                <div className="sm:col-span-2 text-center py-8 border-2 border-dashed border-[var(--color-border)] rounded-xl">
+                  <p className="text-xs font-bold text-[var(--color-text-muted)] mb-2">No dishes selected for this event yet.</p>
+                  <button
+                    onClick={() => setIsMenuEditing(true)}
+                    className="text-[10px] font-black uppercase tracking-wider px-4 py-2 bg-[var(--color-accent)] text-white rounded-lg hover:brightness-110"
+                  >
+                    + Open Menu Selection
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {!isMenuEditing && b.menu && b.menu.length > 0 && (
+              <button
+                onClick={() => setIsMenuEditing(true)}
+                className="w-full mt-4 text-center py-2 text-[10px] font-black uppercase tracking-wider border border-dashed border-[var(--color-border-mid)] text-[var(--color-text-muted)] rounded-lg hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-all"
+              >
+                + Edit Menu Selection
+              </button>
+            )}
+
+            {isMenuEditing && (
+              <button
+                onClick={() => setIsMenuEditing(false)}
+                className="w-full mt-4 text-center py-2 text-[10px] font-black uppercase tracking-wider bg-[var(--color-text-primary)] text-white rounded-lg hover:brightness-110 transition-all"
+              >
+                Save Menu Selection
+              </button>
+            )}
+          </div>
+
           {/* Notes Card */}
           <div className="rounded-xl border p-6 bg-white shadow-sm" style={{ borderColor: 'var(--color-border)' }}>
             <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2 mb-4">Contractual Operations Notes</h3>
@@ -213,7 +319,7 @@ export default function BookingDetailPage() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-[var(--color-text-primary)]">
-                    {n.createdBy} 
+                    {n.createdBy}
                     <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ml-2 bg-[#50a5f1]/10 text-[#50a5f1]">
                       {n.noteType}
                     </span>
@@ -258,8 +364,8 @@ export default function BookingDetailPage() {
             <div className="space-y-3">
               {[
                 { l: 'Base Contract Sum', v: b.contract },
-                { l: 'Subcontract Expenses', v: Math.round(b.contract * 0.45) },
-                { l: 'Net Revenue Margin', v: Math.round(b.contract * 0.55) },
+                { l: 'Total Expenses', v: (b as any).expenses || 0 },
+                { l: 'Net Profit Margin', v: b.contract - ((b as any).expenses || 0) },
                 { l: 'Paid Total (SMS Verified)', v: b.paid, c: 'var(--color-success)' },
                 { l: 'Outstanding Balance Liability', v: b.outstanding, c: 'var(--color-warning)' }
               ].map(x => (
