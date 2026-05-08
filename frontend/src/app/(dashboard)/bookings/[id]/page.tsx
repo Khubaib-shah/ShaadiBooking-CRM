@@ -19,7 +19,7 @@ export default function BookingDetailPage() {
   const { openEditBooking } = useUIStore()
   const [b, setB] = useState<MockBooking | null>(null)
   const [isMenuEditing, setIsMenuEditing] = useState(false)
-  const masterMenu = useMemo(() => mockDb.getMenuItems(), [])
+const masterMenu = useMemo(() => mockDb.getMenuItems(), [])
 
   // Load from persistent localstorage database
   useEffect(() => {

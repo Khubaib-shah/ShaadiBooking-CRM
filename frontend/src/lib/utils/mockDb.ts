@@ -75,8 +75,19 @@ export interface MockWorker {
 export interface MockMenuItem {
   _id: string
   name: string
-  category: 'main' | 'sweet' | 'bread' | 'drink' | 'starter'
+  category: string
+  price: number
+  icon: string
 }
+
+export interface MockMenuCategory {
+  _id: string
+  name: string
+  slug: string
+  icon: string
+}
+
+
 
 const DEFAULT_BOOKINGS: MockBooking[] = [
   {
@@ -313,17 +324,27 @@ const DEFAULT_WORKERS: MockWorker[] = [
 ]
 
 const DEFAULT_MENU: MockMenuItem[] = [
-  { _id: 'm1', name: 'Mutton Biryani', category: 'main' },
-  { _id: 'm2', name: 'Chicken Qorma', category: 'main' },
-  { _id: 'm3', name: 'Seekh Kabab', category: 'main' },
-  { _id: 'm4', name: 'Gajar Ka Halwa', category: 'sweet' },
-  { _id: 'm5', name: 'Gulab Jamun', category: 'sweet' },
-  { _id: 'm6', name: 'Naan / Roti', category: 'bread' },
-  { _id: 'm7', name: 'Cold Drinks', category: 'drink' },
-  { _id: 'm8', name: 'Fresh Juice', category: 'drink' },
-  { _id: 'm9', name: 'Chicken Tikka', category: 'starter' },
-  { _id: 'm10', name: 'Beef Pulao', category: 'main' },
+  { _id: 'm1', name: 'Mutton Biryani', category: 'main', price: 650, icon: '🍖' },
+  { _id: 'm2', name: 'Chicken Qorma', category: 'main', price: 400, icon: '🍗' },
+  { _id: 'm10', name: 'Beef Pulao', category: 'main', price: 500, icon: '🍲' },
+  { _id: 'm3', name: 'Seekh Kabab', category: 'main', price: 300, icon: '🍢' },
+  { _id: 'm9', name: 'Chicken Tikka', category: 'starter', price: 250, icon: '🥗' },
+  { _id: 'm4', name: 'Gajar Ka Halwa', category: 'sweet', price: 180, icon: '🍰' },
+  { _id: 'm5', name: 'Gulab Jamun', category: 'sweet', price: 120, icon: '🧁' },
+  { _id: 'm6', name: 'Naan / Roti', category: 'bread', price: 40, icon: '🫓' },
+  { _id: 'm7', name: 'Cold Drinks', category: 'drink', price: 80, icon: '🥤' },
+  { _id: 'm8', name: 'Fresh Juice', category: 'drink', price: 150, icon: '🍹' },
 ]
+
+const DEFAULT_CATEGORIES: MockMenuCategory[] = [
+  { _id: 'cat_1', name: 'Main Course', slug: 'main', icon: '🍛' },
+  { _id: 'cat_2', name: 'Starter / Appetizer', slug: 'starter', icon: '🥗' },
+  { _id: 'cat_3', name: 'Sweet / Dessert', slug: 'sweet', icon: '🍰' },
+  { _id: 'cat_4', name: 'Bread / Naan', slug: 'bread', icon: '🫓' },
+  { _id: 'cat_5', name: 'Drink / Beverage', slug: 'drink', icon: '🥤' },
+]
+
+
 
 // Pure client-side lazy seeders
 export const mockDb = {
@@ -494,5 +515,77 @@ export const mockDb = {
   // Menu API
   getMenuItems: (): MockMenuItem[] => {
     return mockDb.getStore('menu', DEFAULT_MENU)
+  },
+
+  saveMenuItem: (data: Partial<MockMenuItem> & { _id?: string }): MockMenuItem => {
+    const list = mockDb.getMenuItems()
+    let record: MockMenuItem
+
+    if (data._id) {
+      const idx = list.findIndex(m => m._id === data._id)
+      if (idx > -1) {
+        list[idx] = { ...list[idx], ...data } as MockMenuItem
+        record = list[idx]
+      } else {
+        record = { ...data } as MockMenuItem
+      }
+    } else {
+      record = {
+        _id: 'm_' + Date.now(),
+        name: data.name || 'New Dish',
+        category: data.category || 'main',
+        price: Number(data.price) || 100,
+        icon: data.icon || '🍲'
+      }
+      list.push(record)
+    }
+
+    mockDb.saveStore('menu', list)
+    return record
+  },
+
+  deleteMenuItem: (id: string) => {
+    const list = mockDb.getMenuItems()
+    const filtered = list.filter(m => m._id !== id)
+    mockDb.saveStore('menu', filtered)
+  },
+
+  // Categories API
+  getMenuCategories: (): MockMenuCategory[] => {
+    return mockDb.getStore('menu_categories', DEFAULT_CATEGORIES)
+  },
+
+  saveMenuCategory: (data: Partial<MockMenuCategory> & { _id?: string }): MockMenuCategory => {
+    const list = mockDb.getMenuCategories()
+    let record: MockMenuCategory
+
+    if (data._id) {
+      const idx = list.findIndex(c => c._id === data._id)
+      if (idx > -1) {
+        list[idx] = { ...list[idx], ...data } as MockMenuCategory
+        record = list[idx]
+      } else {
+        record = { ...data } as MockMenuCategory
+      }
+    } else {
+      record = {
+        _id: 'cat_' + Date.now(),
+        name: data.name || 'New Category',
+        slug: data.slug || (data.name || 'new').toLowerCase().replace(/\s+/g, '-'),
+        icon: data.icon || '📁'
+      }
+      list.push(record)
+    }
+
+    mockDb.saveStore('menu_categories', list)
+    return record
+  },
+
+  deleteMenuCategory: (id: string) => {
+    const list = mockDb.getMenuCategories()
+    const filtered = list.filter(c => c._id !== id)
+    mockDb.saveStore('menu_categories', filtered)
   }
 }
+
+

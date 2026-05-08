@@ -10,10 +10,10 @@ export const createBookingSchema = z.object({
   guestCount:          z.number().min(1, 'Guests count must be at least 1'),
   packageType:         z.enum(['per_head', 'fixed']),
   perHeadPrice:        z.number().min(0),
-  totalContractValue:  z.number().min(1, 'Contract value required'),
+  totalContractValue:  z.number().min(0),
   discountAmount:      z.number().min(0),
   discountReason:      z.string().optional().or(z.literal('')),
-  status:              z.enum(['inquiry', 'confirmed']),
+  status:              z.enum(['inquiry', 'confirmed', 'deposit_received', 'balance_pending', 'completed']),
   expenses:            z.number().min(0),
   paymentSchedules:    z.array(z.object({
     type:      z.enum(['deposit', 'balance']),
