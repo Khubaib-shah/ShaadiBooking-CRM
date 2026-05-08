@@ -8,7 +8,7 @@ export type EventType =
   | 'mayun' | 'dholki' | 'mehndi' | 'nikah'
   | 'barat' | 'valima' | 'other'
 
-export type PackageType = 'per_head' | 'fixed'
+export type PackageType = 'per_head' | 'fixed' 
 
 export interface PaymentSchedule {
   _id: string
