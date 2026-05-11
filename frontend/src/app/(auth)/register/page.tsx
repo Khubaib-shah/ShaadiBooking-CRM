@@ -13,6 +13,8 @@ import { toast } from 'sonner'
 import type { z } from 'zod'
 import type { User } from '@/types/user.types'
 import type { Vendor } from '@/types/vendor.types'
+import { FormInput } from '@/components/shared/FormInput'
+import { FormSelect } from '@/components/shared/FormSelect'
 
 type RegisterForm = z.infer<typeof registerSchema>
 
@@ -65,11 +67,7 @@ export default function RegisterPage() {
     }, 1000)
   }
 
-  const inputStyle = (hasError: boolean) => ({
-    background: 'var(--color-bg-sunken)',
-    borderColor: hasError ? 'var(--color-danger)' : 'var(--color-border)',
-    color: 'var(--color-text-primary)',
-  })
+
 
   return (
     <div className="flex min-h-screen">
@@ -125,66 +123,71 @@ export default function RegisterPage() {
             <p className="text-[10px] font-semibold uppercase tracking-[0.12em]"
                style={{ color: 'var(--color-text-muted)' }}>Business Info</p>
             <div className="space-y-3">
-              <div>
-                <label htmlFor="vendorName" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Vendor / Business Name</label>
-                <input id="vendorName" {...register('vendorName')}
-                  className="w-full rounded-[var(--radius-md)] border px-3 py-2.5 text-[var(--text-sm)] focus:outline-none focus:border-[var(--color-accent)]"
-                  style={inputStyle(!!errors.vendorName)} placeholder="e.g. Royal Caterers" />
-                {errors.vendorName && <p className="flex items-center gap-1 mt-1 text-xs" style={{ color: 'var(--color-danger)' }}><AlertCircle className="h-3 w-3" />{errors.vendorName.message}</p>}
-              </div>
-              <div>
-                <label htmlFor="vendorType" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Vendor Type</label>
-                <select id="vendorType" {...register('vendorType')}
-                  className="w-full rounded-[var(--radius-md)] border px-3 py-2.5 text-[var(--text-sm)] focus:outline-none focus:border-[var(--color-accent)]"
-                  style={inputStyle(!!errors.vendorType)}>
-                  <option value="">Select type...</option>
-                  {VENDOR_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="phone" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Phone</label>
-                <input id="phone" {...register('phone')}
-                  className="w-full rounded-[var(--radius-md)] border px-3 py-2.5 text-[var(--text-sm)] focus:outline-none focus:border-[var(--color-accent)]"
-                  style={inputStyle(!!errors.phone)} placeholder="03xx-xxxxxxx" />
-                {errors.phone && <p className="flex items-center gap-1 mt-1 text-xs" style={{ color: 'var(--color-danger)' }}><AlertCircle className="h-3 w-3" />{errors.phone.message}</p>}
-              </div>
+              <FormInput
+                id="vendorName"
+                label="Vendor / Business Name"
+                register={register('vendorName')}
+                error={errors.vendorName?.message}
+                placeholder="e.g. Royal Caterers"
+              />
+              <FormSelect
+                id="vendorType"
+                label="Vendor Type"
+                register={register('vendorType')}
+                error={errors.vendorType?.message}
+              >
+                <option value="">Select type...</option>
+                {VENDOR_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+              </FormSelect>
+              <FormInput
+                id="phone"
+                label="Phone"
+                register={register('phone')}
+                error={errors.phone?.message}
+                placeholder="03xx-xxxxxxx"
+              />
             </div>
 
             {/* Section: Account */}
             <p className="text-[10px] font-semibold uppercase tracking-[0.12em] pt-2"
                style={{ color: 'var(--color-text-muted)' }}>Account Info</p>
             <div className="space-y-3">
-              <div>
-                <label htmlFor="ownerName" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Owner Name</label>
-                <input id="ownerName" {...register('ownerName')}
-                  className="w-full rounded-[var(--radius-md)] border px-3 py-2.5 text-[var(--text-sm)] focus:outline-none focus:border-[var(--color-accent)]"
-                  style={inputStyle(!!errors.ownerName)} placeholder="Your full name" />
-              </div>
-              <div>
-                <label htmlFor="reg-email" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Email</label>
-                <input id="reg-email" type="email" {...register('email')}
-                  className="w-full rounded-[var(--radius-md)] border px-3 py-2.5 text-[var(--text-sm)] focus:outline-none focus:border-[var(--color-accent)]"
-                  style={inputStyle(!!errors.email)} placeholder="you@company.com" />
-              </div>
-              <div>
-                <label htmlFor="reg-password" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Password</label>
-                <div className="relative">
-                  <input id="reg-password" type={showPassword ? 'text' : 'password'} {...register('password')}
-                    className="w-full rounded-[var(--radius-md)] border px-3 py-2.5 pr-10 text-[var(--text-sm)] focus:outline-none focus:border-[var(--color-accent)]"
-                    style={inputStyle(!!errors.password)} placeholder="Min. 8 characters" />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2" aria-label="Toggle password">
+              <FormInput
+                id="ownerName"
+                label="Owner Name"
+                register={register('ownerName')}
+                error={errors.ownerName?.message}
+                placeholder="Your full name"
+              />
+              <FormInput
+                id="reg-email"
+                type="email"
+                label="Email"
+                register={register('email')}
+                error={errors.email?.message}
+                placeholder="you@company.com"
+              />
+              <FormInput
+                id="reg-password"
+                type={showPassword ? 'text' : 'password'}
+                label="Password"
+                register={register('password')}
+                error={errors.password?.message}
+                placeholder="Min. 8 characters"
+                rightElement={
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} aria-label="Toggle password">
                     {showPassword ? <EyeOff className="h-4 w-4" style={{ color: 'var(--color-text-muted)' }} /> : <Eye className="h-4 w-4" style={{ color: 'var(--color-text-muted)' }} />}
                   </button>
-                </div>
-                {errors.password && <p className="flex items-center gap-1 mt-1 text-xs" style={{ color: 'var(--color-danger)' }}><AlertCircle className="h-3 w-3" />{errors.password.message}</p>}
-              </div>
-              <div>
-                <label htmlFor="confirmPassword" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Confirm Password</label>
-                <input id="confirmPassword" type="password" {...register('confirmPassword')}
-                  className="w-full rounded-[var(--radius-md)] border px-3 py-2.5 text-[var(--text-sm)] focus:outline-none focus:border-[var(--color-accent)]"
-                  style={inputStyle(!!errors.confirmPassword)} placeholder="Re-enter password" />
-                {errors.confirmPassword && <p className="flex items-center gap-1 mt-1 text-xs" style={{ color: 'var(--color-danger)' }}><AlertCircle className="h-3 w-3" />{errors.confirmPassword.message}</p>}
-              </div>
+                }
+              />
+              <FormInput
+                id="confirmPassword"
+                type="password"
+                label="Confirm Password"
+                register={register('confirmPassword')}
+                error={errors.confirmPassword?.message}
+                placeholder="Re-enter password"
+              />
             </div>
 
             <button type="submit" disabled={isSubmitting}

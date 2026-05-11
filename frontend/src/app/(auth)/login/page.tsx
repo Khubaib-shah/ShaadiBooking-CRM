@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 import type { z } from 'zod'
 import type { User } from '@/types/user.types'
 import type { Vendor } from '@/types/vendor.types'
+import { FormInput } from '@/components/shared/FormInput'
 
 type LoginForm = z.infer<typeof loginSchema>
 
@@ -126,56 +127,33 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-xs font-medium mb-1.5"
-                     style={{ color: 'var(--color-text-secondary)' }}>
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                {...register('email')}
-                className="w-full rounded-[var(--radius-md)] border px-3 py-2.5 text-[var(--text-sm)] transition-colors focus:outline-none focus:border-[var(--color-accent)]"
-                style={{ background: 'var(--color-bg-sunken)', borderColor: errors.email ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }}
-                placeholder="you@company.com"
-              />
-              {errors.email && (
-                <p className="flex items-center gap-1 mt-1 text-xs" style={{ color: 'var(--color-danger)' }}>
-                  <AlertCircle className="h-3 w-3" /> {errors.email.message}
-                </p>
-              )}
-            </div>
+            <FormInput
+              id="email"
+              type="email"
+              label="Email"
+              register={register('email')}
+              error={errors.email?.message}
+              placeholder="you@company.com"
+            />
 
             {/* Password */}
-            <div>
-              <label htmlFor="password" className="block text-xs font-medium mb-1.5"
-                     style={{ color: 'var(--color-text-secondary)' }}>
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  {...register('password')}
-                  className="w-full rounded-[var(--radius-md)] border px-3 py-2.5 pr-10 text-[var(--text-sm)] transition-colors focus:outline-none focus:border-[var(--color-accent)]"
-                  style={{ background: 'var(--color-bg-sunken)', borderColor: errors.password ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }}
-                  placeholder="••••••••"
-                />
+            <FormInput
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              label="Password"
+              register={register('password')}
+              error={errors.password?.message}
+              placeholder="••••••••"
+              rightElement={
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" style={{ color: 'var(--color-text-muted)' }} /> : <Eye className="h-4 w-4" style={{ color: 'var(--color-text-muted)' }} />}
                 </button>
-              </div>
-              {errors.password && (
-                <p className="flex items-center gap-1 mt-1 text-xs" style={{ color: 'var(--color-danger)' }}>
-                  <AlertCircle className="h-3 w-3" /> {errors.password.message}
-                </p>
-              )}
-            </div>
+              }
+            />
 
             {/* Submit */}
             <button

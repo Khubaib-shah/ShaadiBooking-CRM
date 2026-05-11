@@ -21,9 +21,9 @@ const PRIMARY_ITEMS = [
 const SECONDARY_ITEMS = [
   { href: '/inquiries', label: 'Inquiries', desc: 'Leads & CRM pipeline', icon: MessageSquare },
   { href: '/payments', label: 'Payments', desc: 'Accounts & cash tracking', icon: CreditCard },
-  { href: '/staff-deployment', label: 'Staffing', desc: 'Deployment rosters', icon: ClipboardList },
+  { href: '/staff-deployment', label: 'Staffing', desc: 'Worker schedule', icon: ClipboardList },
   { href: '/outsourcing', label: 'Outsourcing', desc: 'External suppliers', icon: ExternalLink },
-  { href: '/expenses', label: 'Expenses', desc: 'Operational cost ledger', icon: Receipt },
+  { href: '/expenses', label: 'Expenses', desc: 'Expense records', icon: Receipt },
   { href: '/reports', label: 'Reports', desc: 'Business analytics', icon: BarChart3 },
   { href: '/settings', label: 'Settings', desc: 'Account configuration', icon: Settings2 },
 ]
@@ -42,7 +42,7 @@ export default function MobileBottomNav() {
 
   return (
     <>
-      <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t bg-white md:hidden shadow-[0_-4px_12px_rgba(0,0,0,0.05)]"
+      <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t bg-[var(--color-bg-elevated)] md:hidden shadow-[0_-4px_12px_rgba(0,0,0,0.05)]"
            style={{ borderColor: 'var(--color-border)', background: 'var(--color-bg-elevated)' }}>
         
         {/* Render standard tab links */}
@@ -80,8 +80,8 @@ export default function MobileBottomNav() {
       <ResponsiveModal
         isOpen={moreOpen}
         onClose={() => setMoreOpen(false)}
-        title="More Operations"
-        description="Access secondary operational tools and analytical accounts"
+        title="More Menu"
+        description="Access secondary tools and accounts"
       >
         <div className="grid grid-cols-1 gap-3 py-2">
           {SECONDARY_ITEMS.map((item) => {

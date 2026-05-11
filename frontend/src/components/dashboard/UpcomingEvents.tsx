@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Loader2 } from 'lucide-react'
 import { formatDate, relativeTime } from '@/lib/utils/dates'
 import { formatRupees } from '@/lib/utils/currency'
@@ -30,7 +31,8 @@ export default function UpcomingEvents() {
           {upcoming.map((event) => {
             const d = new Date(event.eventDate)
           return (
-            <div
+            <Link
+              href={`/bookings/${event._id}`}
               key={event._id}
               className="flex items-center gap-4 rounded-lg p-3 transition-colors hover:bg-[var(--color-bg-sunken)]"
             >
@@ -63,7 +65,7 @@ export default function UpcomingEvents() {
                   {formatRupees(event.totalOutstanding, true)}
                 </span>
               </div>
-            </div>
+            </Link>
           )
           })}
         </div>

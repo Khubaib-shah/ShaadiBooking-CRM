@@ -56,7 +56,7 @@ export default function CalendarPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         
         {/* Left 2 Columns: Calendar Board */}
-        <div className="lg:col-span-2 rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="lg:col-span-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           
           {/* Calendar Header Month Controller */}
           <div className="flex items-center justify-between mb-6">
@@ -165,7 +165,7 @@ export default function CalendarPage() {
         </div>
 
         {/* Right 1 Column: Daily Event Planner Panel */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm flex flex-col justify-between">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[var(--color-border)]">
               <CalendarIcon className="h-4.5 w-4.5 text-[var(--color-accent)]" />

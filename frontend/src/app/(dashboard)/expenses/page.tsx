@@ -101,7 +101,7 @@ export default function ExpensesPage() {
           <div className="flex gap-2">
             <button
               onClick={() => toast.success('Exporting expense ledger to CSV...')}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-white px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
             >
               <Download className="h-4 w-4" /> Export
             </button>
@@ -120,7 +120,7 @@ export default function ExpensesPage() {
         
         {/* Left column: total stats and category cards list */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm flex items-center justify-between">
+          <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1">General Payout Liabilities</p>
               <p className="text-3xl font-black text-[var(--color-text-primary)] font-mono">
@@ -137,7 +137,7 @@ export default function ExpensesPage() {
             {Object.entries(CATEGORY_COLORS).map(([cat, color]) => {
               const amount = expenses.filter(e => e.category === cat).reduce((sum, current) => sum + current.amount, 0)
               return (
-                <div key={cat} className="rounded-xl border border-[var(--color-border)] bg-white p-4 shadow-sm flex justify-between items-center">
+                <div key={cat} className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4 shadow-sm flex justify-between items-center">
                   <div className="flex items-center gap-2.5">
                     <span className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
                     <span className="text-xs font-bold text-[var(--color-text-primary)]">{cat}</span>
@@ -150,7 +150,7 @@ export default function ExpensesPage() {
         </div>
 
         {/* Right column: Beautiful Recharts donut chart visualization */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm flex flex-col justify-between">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm flex flex-col justify-between">
           <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2 mb-4">Cost Structure Breakdown</h3>
           
           <div className="h-56">
@@ -191,7 +191,7 @@ export default function ExpensesPage() {
       </div>
 
       {/* Categories select row and search input */}
-      <div className="rounded-xl border border-[var(--color-border)] bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-1.5">
           <button
             onClick={() => setActiveCategory('all')}
@@ -215,12 +215,12 @@ export default function ExpensesPage() {
           placeholder="Search costs by event or payee..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-xs bg-white focus:outline-none focus:border-[var(--color-accent)] text-[var(--color-text-primary)] shadow-sm max-w-xs"
+          className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-xs bg-[var(--color-bg-elevated)] focus:outline-none focus:border-[var(--color-accent)] text-[var(--color-text-primary)] shadow-sm max-w-xs"
         />
       </div>
 
       {/* Expenses Table ledger */}
-      <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-sm">
         <table className="w-full min-w-[700px]">
           <thead className="bg-[var(--color-bg-sunken)]">
             <tr>

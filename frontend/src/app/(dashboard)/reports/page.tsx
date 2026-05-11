@@ -15,10 +15,10 @@ export default function ReportsHubPage() {
       <PageHeader title="Reports" description="Analytics and performance reporting modules" />
       <div className="grid gap-4 md:grid-cols-3">
         {cards.map((card) => (
-          <Link key={card.href} href={card.href} className="rounded-xl border border-[#e9ecef] bg-white p-5 transition hover:shadow-sm">
+          <Link key={card.href} href={card.href} className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 transition hover:shadow-sm">
             <card.icon className="mb-3 h-6 w-6 text-[#556ee6]" />
-            <h3 className="text-[15px] font-semibold text-[#343a40]">{card.title}</h3>
-            <p className="mt-1 text-[13px] text-[#74788d]">{card.desc}</p>
+            <h3 className="text-[15px] font-semibold text-[var(--color-text-primary)]">{card.title}</h3>
+            <p className="mt-1 text-[13px] text-[var(--color-text-muted)]">{card.desc}</p>
           </Link>
         ))}
       </div>

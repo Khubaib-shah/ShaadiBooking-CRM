@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  LayoutDashboard, CalendarDays, BookOpen, MessageSquare, CreditCard, Users, Settings2, ChevronLeft, X, ClipboardList, ExternalLink, Receipt, BarChart3, LogOut
+  LayoutDashboard, CalendarDays, BookOpen, MessageSquare, CreditCard, Users, Settings2, ChevronLeft, X, ClipboardList, ExternalLink, Receipt, BarChart3, LogOut, Sun, Moon
 } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import { useUIStore } from '@/lib/store/uiStore'
@@ -23,7 +23,7 @@ const NAV_ITEMS = [
   ]},
   { label: 'WORKFORCE', items: [
     { href: '/workers', label: 'Workers', icon: Users },
-    { href: '/staff-deployment', label: 'Staff Deployment', icon: ClipboardList },
+    { href: '/staff-deployment', label: 'Staff Schedule', icon: ClipboardList },
   ]},
   { label: 'SERVICES', items: [
     { href: '/outsourcing', label: 'Outsourcing', icon: ExternalLink },
@@ -39,7 +39,7 @@ const NAV_ITEMS = [
 
 export default function Sidebar() {
   const pathname = usePathname()
-  const { sidebarCollapsed, toggleSidebar, setSidebarCollapsed } = useUIStore()
+  const { sidebarCollapsed, toggleSidebar, setSidebarCollapsed, theme, toggleTheme } = useUIStore()
   const { user, vendor } = useAuthStore()
   const { logout } = useLogout()
 
@@ -72,8 +72,8 @@ export default function Sidebar() {
           sidebarCollapsed ? '-translate-x-full lg:w-[60px]' : 'translate-x-0 w-[var(--sidebar-width)]'
         )}
         style={{
-          background: '#2a3042',
-          borderColor: '#343a52',
+          background: 'var(--color-bg-elevated)',
+          borderColor: 'var(--color-border)',
         }}
       >
         {/* Logo */}
@@ -81,34 +81,34 @@ export default function Sidebar() {
           <Link href="/" className="flex items-center gap-1.5">
             {!sidebarCollapsed && (
               <>
-                <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1.25rem', color: '#ffffff' }}>
+                <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1.25rem', color: 'var(--color-text-primary)' }}>
                   Shaadi
                 </span>
-                <span style={{ color: '#556ee6', fontSize: '8px' }}>●</span>
-                <span style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '1.25rem', color: '#ffffff' }}>
+                <span style={{ color: 'var(--color-accent)', fontSize: '8px' }}>●</span>
+                <span style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '1.25rem', color: 'var(--color-text-secondary)' }}>
                   Book
                 </span>
               </>
             )}
             {sidebarCollapsed && (
-              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1.25rem', color: '#556ee6' }}>
+              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1.25rem', color: 'var(--color-accent)' }}>
                 S
               </span>
             )}
           </Link>
           <button
             onClick={toggleSidebar}
-            className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md transition-colors hover:bg-[#2e3548]"
+            className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md transition-colors hover:bg-[var(--color-bg-sunken)]"
             aria-label="Toggle sidebar"
           >
-            <ChevronLeft className={cn('h-4 w-4 text-[#a6b0cf] transition-transform', sidebarCollapsed && 'rotate-180')} />
+            <ChevronLeft className={cn('h-4 w-4 text-[var(--color-text-muted)] transition-transform', sidebarCollapsed && 'rotate-180')} />
           </button>
           <button
             onClick={toggleSidebar}
-            className="flex lg:hidden items-center justify-center h-7 w-7 rounded-md"
+            className="flex lg:hidden items-center justify-center h-7 w-7 rounded-md hover:bg-[var(--color-bg-sunken)] transition-colors"
             aria-label="Close sidebar"
           >
-            <X className="h-4 w-4 text-[#a6b0cf]" />
+            <X className="h-4 w-4 text-[var(--color-text-muted)]" />
           </button>
         </div>
 
@@ -117,7 +117,7 @@ export default function Sidebar() {
           {NAV_ITEMS.map((section) => (
             <div key={section.label}>
               {!sidebarCollapsed && (
-                <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#6a7187' }}>
+                <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--color-text-muted)]">
                   {section.label}
                 </p>
               )}
@@ -131,11 +131,10 @@ export default function Sidebar() {
                       className={cn(
                         'flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-150',
                         active
-                          ? 'text-white border-l-[3px] border-[#556ee6]'
-                          : 'text-[#a6b0cf] hover:text-white hover:bg-[#2e3548]',
+                          ? 'text-[var(--color-accent)] bg-[var(--color-accent-soft)]'
+                          : 'text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] hover:bg-[var(--color-bg-sunken)]',
                         sidebarCollapsed && 'justify-center px-2'
                       )}
-                      style={active ? { background: '#374151' } : undefined}
                     >
                       <item.icon className="h-4 w-4 shrink-0" />
                       {!sidebarCollapsed && <span>{item.label}</span>}
@@ -148,13 +147,13 @@ export default function Sidebar() {
         </nav>
 
         {/* Bottom section */}
-        <div className="border-t px-3 py-4 space-y-3" style={{ borderColor: '#343a52' }}>
+        <div className="border-t px-3 py-4 space-y-3" style={{ borderColor: 'var(--color-border)' }}>
           {/* Subscription badge */}
           {!sidebarCollapsed && vendor?.subscription && (
-            <div className="rounded-lg px-3 py-2 text-xs"
+            <div className="rounded-lg px-3 py-2 text-xs font-semibold"
                  style={{
-                   background: vendor.subscription.plan === 'trial' ? '#fff3cd' : '#374151',
-                   color: vendor.subscription.plan === 'trial' ? '#f1b44c' : '#ffffff',
+                   background: vendor.subscription.plan === 'trial' ? 'var(--color-warning-bg)' : 'var(--color-accent-soft)',
+                   color: vendor.subscription.plan === 'trial' ? 'var(--color-warning)' : 'var(--color-accent)',
                  }}>
               {vendor.subscription.plan === 'trial'
                 ? `Trial: ${vendor.subscription.daysRemaining} days left`
@@ -166,33 +165,38 @@ export default function Sidebar() {
           <div className={cn('flex items-center justify-between gap-3', sidebarCollapsed && 'flex-col')}>
             <div className={cn('flex items-center gap-3', sidebarCollapsed && 'justify-center')}>
               <div
-                className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold shrink-0"
-                style={{ background: '#374151', color: '#ffffff' }}
+                className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold shrink-0 bg-[var(--color-accent-soft)] text-[var(--color-accent)]"
               >
                 {user?.name?.charAt(0)?.toUpperCase() || 'U'}
               </div>
               {!sidebarCollapsed && (
                 <div className="min-w-0">
-                  <p className="truncate text-[13px] font-medium" style={{ color: '#ffffff' }}>
+                  <p className="truncate text-[13px] font-bold text-[var(--color-text-primary)]">
                     {user?.name || 'User'}
                   </p>
-                  <p className="text-[10px] uppercase tracking-wider" style={{ color: '#a6b0cf' }}>
+                  <p className="text-[10px] uppercase tracking-wider font-bold text-[var(--color-text-muted)]">
                     {user?.role || 'owner'}
                   </p>
                 </div>
               )}
             </div>
 
-            <button
-              onClick={logout}
-              className={cn(
-                "flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-red-500/10 hover:text-red-500",
-                !sidebarCollapsed && "ml-auto"
-              )}
-              title="Logout"
-            >
-              <LogOut className="h-4 w-4" style={{ color: '#a6b0cf' }} />
-            </button>
+            <div className={cn("flex items-center gap-1", !sidebarCollapsed && "ml-auto")}>
+              <button
+                onClick={toggleTheme}
+                className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-[var(--color-bg-sunken)] text-[var(--color-text-muted)] hover:text-[var(--color-accent)]"
+                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
+              <button
+                onClick={logout}
+                className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-red-50 hover:dark:bg-red-900/20 text-[var(--color-text-muted)] hover:text-red-500"
+                title="Logout"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
       </aside>

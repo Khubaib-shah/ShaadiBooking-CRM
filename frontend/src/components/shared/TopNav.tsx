@@ -19,7 +19,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/payments': 'Payments',
   '/workers': 'Workforce',
   '/workers/salaries': 'Salary Management',
-  '/staff-deployment': 'Staff Deployment',
+  '/staff-deployment': 'Staff Schedule',
   '/outsourcing': 'Outsourcing',
   '/expenses': 'Expenses',
   '/reports': 'Reports',
@@ -54,7 +54,7 @@ export default function TopNav() {
 
   // Standard Mock Notification list state
   const [notifications, setNotifications] = useState<NotificationItem[]>([
-    { id: 'n1', text: 'Imran Barat Banquet starts in 2 hours. Staff rosters loaded.', time: '2 hours ago', type: 'info', url: '/calendar' },
+    { id: 'n1', text: 'Imran Barat Banquet starts in 2 hours. Staff schedule loaded.', time: '2 hours ago', type: 'info', url: '/calendar' },
     { id: 'n2', text: 'New inquiry received from Zara Hussain for Mehndi.', time: '5 hours ago', type: 'alert', url: '/inquiries' },
     { id: 'n3', text: 'Payment overdue notice: Ahmed Khan second installment.', time: '1 day ago', type: 'payment', url: '/bookings/1' }
   ])
@@ -136,18 +136,18 @@ export default function TopNav() {
         sidebarCollapsed ? 'lg:ml-[60px]' : 'lg:ml-[var(--sidebar-width)]'
       )}
       style={{
-        background: '#ffffff',
-        borderColor: '#e9ecef',
+        background: 'var(--color-bg-elevated)',
+        borderColor: 'var(--color-border)',
       }}
     >
       {/* Left side: Mobile burger toggler and active page header */}
       <div className="flex items-center gap-4">
         <button
           onClick={toggleSidebar}
-          className="flex lg:hidden items-center justify-center h-8 w-8 rounded-md transition-colors hover:bg-[#f1f3f5]"
+          className="flex lg:hidden items-center justify-center h-8 w-8 rounded-md transition-colors hover:bg-[var(--color-bg-sunken)]"
           aria-label="Open menu"
         >
-          <Menu className="h-5 w-5 text-[#74788d]" />
+          <Menu className="h-5 w-5 text-[var(--color-text-muted)]" />
         </button>
         <div>
           <h1 className="!text-[18px] font-semibold uppercase tracking-wide" style={{ fontFamily: 'var(--font-body)', color: '#343a40' }}>
@@ -165,7 +165,7 @@ export default function TopNav() {
           className="flex h-9 w-9 items-center justify-center rounded-md transition-colors hover:bg-[#f1f3f5]"
           aria-label="Search (Cmd+K)"
         >
-          <Search className="h-4 w-4 text-[#74788d]" />
+          <Search className="h-4 w-4 text-[var(--color-text-muted)]" />
         </button>
 
         {/* Notifications Popover Trigger */}
@@ -175,7 +175,7 @@ export default function TopNav() {
             className="relative flex h-9 w-9 items-center justify-center rounded-md transition-colors hover:bg-[#f1f3f5]"
             aria-label="Notifications"
           >
-            <Bell className="h-4 w-4 text-[#74788d]" />
+            <Bell className="h-4 w-4 text-[var(--color-text-muted)]" />
             {notifications.length > 0 && (
               <span className="absolute -top-0.5 -right-1 min-w-4 rounded-full px-1 text-[10px] font-semibold text-white bg-[var(--color-danger)]">
                 {notifications.length}
@@ -191,7 +191,7 @@ export default function TopNav() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 mt-2 w-80 rounded-xl border border-[var(--color-border)] bg-white p-4 shadow-xl z-40 focus:outline-none"
+                className="absolute right-0 mt-2 w-80 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4 shadow-xl z-40 focus:outline-none"
               >
                 <div className="flex justify-between items-center pb-2 border-b border-[var(--color-border)] mb-2">
                   <span className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)]">Notifications</span>
@@ -266,7 +266,7 @@ export default function TopNav() {
               className="flex items-center justify-center rounded transition-colors hover:text-red-500"
               title="Logout"
             >
-              <LogOut className="h-3.5 w-3.5 text-[#74788d] hover:text-inherit" />
+              <LogOut className="h-3.5 w-3.5 text-[var(--color-text-muted)] hover:text-inherit" />
             </button>
           </div>
         )}
@@ -289,7 +289,7 @@ export default function TopNav() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
               transition={{ duration: 0.18 }}
-              className="relative z-10 w-full max-w-xl rounded-xl border p-0 shadow-2xl overflow-hidden focus:outline-none bg-white"
+              className="relative z-10 w-full max-w-xl rounded-xl border p-0 shadow-2xl overflow-hidden focus:outline-none bg-[var(--color-bg-elevated)]"
               style={{ borderColor: 'var(--color-border)' }}
             >
               {/* Search input field */}
@@ -300,7 +300,7 @@ export default function TopNav() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search bookings, inquiries, roster or navigations..."
+                  placeholder="Search bookings, inquiries, schedule or navigations..."
                   className="w-full text-sm outline-none bg-transparent text-[var(--color-text-primary)]"
                 />
                 <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded-md bg-[var(--color-bg-sunken)] border border-[var(--color-border)] text-[var(--color-text-muted)]">

@@ -12,7 +12,7 @@ const toneMap = {
 
 export default function StatusDot({ tone, label }: StatusDotProps) {
   return (
-    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[#74788d]">
+    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[var(--color-text-muted)]">
       <span className="h-2 w-2 rounded-full" style={{ background: toneMap[tone] }} />
       {label}
     </span>

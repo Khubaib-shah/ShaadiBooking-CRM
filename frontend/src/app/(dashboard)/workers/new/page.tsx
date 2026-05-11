@@ -99,7 +99,7 @@ export default function NewWorkerPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         
         {/* SECTION 1: BASIC INFORMATION */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
           <h3 className="text-sm font-bold uppercase tracking-wider mb-4 text-[var(--color-text-muted)] flex items-center gap-1.5">
             <Sparkles className="h-4 w-4 text-[#556ee6]" /> 1. Personal & Contact Ledger
           </h3>
@@ -180,7 +180,7 @@ export default function NewWorkerPage() {
         </div>
 
         {/* SECTION 2: ROLE & EMPLOYMENT */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
           <h3 className="text-sm font-bold uppercase tracking-wider mb-4 text-[var(--color-text-muted)] flex items-center gap-1.5">
             <Sparkles className="h-4 w-4 text-[#556ee6]" /> 2. Role & Employment Parameters
           </h3>
@@ -249,7 +249,7 @@ export default function NewWorkerPage() {
         </div>
 
         {/* SECTION 3: COMPENSATION DETAILS */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
           <h3 className="text-sm font-bold uppercase tracking-wider mb-4 text-[var(--color-text-muted)] flex items-center gap-1.5">
             <Sparkles className="h-4 w-4 text-[#556ee6]" /> 3. Financial Compensation
           </h3>
@@ -296,7 +296,7 @@ export default function NewWorkerPage() {
         </div>
 
         {/* SECTION 4: INTERNAL NOTES */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
           <h3 className="text-sm font-bold uppercase tracking-wider mb-3" style={{ color: 'var(--color-text-muted)' }}>
             4. Operational Notes
           </h3>

@@ -46,7 +46,7 @@ export default function BookingsPage() {
       {
         header: 'Client',
         accessorKey: 'clientName',
-        cell: ({ row }) => <span className="font-semibold text-[#343a40]">{row.original.clientName}</span>,
+        cell: ({ row }) => <span className="font-semibold text-[var(--color-text-primary)]">{row.original.clientName}</span>,
       },
       {
         header: 'Event',
@@ -62,8 +62,8 @@ export default function BookingsPage() {
         accessorKey: 'eventDate',
         cell: ({ row }) => (
           <div>
-            <p className="text-[13px] font-semibold text-[#343a40]">{formatDate(row.original.eventDate)}</p>
-            <p className="text-[11px] text-[#74788d]">{relativeTime(row.original.eventDate)}</p>
+            <p className="text-[13px] font-semibold text-[var(--color-text-primary)]">{formatDate(row.original.eventDate)}</p>
+            <p className="text-[11px] text-[var(--color-text-muted)]">{relativeTime(row.original.eventDate)}</p>
           </div>
         ),
       },
@@ -76,7 +76,7 @@ export default function BookingsPage() {
         header: 'Contract',
         accessorKey: 'totalContractValue',
         cell: ({ row }) => (
-          <span className="font-semibold font-mono text-xs text-[#343a40]">
+          <span className="font-semibold font-mono text-xs text-[var(--color-text-primary)]">
             {formatRupees(row.original.totalContractValue, true)}
           </span>
         ),
@@ -94,7 +94,7 @@ export default function BookingsPage() {
         header: 'Actions',
         id: 'actions',
         cell: ({ row }) => (
-          <Link href={`/bookings/${row.original._id}`} className="rounded-md px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-[#74788d] hover:bg-[#f1f3f5] border border-[var(--color-border)]">
+          <Link href={`/bookings/${row.original._id}`} className="rounded-md px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-[var(--color-text-muted)] hover:bg-[#f1f3f5] border border-[var(--color-border)]">
             View
           </Link>
         ),

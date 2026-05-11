@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   useKeyboardShortcuts()
 
   return (
-    <div className="min-h-screen" style={{ background: '#f8f9fa' }}>
+    <div className="min-h-screen" style={{ background: 'var(--color-bg)' }}>
       <Sidebar />
       <TopNav />
       <MobileBottomNav />

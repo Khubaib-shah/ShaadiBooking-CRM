@@ -116,6 +116,7 @@ export const bookingsApi = {
       perHeadPrice: data.perHeadPrice ?? target.perHeadPrice,
       contract: data.totalContractValue ?? target.contract,
       status: data.status ?? target.status,
+      menu: data.menu ?? target.menu,
       outstanding: (data.totalContractValue ?? target.contract) - target.paid
     } as any)
 

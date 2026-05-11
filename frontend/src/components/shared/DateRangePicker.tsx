@@ -13,14 +13,14 @@ export default function DateRangePicker({ from = '', to = '', onChange }: DateRa
         type="date"
         value={from}
         onChange={(e) => onChange?.({ from: e.target.value, to })}
-        className="rounded-lg border border-[#e9ecef] px-3 py-2 text-[13px]"
+        className="rounded-lg border border-[var(--color-border)] px-3 py-2 text-[13px]"
       />
-      <span className="text-[12px] text-[#74788d]">to</span>
+      <span className="text-[12px] text-[var(--color-text-muted)]">to</span>
       <input
         type="date"
         value={to}
         onChange={(e) => onChange?.({ from, to: e.target.value })}
-        className="rounded-lg border border-[#e9ecef] px-3 py-2 text-[13px]"
+        className="rounded-lg border border-[var(--color-border)] px-3 py-2 text-[13px]"
       />
     </div>
   )

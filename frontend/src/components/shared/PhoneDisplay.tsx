@@ -11,7 +11,7 @@ export default function PhoneDisplay({ phone }: PhoneDisplayProps) {
       href={`https://wa.me/92${normalized.slice(1)}`}
       target="_blank"
       rel="noreferrer"
-      className="text-[13px] text-[#74788d] hover:text-[#556ee6]"
+      className="text-[13px] text-[var(--color-text-muted)] hover:text-[#556ee6]"
     >
       {formatted}
     </a>

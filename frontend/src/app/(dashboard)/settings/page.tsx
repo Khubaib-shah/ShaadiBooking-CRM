@@ -198,7 +198,7 @@ export default function SettingsPage() {
 
   return (
     <PageWrapper>
-      <PageHeader title="Settings" description="Manage your vendor business account, notification timelines, and active team rosters" />
+      <PageHeader title="Settings" description="Manage your vendor business account, notification timelines, and active team lists" />
 
       {/* Settings Navigation Tabs */}
       <div className="flex gap-1 border-b mb-6 overflow-x-auto flex-nowrap scrollbar-none whitespace-nowrap" style={{ borderColor: 'var(--color-border)', WebkitOverflowScrolling: 'touch' }}>
@@ -289,7 +289,7 @@ export default function SettingsPage() {
           <div className="space-y-4">
             <div className="flex justify-between items-center mb-2">
               <div>
-                <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)]">Active Team Roster</h3>
+                <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)]">Active Team List</h3>
                 <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Manage administrative and coordination access roles</p>
               </div>
               <button
@@ -302,7 +302,7 @@ export default function SettingsPage() {
             </div>
 
             {/* Team Roster Grid Table */}
-            <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-white shadow-xs">
+            <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-xs">
               <table className="w-full min-w-[550px]">
                 <thead className="bg-[var(--color-bg-sunken)]">
                   <tr>
@@ -344,7 +344,7 @@ export default function SettingsPage() {
               isOpen={isInviteOpen}
               onClose={() => setIsInviteOpen(false)}
               title="Invite Team Member"
-              description="Invite coordinates, sales reps, or hall managers to handle operational flow."
+              description="Invite coordinators, sales reps, or hall managers to handle your events."
             >
               <form onSubmit={handleInviteSubmit} className="space-y-4">
                 <div className="space-y-1.5">
@@ -383,7 +383,7 @@ export default function SettingsPage() {
                   >
                     <option value="Owner">Owner (Full Admin Access)</option>
                     <option value="Sales Rep">Sales Rep (Leads & Inquiries)</option>
-                    <option value="Operations Manager">Operations Manager (Workforce & Deployment)</option>
+                    <option value="Operations Manager">Operations Manager (Staff & Tasks)</option>
                     <option value="Coordinator">Coordinator (On-site Logistics)</option>
                   </select>
                 </div>
@@ -557,7 +557,7 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Categories Grid Table */}
-                <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-white shadow-xs">
+                <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-xs">
                   <table className="w-full min-w-[500px]">
                     <thead className="bg-[var(--color-bg-sunken)]">
                       <tr>

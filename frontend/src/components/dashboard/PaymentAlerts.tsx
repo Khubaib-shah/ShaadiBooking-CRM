@@ -25,8 +25,8 @@ export default function PaymentAlerts() {
   }
 
   return (
-    <div className="rounded-xl border p-5 flex flex-col" style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', minHeight: '350px' }}>
-      <h3 className="text-[var(--text-base)] font-semibold mb-4" style={{ fontFamily: 'var(--font-body)', color: 'var(--color-text-primary)' }}>
+    <div className="rounded-xl border p-5 flex flex-col h-full" style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', height: '350px' }}>
+      <h3 className="text-[var(--text-base)] font-semibold mb-4 shrink-0" style={{ fontFamily: 'var(--font-body)', color: 'var(--color-text-primary)' }}>
         Payment Alerts
       </h3>
 
@@ -39,8 +39,8 @@ export default function PaymentAlerts() {
           No pending payment alerts!
         </div>
       ) : (
-        <div className="space-y-3">
-          {alerts.map((alert) => {
+        <div className="space-y-3 flex-1 overflow-y-auto pr-1 custom-scrollbar min-h-0">
+          {alerts.slice(0, 4).map((alert) => {
             const config = ALERT_CONFIG[alert.type]
             const Icon = config.icon
             return (

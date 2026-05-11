@@ -10,8 +10,11 @@ import { useCreateBooking } from '@/lib/hooks/useBookings'
 import { EVENT_TYPE_LABELS, getGuestCountModifier } from '@/lib/utils/booking'
 import { formatRupees } from '@/lib/utils/currency'
 import ResponsiveModal from '../ResponsiveModal'
+import { FormInput } from '../FormInput'
+import { FormSelect } from '../FormSelect'
 import { mockDb } from '@/lib/utils/mockDb'
 import type { z } from 'zod'
+import { toast } from 'sonner'
 
 
 
@@ -24,8 +27,14 @@ export default function NewBookingModal() {
   // Dynamic state for master menu loaded from mockDb
   const [masterMenu, setMasterMenu] = useState<any[]>([])
 
-  // Dynamic state for interactive menu selection (Mutton Biryani, Gajar Ka Halwa, Naan, Cold Drinks by default)
-  const [selectedMenuIds, setSelectedMenuIds] = useState<string[]>(['m1', 'm4', 'm6', 'm7'])
+  // Dynamic state for interactive menu selection
+  const [selectedMenuIds, setSelectedMenuIds] = useState<string[]>([])
+  
+  // Custom dish creation state
+  const [isAddingCustomDish, setIsAddingCustomDish] = useState(false)
+  const [newDishName, setNewDishName] = useState('')
+  const [newDishPrice, setNewDishPrice] = useState(0)
+  const [newDishCategory, setNewDishCategory] = useState('main')
 
 
   // Format prefilled date if exists
@@ -69,7 +78,7 @@ export default function NewBookingModal() {
 
   // Auto-compute recommended per head price based on selected dishes and guest count overhead tier
   useEffect(() => {
-    if (watched.packageType === 'per_head') {
+    if (watched.packageType === 'per_head' && selectedMenuIds.length > 0) {
       const menuSum = selectedMenuIds.reduce((sum, id) => {
         const item = masterMenu.find(m => m._id === id)
         return sum + (item?.price || 0)
@@ -79,6 +88,33 @@ export default function NewBookingModal() {
       setValue('perHeadPrice', recommendedPerHead)
     }
   }, [selectedMenuIds, watched.guestCount, watched.packageType, setValue, masterMenu])
+
+  const handleAddCustomDish = () => {
+    if (!newDishName.trim()) return
+
+    let icon = '🥗'
+    if (newDishCategory === 'main') icon = '🍖'
+    if (newDishCategory === 'sweet') icon = '🍰'
+    if (newDishCategory === 'bread') icon = '🫓'
+    if (newDishCategory === 'drink') icon = '🥤'
+
+    const newItem = mockDb.saveMenuItem({
+      name: newDishName,
+      price: newDishPrice,
+      category: newDishCategory,
+      icon
+    })
+
+    setMasterMenu(prev => [...prev, newItem])
+    setSelectedMenuIds(prev => [...prev, newItem._id])
+    
+    // Reset form
+    setNewDishName('')
+    setNewDishPrice(0)
+    setNewDishCategory('main')
+    setIsAddingCustomDish(false)
+    toast.success(`${newItem.name} instantly added to master menu!`)
+  }
 
   // Calculate net contract amount in real-time
   const calculatedTotal = watched.packageType === 'per_head'
@@ -199,23 +235,25 @@ export default function NewBookingModal() {
           <div className="space-y-4 animate-fade-in py-1">
             <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">Client Particulars</p>
             <div className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Client Name</label>
-                <input required {...register('clientName')} placeholder="e.g. Imran Khan" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
-                       style={{ background: 'var(--color-bg-sunken)', borderColor: errors.clientName ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }} />
-                {errors.clientName && <span className="text-[10px] text-[var(--color-danger)] font-bold">{errors.clientName.message}</span>}
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Phone Number</label>
-                <input required {...register('clientPhone')} placeholder="03xxxxxxxxx" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
-                       style={{ background: 'var(--color-bg-sunken)', borderColor: errors.clientPhone ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }} />
-                {errors.clientPhone && <span className="text-[10px] text-[var(--color-danger)] font-bold">{errors.clientPhone.message}</span>}
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>WhatsApp Link Number (Optional)</label>
-                <input {...register('clientWhatsapp')} placeholder="03xxxxxxxxx" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
-                       style={{ background: 'var(--color-bg-sunken)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }} />
-              </div>
+              <FormInput
+                label="Client Name"
+                register={register('clientName')}
+                error={errors.clientName?.message}
+                placeholder="e.g. Imran Khan"
+                required
+              />
+              <FormInput
+                label="Phone Number"
+                register={register('clientPhone')}
+                error={errors.clientPhone?.message}
+                placeholder="03xxxxxxxxx"
+                required
+              />
+              <FormInput
+                label="WhatsApp Link Number (Optional)"
+                register={register('clientWhatsapp')}
+                placeholder="03xxxxxxxxx"
+              />
             </div>
           </div>
         )}
@@ -225,32 +263,36 @@ export default function NewBookingModal() {
           <div className="space-y-4 animate-fade-in py-1">
             <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">Event Settings</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Event Type</label>
-                <select {...register('eventType')} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
-                        style={{ background: 'var(--color-bg-sunken)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}>
-                  {Object.entries(EVENT_TYPE_LABELS).map(([val, label]) => (
-                    <option key={val} value={val}>{label}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Event Date</label>
-                <input required type="date" {...register('eventDate')} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
-                       style={{ background: 'var(--color-bg-sunken)', borderColor: errors.eventDate ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }} />
-                {errors.eventDate && <span className="text-[10px] text-[var(--color-danger)] font-bold">{errors.eventDate.message}</span>}
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Venue / Hall Location</label>
-                <input required {...register('venueName')} placeholder="e.g. Shalimar Marquee" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
-                       style={{ background: 'var(--color-bg-sunken)', borderColor: errors.venueName ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }} />
-                {errors.venueName && <span className="text-[10px] text-[var(--color-danger)] font-bold">{errors.venueName.message}</span>}
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Guests Count</label>
-                <input required type="number" {...register('guestCount', { valueAsNumber: true })} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
-                       style={{ background: 'var(--color-bg-sunken)', borderColor: errors.guestCount ? 'var(--color-danger)' : 'var(--color-border)', color: 'var(--color-text-primary)' }} />
-                {errors.guestCount && <span className="text-[10px] text-[var(--color-danger)] font-bold">{errors.guestCount.message}</span>}
+              <FormSelect
+                label="Event Type"
+                register={register('eventType')}
+              >
+                {Object.entries(EVENT_TYPE_LABELS).map(([val, label]) => (
+                  <option key={val} value={val}>{label}</option>
+                ))}
+              </FormSelect>
+              <FormInput
+                label="Event Date"
+                type="date"
+                register={register('eventDate')}
+                error={errors.eventDate?.message}
+                required
+              />
+              <FormInput
+                label="Venue / Hall Location"
+                register={register('venueName')}
+                error={errors.venueName?.message}
+                placeholder="e.g. Shalimar Marquee"
+                required
+              />
+              <div>
+                <FormInput
+                  label="Guests Count"
+                  type="number"
+                  register={register('guestCount', { valueAsNumber: true })}
+                  error={errors.guestCount?.message}
+                  required
+                />
                 {watched.guestCount !== undefined && (
                   <div className="flex items-center gap-1.5 mt-1 text-[10px] font-bold" style={{ color: 'var(--color-text-muted)' }}>
                     <span className={`inline-block h-2 w-2 rounded-full ${
@@ -272,12 +314,48 @@ export default function NewBookingModal() {
                 <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">Catering Selection</p>
                 <h4 className="text-xs font-bold text-[var(--color-text-primary)] mt-0.5">Interactive Menu Planner</h4>
               </div>
-              <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-                {selectedMenuIds.length} Dishes Selected
-              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsAddingCustomDish(!isAddingCustomDish)}
+                  className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg border transition-colors hover:brightness-110"
+                  style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)', background: isAddingCustomDish ? 'var(--color-accent-soft)' : 'transparent' }}
+                >
+                  {isAddingCustomDish ? 'Cancel' : '+ New Dish'}
+                </button>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)] hidden sm:inline-block">
+                  {selectedMenuIds.length} Dishes Selected
+                </span>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto max-h-[220px] p-0.5">
+            {isAddingCustomDish && (
+              <div className="p-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-sunken)]/50 animate-fade-in flex flex-col sm:flex-row gap-2 items-end">
+                <div className="w-full sm:flex-1 space-y-1">
+                  <label className="text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Dish Name</label>
+                  <input type="text" placeholder="e.g. Special Kabab" value={newDishName} onChange={e => setNewDishName(e.target.value)} className="w-full text-xs rounded-lg border px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" style={{ background: 'white', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }} />
+                </div>
+                <div className="w-full sm:w-24 space-y-1">
+                  <label className="text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Price/Head</label>
+                  <input type="number" placeholder="Rs." value={newDishPrice || ''} onChange={e => setNewDishPrice(Number(e.target.value))} className="w-full text-xs rounded-lg border px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" style={{ background: 'white', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }} />
+                </div>
+                <div className="w-full sm:w-28 space-y-1">
+                  <label className="text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Category</label>
+                  <select value={newDishCategory} onChange={e => setNewDishCategory(e.target.value)} className="w-full text-xs rounded-lg border px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" style={{ background: 'white', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}>
+                    <option value="main">Main Course</option>
+                    <option value="starter">Starter</option>
+                    <option value="sweet">Sweet</option>
+                    <option value="bread">Bread</option>
+                    <option value="drink">Drink</option>
+                  </select>
+                </div>
+                <button type="button" onClick={handleAddCustomDish} disabled={!newDishName.trim()} className="w-full sm:w-auto mt-2 sm:mt-0 text-[10px] font-black uppercase tracking-wider px-4 py-2 rounded-lg text-white disabled:opacity-50 transition-colors hover:brightness-110" style={{ background: 'var(--color-accent)', minHeight: '34px' }}>
+                  Save
+                </button>
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto max-h-[220px] p-0.5 custom-scrollbar">
               {masterMenu.map((item) => {
                 const isSelected = selectedMenuIds.includes(item._id)
                 return (
@@ -351,49 +429,53 @@ export default function NewBookingModal() {
             <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">Financial Quotation & Pricing</p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Pricing Quotation Model</label>
-                <select {...register('packageType')} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
-                        style={{ background: 'var(--color-bg-sunken)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}>
-                  <option value="per_head">Per Head Charge Pricing</option>
-                  <option value="fixed">Fixed Contract Value Sum</option>
-                </select>
-              </div>
+              <FormSelect
+                label="Pricing Quotation Model"
+                register={register('packageType')}
+              >
+                <option value="per_head">Per Head Charge Pricing</option>
+                <option value="fixed">Fixed Contract Value Sum</option>
+              </FormSelect>
 
               {watched.packageType === 'per_head' ? (
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Price Per Head (Rs.)</label>
-                  <input required type="number" {...register('perHeadPrice', { valueAsNumber: true })} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)] font-mono"
-                         style={{ background: 'var(--color-bg-sunken)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }} />
-                </div>
+                <FormInput
+                  label="Price Per Head (Rs.)"
+                  type="number"
+                  className="font-mono"
+                  register={register('perHeadPrice', { valueAsNumber: true })}
+                  required
+                />
               ) : (
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Fixed Base Price (Rs.)</label>
-                  <input required type="number" {...register('totalContractValue', { valueAsNumber: true })} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)] font-mono"
-                         style={{ background: 'var(--color-bg-sunken)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }} />
-                </div>
+                <FormInput
+                  label="Fixed Base Price (Rs.)"
+                  type="number"
+                  className="font-mono"
+                  register={register('totalContractValue', { valueAsNumber: true })}
+                  required
+                />
               )}
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Discount Allowed (Rs.)</label>
-                <input type="number" {...register('discountAmount', { valueAsNumber: true })} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)] font-mono"
-                       style={{ background: 'var(--color-bg-sunken)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }} />
-              </div>
+              <FormInput
+                label="Discount Allowed (Rs.)"
+                type="number"
+                className="font-mono"
+                register={register('discountAmount', { valueAsNumber: true })}
+              />
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Contract Booking Status</label>
-                <select {...register('status')} className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
-                        style={{ background: 'var(--color-bg-sunken)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}>
-                  <option value="confirmed">Confirmed</option>
-                  <option value="inquiry">Inquiry</option>
-                </select>
-              </div>
+              <FormSelect
+                label="Contract Booking Status"
+                register={register('status')}
+              >
+                <option value="confirmed">Confirmed</option>
+                <option value="inquiry">Inquiry</option>
+              </FormSelect>
 
-              <div className="space-y-1.5 sm:col-span-2">
-                <label className="text-xs font-semibold" style={{ color: 'var(--color-text-secondary)' }}>Discount Reason (Optional)</label>
-                <input {...register('discountReason')} placeholder="e.g. Special off-season discount" className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-accent)]"
-                       style={{ background: 'var(--color-bg-sunken)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }} />
-              </div>
+              <FormInput
+                wrapperClassName="sm:col-span-2"
+                label="Discount Reason (Optional)"
+                register={register('discountReason')}
+                placeholder="e.g. Special off-season discount"
+              />
             </div>
 
             {/* Dynamic live calculation output card */}

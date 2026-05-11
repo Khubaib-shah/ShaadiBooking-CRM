@@ -58,7 +58,7 @@ export default function ResponsiveModal({ isOpen, onClose, title, description, c
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-              className="relative z-10 w-full rounded-t-2xl bg-white p-5 pb-8 shadow-2xl focus:outline-none"
+              className="relative z-10 w-full rounded-t-2xl bg-[var(--color-bg-elevated)] p-5 pb-8 shadow-2xl focus:outline-none"
               style={{
                 background: 'var(--color-bg-elevated)',
                 maxHeight: '90vh',

@@ -32,7 +32,7 @@ export default function WorkerReportsPage() {
         actions={
           <button
             onClick={() => toast.success('Exporting workforce analytics to Excel...')}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-white px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
           >
             <Download className="h-4 w-4" /> Export Analytics
           </button>
@@ -41,7 +41,7 @@ export default function WorkerReportsPage() {
 
       {/* Analytics KPIs */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Total Deployed Crews</p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">42 workers</p>
@@ -51,7 +51,7 @@ export default function WorkerReportsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Total Wages Paid</p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">
@@ -63,7 +63,7 @@ export default function WorkerReportsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Workers Per Event</p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">11 avg</p>
@@ -73,7 +73,7 @@ export default function WorkerReportsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Top Rated Worker</p>
           <div className="flex items-center justify-between">
             <p className="text-sm font-black text-[var(--color-text-primary)]">Ahmed Ali (Waiter)</p>
@@ -86,7 +86,7 @@ export default function WorkerReportsPage() {
 
       {/* Role utilization horizontal Recharts chart */}
       <div className="grid gap-6 md:grid-cols-3 mb-6">
-        <div className="md:col-span-2 rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm">
+        <div className="md:col-span-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm">
           <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2 mb-4">Workforce Utilization % by Category</h3>
           
           <div className="h-64">
@@ -106,7 +106,7 @@ export default function WorkerReportsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm flex flex-col justify-between">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm flex flex-col justify-between">
           <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2 mb-3">Utilization Context</h3>
           <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
             Utilization values are tracked dynamically based on assigned worker days relative to total weekend active rosters. 
@@ -122,7 +122,7 @@ export default function WorkerReportsPage() {
       </div>
 
       {/* Top Performers Ranking Table */}
-      <div className="rounded-xl border border-[var(--color-border)] bg-white shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-sm overflow-hidden">
         <div className="px-5 py-4 border-b border-[var(--color-border)]">
           <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)]">Workforce Rankings & Ratings</h3>
         </div>
