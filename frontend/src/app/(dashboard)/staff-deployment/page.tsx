@@ -164,13 +164,13 @@ export default function StaffDeploymentPage() {
   return (
     <PageWrapper>
       <PageHeader
-        title="Staff Deployment"
-        description="Assign, deploy, and monitor event-level staffing completeness"
+        title="Staff Schedule"
+        description="Assign and monitor event-level staffing assignments"
       />
 
       {/* Staffing Status KPIs */}
       <div className="grid gap-4 sm:grid-cols-3 mb-6">
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Staffing Progress</p>
           <div className="flex items-baseline gap-2">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">{stats.percent}%</p>
@@ -180,7 +180,7 @@ export default function StaffDeploymentPage() {
             <div className="h-2 rounded-full bg-[#34c38f]" style={{ width: `${stats.percent}%` }} />
           </div>
         </div>
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm flex items-center gap-4">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm flex items-center gap-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#34c38f]/10 text-[#34c38f]">
             <UserCheck className="h-5 w-5" />
           </div>
@@ -189,7 +189,7 @@ export default function StaffDeploymentPage() {
             <p className="text-xl font-black text-[var(--color-text-primary)] font-mono mt-0.5">{stats.totalAsg}</p>
           </div>
         </div>
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm flex items-center gap-4">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm flex items-center gap-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f1b44c]/10 text-[#f1b44c]">
             <AlertTriangle className="h-5 w-5" />
           </div>
@@ -201,7 +201,7 @@ export default function StaffDeploymentPage() {
       </div>
 
       {/* Booked Dates Navigator */}
-      <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm mb-6">
+      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm mb-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex flex-col">
             <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Event Dates</p>
@@ -246,7 +246,7 @@ export default function StaffDeploymentPage() {
       {/* Deployments List render */}
       <div className="space-y-6">
         {activeDeployments.length === 0 ? (
-          <div className="rounded-xl border border-[var(--color-border)] bg-white p-8 text-center" style={{ minHeight: '200px' }}>
+          <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8 text-center" style={{ minHeight: '200px' }}>
             <p className="text-sm font-semibold text-[var(--color-text-primary)] mb-1">No active events on this date</p>
             <p className="text-xs text-[var(--color-text-muted)]">Check another day of the week above.</p>
           </div>
@@ -256,7 +256,7 @@ export default function StaffDeploymentPage() {
             const isFullyStaffed = event.assigned === event.required
 
             return (
-              <div key={event.id} className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm space-y-5">
+              <div key={event.id} className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm space-y-5">
                 <div className="flex items-start justify-between border-b pb-4 border-[var(--color-border)]">
                   <div>
                     <h3 className="text-base font-bold text-[var(--color-text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
@@ -307,7 +307,7 @@ export default function StaffDeploymentPage() {
                       {/* List of assigned personnel */}
                       <div className="space-y-1.5">
                         {rn.workers.map((worker) => (
-                          <div key={worker} className="flex justify-between items-center text-xs px-2.5 py-1.5 rounded bg-white border border-[var(--color-border)] text-[var(--color-text-primary)]">
+                          <div key={worker} className="flex justify-between items-center text-xs px-2.5 py-1.5 rounded bg-[var(--color-bg-elevated)] border border-[var(--color-border)] text-[var(--color-text-primary)]">
                             <span className="font-medium">{worker}</span>
                             <button
                               onClick={() => removeWorker(event.id, rn.role, worker)}
@@ -323,7 +323,7 @@ export default function StaffDeploymentPage() {
                           <div
                             key={idx}
                             onClick={() => openAssignPanel(event, rn.role)}
-                            className="text-center py-2 text-[11px] font-semibold rounded-lg border-2 border-dashed border-[var(--color-border-mid)] text-[var(--color-text-muted)] cursor-pointer hover:border-[#556ee6] hover:text-[#556ee6] transition-all bg-white"
+                            className="text-center py-2 text-[11px] font-semibold rounded-lg border-2 border-dashed border-[var(--color-border-mid)] text-[var(--color-text-muted)] cursor-pointer hover:border-[#556ee6] hover:text-[#556ee6] transition-all bg-[var(--color-bg-elevated)]"
                           >
                             + Click to assign {rn.label.slice(0, -1)}
                           </div>
@@ -351,7 +351,7 @@ export default function StaffDeploymentPage() {
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm h-full bg-white border-l shadow-2xl p-6 flex flex-col justify-between"
+              className="w-full max-w-sm h-full bg-[var(--color-bg-elevated)] border-l shadow-2xl p-6 flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between border-b pb-4 border-[var(--color-border)] mb-5">
@@ -378,7 +378,7 @@ export default function StaffDeploymentPage() {
                       <button
                         key={worker.id}
                         onClick={() => assignWorker(worker.name)}
-                        className="w-full flex items-center justify-between p-3 rounded-xl border border-[var(--color-border)] bg-white hover:bg-[var(--color-bg-sunken)] hover:border-[var(--color-border-mid)] text-left transition-all"
+                        className="w-full flex items-center justify-between p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] hover:bg-[var(--color-bg-sunken)] hover:border-[var(--color-border-mid)] text-left transition-all"
                       >
                         <div className="flex items-center gap-2.5">
                           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-bg-sunken)] text-sm">
@@ -394,7 +394,7 @@ export default function StaffDeploymentPage() {
                     ))}
                   {availableWorkers.filter(w => w.role === activeRoleToAssign).length === 0 && (
                     <div className="p-8 text-center border-2 border-dashed border-[var(--color-border)] rounded-xl">
-                      <p className="text-xs font-bold text-[var(--color-text-muted)]">No available {activeRoleToAssign}s found in roster.</p>
+                      <p className="text-xs font-bold text-[var(--color-text-muted)]">No available {activeRoleToAssign}s found in staff list.</p>
                     </div>
                   )}
                 </div>

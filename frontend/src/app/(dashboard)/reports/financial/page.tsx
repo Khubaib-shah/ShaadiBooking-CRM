@@ -5,7 +5,6 @@ import { Download, Landmark, TrendingUp, TrendingDown, DollarSign } from 'lucide
 import { toast } from 'sonner'
 import { ComposedChart, Bar, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import PageHeader from '@/components/shared/PageHeader'
-import PageWrapper from '@/components/shared/PageWrapper'
 import CurrencyDisplay from '@/components/shared/CurrencyDisplay'
 
 // High fidelity monthly financial mock data
@@ -35,14 +34,14 @@ export default function FinancialReportsPage() {
   }, [])
 
   return (
-    <PageWrapper>
+    <div className="space-y-6">
       <PageHeader
         title="Financial Report"
         description="Comprehensive analysis of business revenues, operational expenses, and profit margins"
         actions={
           <button
             onClick={() => toast.success('Exporting financial report to Excel...')}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-white px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
           >
             <Download className="h-4 w-4" /> Export Ledger
           </button>
@@ -51,7 +50,7 @@ export default function FinancialReportsPage() {
 
       {/* KPI stats display */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Total Gross Revenues</p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">
@@ -63,7 +62,7 @@ export default function FinancialReportsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Total Disbursed Costs</p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">
@@ -75,7 +74,7 @@ export default function FinancialReportsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Net Business Profits</p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-black text-[#34c38f] font-mono">
@@ -87,7 +86,7 @@ export default function FinancialReportsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Gross Profit Margin</p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">{totals.margin}%</p>
@@ -102,7 +101,7 @@ export default function FinancialReportsPage() {
       <div className="grid gap-6 md:grid-cols-2 mb-6">
         
         {/* Composed Chart: Revenue vs Total Costs */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm">
           <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2 mb-4">Revenue vs Operations Cost</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -123,7 +122,7 @@ export default function FinancialReportsPage() {
         </div>
 
         {/* Area Chart: Net Profits Area */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm">
           <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2 mb-4">Monthly Profits Curve</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -150,7 +149,7 @@ export default function FinancialReportsPage() {
       </div>
 
       {/* Monthly Financial Ledger Table */}
-      <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-sm">
         <table className="w-full min-w-[780px]">
           <thead className="bg-[var(--color-bg-sunken)]">
             <tr>
@@ -184,6 +183,6 @@ export default function FinancialReportsPage() {
           </tbody>
         </table>
       </div>
-    </PageWrapper>
+    </div>
   )
 }

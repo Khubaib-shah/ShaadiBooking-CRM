@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import QueryProvider from "@/lib/providers/QueryProvider";
 import ToastProvider from "@/lib/providers/ToastProvider";
 import ModalProvider from "@/lib/providers/ModalProvider";
+import ThemeProvider from "@/lib/providers/ThemeProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,12 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased dark">
+    <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col" style={{ fontFamily: 'var(--font-body)' }}>
         <QueryProvider>
-          {children}
-          <ModalProvider />
-          <ToastProvider />
+          <ThemeProvider>
+            {children}
+            <ModalProvider />
+            <ToastProvider />
+          </ThemeProvider>
         </QueryProvider>
       </body>
     </html>

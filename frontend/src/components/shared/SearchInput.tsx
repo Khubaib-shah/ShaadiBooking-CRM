@@ -30,7 +30,7 @@ export default function SearchInput({ placeholder = 'Search...', onSearch, delay
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
-        className="w-full rounded-lg border bg-white py-2 pl-9 pr-3 text-[13px] transition-colors focus:outline-none"
+        className="w-full rounded-lg border bg-[var(--color-bg-elevated)] py-2 pl-9 pr-3 text-[13px] transition-colors focus:outline-none"
         style={{
           background: 'var(--color-bg-sunken)',
           borderColor: 'var(--color-border)',

@@ -117,7 +117,7 @@ export default function OutsourcingPage() {
           <div className="flex gap-2">
             <button
               onClick={() => toast.success('Exporting report...')}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-white px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
             >
               <Download className="h-4 w-4" /> Export
             </button>
@@ -133,7 +133,7 @@ export default function OutsourcingPage() {
 
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Total Jobs</p>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#556ee6]/10 text-[#556ee6]">
@@ -142,19 +142,19 @@ export default function OutsourcingPage() {
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">{stats.totalJobs}</p>
           </div>
         </div>
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Total Revenue</p>
           <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">
             <CurrencyDisplay value={stats.totalRevenue} />
           </p>
         </div>
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Total Profit</p>
           <p className="text-2xl font-black text-[#34c38f] font-mono">
             <CurrencyDisplay value={stats.totalProfit} />
           </p>
         </div>
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Average Profit %</p>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#34c38f]/10 text-[#34c38f]">
@@ -166,7 +166,7 @@ export default function OutsourcingPage() {
       </div>
 
       {/* Roster list filter bar */}
-      <div className="rounded-xl border border-[var(--color-border)] bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-xs">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-[var(--color-text-muted)]" />
           <input
@@ -174,7 +174,7 @@ export default function OutsourcingPage() {
             placeholder="Search outsourcing jobs..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-[var(--color-border)] pl-9 pr-3 py-2 text-xs bg-white focus:outline-none focus:border-[var(--color-accent)] text-[var(--color-text-primary)] shadow-sm"
+            className="w-full rounded-lg border border-[var(--color-border)] pl-9 pr-3 py-2 text-xs bg-[var(--color-bg-elevated)] focus:outline-none focus:border-[var(--color-accent)] text-[var(--color-text-primary)] shadow-sm"
           />
         </div>
 
@@ -196,11 +196,11 @@ export default function OutsourcingPage() {
           const statusColors: Record<string, string> = {
             Completed: 'bg-[#d4edda] text-[#34c38f]',
             'In Progress': 'bg-[#fff3cd] text-[#f1b44c]',
-            Pending: 'bg-[#f8f9fa] text-[var(--color-text-secondary)] border border-[var(--color-border)]',
+            Pending: 'bg-[var(--color-bg-sunken)] text-[var(--color-text-secondary)] border border-[var(--color-border)]',
           }
 
           return (
-            <Link key={job.id} href={`/outsourcing/${job.id}`} className="block rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-all duration-150">
+            <Link key={job.id} href={`/outsourcing/${job.id}`} className="block rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-all duration-150">
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
@@ -253,7 +253,7 @@ export default function OutsourcingPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-7 overflow-hidden"
+              className="w-full max-w-2xl bg-[var(--color-bg-elevated)] rounded-2xl shadow-2xl p-7 overflow-hidden"
             >
               <div className="flex items-center justify-between mb-6">
                 <div>
@@ -271,7 +271,7 @@ export default function OutsourcingPage() {
                   <button 
                     type="button" 
                     onClick={() => setNewJob({...newJob, type: 'hired'})}
-                    className={`flex-1 py-2 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${newJob.type === 'hired' ? 'bg-white shadow-sm text-[#556ee6]' : 'text-[var(--color-text-muted)]'}`}
+                    className={`flex-1 py-2 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${newJob.type === 'hired' ? 'bg-[var(--color-bg-elevated)] shadow-sm text-[#556ee6]' : 'text-[var(--color-text-muted)]'}`}
                   >
                     Hiring from Outside
                   </button>
@@ -281,7 +281,7 @@ export default function OutsourcingPage() {
                       const resetCosts = newJob.items.map(i => ({ ...i, cost: 0 }))
                       setNewJob({...newJob, type: 'own', items: resetCosts})
                     }}
-                    className={`flex-1 py-2 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${newJob.type === 'own' ? 'bg-white shadow-sm text-[#556ee6]' : 'text-[var(--color-text-muted)]'}`}
+                    className={`flex-1 py-2 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${newJob.type === 'own' ? 'bg-[var(--color-bg-elevated)] shadow-sm text-[#556ee6]' : 'text-[var(--color-text-muted)]'}`}
                   >
                     Renting our Own
                   </button>
@@ -342,11 +342,11 @@ export default function OutsourcingPage() {
                 <div className="rounded-xl p-4 space-y-3" style={{ background: 'var(--color-bg-sunken)', border: '1px solid var(--color-border)' }}>
                   <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-muted)]">Money Summary</p>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-[var(--color-border)]">
+                    <div className="flex justify-between items-center bg-[var(--color-bg-elevated)] p-3 rounded-lg border border-[var(--color-border)]">
                       <span className="text-xs font-semibold text-[var(--color-text-secondary)]">Total Bill:</span>
                       <span className="text-sm font-black font-mono text-[#556ee6]"><CurrencyDisplay value={calculatedTotals.revenue} /></span>
                     </div>
-                    <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-[var(--color-border)]">
+                    <div className="flex justify-between items-center bg-[var(--color-bg-elevated)] p-3 rounded-lg border border-[var(--color-border)]">
                       <span className="text-xs font-semibold text-[var(--color-text-secondary)]">Net Profit:</span>
                       <span className="text-sm font-black font-mono text-[#34c38f]"><CurrencyDisplay value={calculatedTotals.revenue - calculatedTotals.cost} /></span>
                     </div>

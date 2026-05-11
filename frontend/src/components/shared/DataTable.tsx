@@ -45,15 +45,15 @@ export default function DataTable<TData>({ columns, data, emptyMessage = 'No rec
 
   return (
     <div className="space-y-3">
-      <div className="overflow-x-auto rounded-xl border border-[#e9ecef] bg-white">
+      <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)]">
         <table className="w-full min-w-[800px]">
-          <thead className="sticky top-0 bg-[#f8f9fa]">
+          <thead className="sticky top-0 bg-[var(--color-bg-sunken)]">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-4 py-3 text-left text-[12px] font-semibold uppercase tracking-wider text-[#74788d]"
+                    className="px-4 py-3 text-left text-[12px] font-semibold uppercase tracking-wider text-[var(--color-text-muted)]"
                   >
                     {header.isPlaceholder ? null : (
                       <button
@@ -73,13 +73,13 @@ export default function DataTable<TData>({ columns, data, emptyMessage = 'No rec
           <tbody>
             {table.getRowModel().rows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-10 text-center text-[13px] text-[#74788d]">
+                <td colSpan={columns.length} className="px-4 py-10 text-center text-[13px] text-[var(--color-text-muted)]">
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
               table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="border-t border-[#e9ecef] text-[13px] text-[#495057] hover:bg-[#f8f9fa]">
+                <tr key={row.id} className="border-t border-[var(--color-border)] text-[13px] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)]">
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="px-4 py-3 align-top">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -92,20 +92,20 @@ export default function DataTable<TData>({ columns, data, emptyMessage = 'No rec
         </table>
       </div>
 
-      <div className="flex items-center justify-between rounded-xl border border-[#e9ecef] bg-white px-4 py-3">
-        <p className="text-[12px] text-[#74788d]">{pageCountLabel}</p>
+      <div className="flex items-center justify-between rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3">
+        <p className="text-[12px] text-[var(--color-text-muted)]">{pageCountLabel}</p>
         <div className="flex items-center gap-2">
           <button
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="rounded-lg border border-[#e9ecef] px-3 py-1.5 text-[12px] font-semibold text-[#74788d] disabled:opacity-40"
+            className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-[12px] font-semibold text-[var(--color-text-muted)] disabled:opacity-40"
           >
             Previous
           </button>
           <button
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="rounded-lg border border-[#e9ecef] px-3 py-1.5 text-[12px] font-semibold text-[#74788d] disabled:opacity-40"
+            className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-[12px] font-semibold text-[var(--color-text-muted)] disabled:opacity-40"
           >
             Next
           </button>

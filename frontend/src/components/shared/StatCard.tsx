@@ -25,9 +25,9 @@ export default function StatCard({ label, value, subvalue, trend, accent = 'gold
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.22, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
-      className="relative overflow-hidden rounded-xl border p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06),0_3px_8px_rgba(15,23,42,0.06)] transition-all duration-200 ease-in-out hover:-translate-y-[2px] hover:shadow-[0_4px_14px_rgba(15,23,42,0.12)]"
+      animate={{ opacity: 1, y: 0, transition: { duration: 0.22, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] } }}
+      whileHover={{ y: -2, transition: { duration: 0.15, ease: 'easeInOut' } }}
+      className="relative overflow-hidden rounded-xl border p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06),0_3px_8px_rgba(15,23,42,0.06)] transition-shadow duration-200 ease-in-out hover:shadow-[0_4px_14px_rgba(15,23,42,0.12)]"
       style={{
         background: 'var(--color-bg-elevated)',
         borderColor: 'var(--color-border)',

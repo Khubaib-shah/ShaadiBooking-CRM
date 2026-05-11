@@ -92,6 +92,46 @@
   --content-max-w: 1280px;
 }
 
+.dark {
+  /* ── Primary — Classic Deep Blue-Gray (#2a3042) ── */
+  --color-bg:          #222736;
+  --color-bg-elevated: #2a3042;
+  --color-bg-sunken:   #2e3548;
+  --color-border:      #32394e;
+  --color-border-mid:  #343a52;
+
+  /* ── Accent — Classic Saffron / Blue ── */
+  --color-accent:        #556ee6;
+  --color-accent-soft:   rgba(85, 110, 230, 0.15);
+  --color-accent-bright: #6c81f0;
+
+  /* ── Semantic ── */
+  --color-success-bg: rgba(52, 195, 143, 0.15);
+  --color-warning-bg: rgba(241, 180, 76, 0.15);
+  --color-danger-bg:  rgba(244, 106, 106, 0.15);
+  --color-info-bg:    rgba(80, 165, 241, 0.15);
+
+  /* ── Text ── */
+  --color-text-primary:   #e9ecef;
+  --color-text-secondary: #a6b0cf;
+  --color-text-muted:     #74788d;
+  --color-text-inverse:   #ffffff;
+  
+  /* ── Status Badge Fills ── */
+  --status-inquiry:         #32394e;
+  --status-inquiry-text:    #a6b0cf;
+  --status-confirmed:       rgba(80, 165, 241, 0.15);
+  --status-confirmed-text:  #50a5f1;
+  --status-deposit:         rgba(52, 195, 143, 0.15);
+  --status-deposit-text:    #34c38f;
+  --status-balance:         rgba(241, 180, 76, 0.15);
+  --status-balance-text:    #f1b44c;
+  --status-completed:       rgba(52, 195, 143, 0.15);
+  --status-completed-text:  #34c38f;
+  --status-cancelled:       rgba(244, 106, 106, 0.15);
+  --status-cancelled-text:  #f46a6a;
+}
+
 /* ── Tailwind v4 Theme Tokens ── */
 @theme inline {
   --color-background:    var(--color-bg);

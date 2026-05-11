@@ -76,11 +76,11 @@ export default function WorkerSalariesPage() {
     <PageWrapper>
       <PageHeader
         title="Salary Management"
-        description="Salary ledger & operational payout directory"
+        description="Salary ledger & payout directory"
         actions={
           <button
             onClick={() => toast.success('Exporting salaries to CSV...')}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-white px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
           >
             <Download className="h-4 w-4" />
             Export CSV
@@ -89,7 +89,7 @@ export default function WorkerSalariesPage() {
       />
 
       {/* Month Navigator Row */}
-      <div className="flex items-center justify-between mb-6 rounded-xl border border-[var(--color-border)] bg-white p-4 shadow-sm">
+      <div className="flex items-center justify-between mb-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4 shadow-sm">
         <button
           onClick={handlePrevMonth}
           className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-bg-sunken)] transition-all"
@@ -111,19 +111,19 @@ export default function WorkerSalariesPage() {
 
       {/* Overall Payroll quick-stats row */}
       <div className="grid gap-4 sm:grid-cols-3 mb-6">
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Total Payroll Liabilities</p>
           <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">
             <CurrencyDisplay value={stats.totalNet} />
           </p>
         </div>
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Total Disbursed</p>
           <p className="text-2xl font-black text-[#34c38f] font-mono">
             <CurrencyDisplay value={stats.totalPaid} />
           </p>
         </div>
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Salaries Outstanding</p>
           <p className="text-2xl font-black text-[#f1b44c] font-mono">
             <CurrencyDisplay value={stats.totalNet - stats.totalPaid} />
@@ -140,7 +140,7 @@ export default function WorkerSalariesPage() {
             placeholder="Search ledger by name or role..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-[var(--color-border)] pl-9 pr-3 py-2 text-xs bg-white focus:outline-none focus:border-[var(--color-accent)] text-[var(--color-text-primary)] shadow-sm"
+            className="w-full rounded-lg border border-[var(--color-border)] pl-9 pr-3 py-2 text-xs bg-[var(--color-bg-elevated)] focus:outline-none focus:border-[var(--color-accent)] text-[var(--color-text-primary)] shadow-sm"
           />
         </div>
 
@@ -154,7 +154,7 @@ export default function WorkerSalariesPage() {
       </div>
 
       {/* Salary table ledger */}
-      <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-sm">
         <table className="w-full min-w-[920px]">
           <thead className="bg-[var(--color-bg-sunken)]">
             <tr>

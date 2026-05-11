@@ -39,7 +39,7 @@ export default function EventReportsPage() {
         actions={
           <button
             onClick={() => toast.success('Exporting seasonal trends to Excel...')}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-white px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
           >
             <Download className="h-4 w-4" /> Export Trends
           </button>
@@ -48,7 +48,7 @@ export default function EventReportsPage() {
 
       {/* Seasonal KPIs */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Total Bookings Managed</p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">112 events</p>
@@ -58,7 +58,7 @@ export default function EventReportsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Busiest Wedding Type</p>
           <div className="flex items-center justify-between">
             <p className="text-xl font-black text-[var(--color-text-primary)]">Barat (54%)</p>
@@ -68,7 +68,7 @@ export default function EventReportsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Average Guest Count</p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">420 guests</p>
@@ -78,7 +78,7 @@ export default function EventReportsPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm">
           <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1.5">Active Venues Ledger</p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-black text-[var(--color-text-primary)] font-mono">14 locations</p>
@@ -90,7 +90,7 @@ export default function EventReportsPage() {
       </div>
 
       {/* Seasonal Line chart representation using Recharts */}
-      <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm mb-6">
+      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm mb-6">
         <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2 mb-4">Seasonal Wedding Booking Density (Monthly Counts)</h3>
         
         <div className="h-72">
@@ -111,7 +111,7 @@ export default function EventReportsPage() {
       </div>
 
       {/* Venue Performance Table */}
-      <div className="rounded-xl border border-[var(--color-border)] bg-white shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-sm overflow-hidden">
         <div className="px-5 py-4 border-b border-[var(--color-border)]">
           <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)]">Venue Deployment & Performance Table</h3>
         </div>

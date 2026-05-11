@@ -114,7 +114,7 @@ export default function InquiriesPage() {
                 {/* Column Header */}
                 <div className="flex items-center justify-between mb-4 px-1">
                   <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)]">{col.label}</h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[var(--color-bg-elevated)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
                     {items.length}
                   </span>
                 </div>
@@ -126,7 +126,7 @@ export default function InquiriesPage() {
                       key={inq._id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, inq._id)}
-                      className="rounded-xl border p-4 shadow-xs transition-all duration-150 hover:-translate-y-[1px] hover:shadow-md cursor-grab active:cursor-grabbing bg-white group"
+                      className="rounded-xl border p-4 shadow-xs transition-all duration-150 hover:-translate-y-[1px] hover:shadow-md cursor-grab active:cursor-grabbing bg-[var(--color-bg-elevated)] group"
                       style={{ borderColor: 'var(--color-border)' }}
                     >
                       <div className="flex justify-between items-center gap-2">
@@ -199,7 +199,7 @@ export default function InquiriesPage() {
                   {col.status === 'new' && (
                     <button
                       onClick={openNewInquiry}
-                      className="w-full rounded-xl border border-dashed p-3 text-xs font-semibold text-[var(--color-text-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-all bg-white/50 hover:bg-white"
+                      className="w-full rounded-xl border border-dashed p-3 text-xs font-semibold text-[var(--color-text-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-all bg-[var(--color-bg-elevated)]/50 hover:bg-[var(--color-bg-elevated)]"
                     >
                       + Add Inquiry
                     </button>

@@ -28,12 +28,12 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
 
 export default function RevenueChart() {
   return (
-    <div className="rounded-xl border p-5" style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)' }}>
+    <div className="rounded-xl border p-5 h-full flex flex-col" style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)' }}>
       <h3 className="text-[var(--text-base)] font-semibold mb-4" style={{ fontFamily: 'var(--font-body)', color: 'var(--color-text-primary)' }}>
         Revenue Overview
       </h3>
-      <div className="h-[250px]">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="flex-1 min-h-[250px] [&_.recharts-wrapper]:!outline-none [&_.recharts-surface]:!outline-none [&>div]:!outline-none">
+        <ResponsiveContainer width="100%" height="100%" className="!outline-none">
           <AreaChart data={DEMO_DATA}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
             <XAxis

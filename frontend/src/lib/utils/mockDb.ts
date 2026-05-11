@@ -26,6 +26,8 @@ export interface MockBooking {
     dueDate: string
     isPaid: boolean
     paidAt?: string
+    paymentMethod?: 'Cash' | 'Bank Transfer' | 'EasyPaisa' | 'JazzCash' | 'Other'
+    paymentSlip?: string
   }>
   notes: Array<{
     _id: string
@@ -110,7 +112,9 @@ const DEFAULT_BOOKINGS: MockBooking[] = [
       { _id: 'ps2', type: 'balance', amountDue: 350000, dueDate: '2026-05-08', isPaid: false },
     ],
     notes: [
-      { _id: 'n1', content: 'Client requested premium mutton biryani upgrade', noteType: 'menu', createdBy: 'Ali Manager', createdAt: '2026-04-20' }
+      { _id: 'n1', content: 'Client requested premium mutton biryani upgrade', noteType: 'menu', createdBy: 'Ali Manager', createdAt: '2026-04-20' },
+      { _id: 'n1_b', content: 'Confirmed entrance theme to be floral red roses. Setup team notified.', noteType: 'decor', createdBy: 'Sajid Designer', createdAt: '2026-04-22' },
+      { _id: 'n1_c', content: 'Awaiting final guest count confirmation tomorrow morning.', noteType: 'ops', createdBy: 'Zeeshan Admin', createdAt: '2026-04-23' }
     ],
     menu: [
       { _id: 'm1', name: 'Mutton Biryani', category: 'main' },
@@ -163,7 +167,9 @@ const DEFAULT_BOOKINGS: MockBooking[] = [
       { _id: 'ps5', type: 'deposit', amountDue: 600000, dueDate: '2026-05-08', isPaid: true, paidAt: '2026-05-07' },
       { _id: 'ps6', type: 'balance', amountDue: 500000, dueDate: '2026-05-14', isPaid: false },
     ],
-    notes: []
+    notes: [
+      { _id: 'n3_a', content: 'Client might add 50 more guests. Do not finalize menu order yet.', noteType: 'ops', createdBy: 'Ali Manager', createdAt: '2026-05-01' }
+    ]
   },
   {
     _id: '4',

@@ -132,7 +132,7 @@ export default function WorkerProfilePage({ params }: { params: Promise<{ id: st
               {/* TAB 1: OVERVIEW */}
               {activeTab === 'overview' && (
                 <div className="grid gap-6 md:grid-cols-3">
-                  <div className="md:col-span-2 rounded-xl border border-[var(--color-border)] bg-white p-6 space-y-5 shadow-sm">
+                  <div className="md:col-span-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 space-y-5 shadow-sm">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Biography Details</h3>
                     
                     <div className="grid gap-y-4 gap-x-6 sm:grid-cols-2 text-sm">
@@ -163,7 +163,7 @@ export default function WorkerProfilePage({ params }: { params: Promise<{ id: st
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 space-y-5 shadow-sm">
+                  <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 space-y-5 shadow-sm">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">HR Metadata</h3>
                     
                     <div className="space-y-3.5 text-sm">
@@ -189,7 +189,7 @@ export default function WorkerProfilePage({ params }: { params: Promise<{ id: st
 
               {/* TAB 2: EVENTS HISTORY */}
               {activeTab === 'events' && (
-                <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-white shadow-sm">
+                <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-sm">
                   <table className="w-full">
                     <thead>
                       <tr className="bg-[var(--color-bg-sunken)]">
@@ -222,7 +222,7 @@ export default function WorkerProfilePage({ params }: { params: Promise<{ id: st
               {/* TAB 3: SALARY LEDGER */}
               {activeTab === 'salary' && (
                 <div className="space-y-4">
-                  <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-white shadow-sm">
+                  <div className="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-sm">
                     <table className="w-full">
                       <thead>
                         <tr className="bg-[var(--color-bg-sunken)]">
@@ -265,8 +265,8 @@ export default function WorkerProfilePage({ params }: { params: Promise<{ id: st
               {/* TAB 4: ATTENDANCE HEATMAP GRID */}
               {activeTab === 'attendance' && (
                 <div className="grid gap-6 md:grid-cols-3">
-                  <div className="md:col-span-2 rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm">
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2 mb-4">Last 30 Days Roster Log</h3>
+                  <div className="md:col-span-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm">
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2 mb-4">Last 30 Days Schedule Log</h3>
                     
                     {/* Simulated visual calendar heatmap */}
                     <div className="grid grid-cols-7 gap-1.5 max-w-sm">
@@ -293,8 +293,8 @@ export default function WorkerProfilePage({ params }: { params: Promise<{ id: st
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 space-y-5 shadow-sm">
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Roster Percentages</h3>
+                  <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 space-y-5 shadow-sm">
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Schedule Percentages</h3>
                     <div className="space-y-4">
                       <div>
                         <div className="flex justify-between text-xs font-semibold mb-1">
@@ -329,7 +329,7 @@ export default function WorkerProfilePage({ params }: { params: Promise<{ id: st
               {activeTab === 'docs' && (
                 <div className="grid gap-4 sm:grid-cols-2">
                   {p.documents.map((doc: any, idx: number) => (
-                    <div key={idx} className="flex items-center justify-between p-4 rounded-xl border border-[var(--color-border)] bg-white shadow-sm">
+                    <div key={idx} className="flex items-center justify-between p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-sm">
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#eef2ff] text-[#556ee6]">
                           <FileText className="h-5 w-5" />
@@ -357,7 +357,7 @@ export default function WorkerProfilePage({ params }: { params: Promise<{ id: st
       {/* DETAILED PRINTABLE SALARY SLIP MODAL (radix style) */}
       {slipModalOpen && selectedSlip && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg bg-white rounded-xl border p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+          <div className="relative w-full max-w-lg bg-[var(--color-bg-elevated)] rounded-xl border p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
             
             {/* Printable Content Section */}
             <div id="salary-slip-print" className="p-4 border-2 border-slate-200 rounded-lg">
@@ -400,7 +400,7 @@ export default function WorkerProfilePage({ params }: { params: Promise<{ id: st
                   <span className="font-mono text-[#f46a6a]">- <CurrencyDisplay value={selectedSlip.advance} /></span>
                 </div>
                 <div className="flex justify-between text-slate-600 font-medium">
-                  <span>Operational Deductions</span>
+                  <span>Deductions</span>
                   <span className="font-mono text-[#f46a6a]">- <CurrencyDisplay value={selectedSlip.deductions} /></span>
                 </div>
                 <div className="flex justify-between border-t pt-3 font-bold text-sm text-slate-800">

@@ -151,12 +151,12 @@ export default function WorkersPage() {
     <PageWrapper>
       <PageHeader
         title="Workforce"
-        description="Roster and availability of banquet hall workers"
+        description="Staff list and availability of banquet hall workers"
         actions={
           <div className="flex gap-2">
             <button
-              onClick={() => toast.success('Exporting roster to Excel...')}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-white px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
+              onClick={() => toast.success('Exporting staff list to Excel...')}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-sunken)] transition-all"
             >
               <Download className="h-4 w-4" />
               Export
@@ -181,7 +181,7 @@ export default function WorkersPage() {
       </div>
 
       {/* Advanced Filter Bar */}
-      <div className="rounded-xl border border-[var(--color-border)] bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           {/* Worker Type filter */}
           <select
@@ -210,21 +210,21 @@ export default function WorkersPage() {
 
         <div className="flex items-center gap-3">
           <div className="w-56 md:w-64">
-            <SearchInput placeholder="Search roster by name..." onSearch={setSearch} />
+            <SearchInput placeholder="Search staff list by name..." onSearch={setSearch} />
           </div>
 
           {/* Grid/Table view toggles */}
           <div className="flex items-center gap-1 rounded-lg border border-[var(--color-border)] p-1 bg-[var(--color-bg-sunken)]">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-1.5 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-[#556ee6]' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'}`}
+              className={`p-1.5 rounded-md transition-all ${viewMode === 'grid' ? 'bg-[var(--color-bg-elevated)] shadow-sm text-[#556ee6]' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'}`}
               aria-label="Grid view"
             >
               <Grid className="h-4 w-4" />
             </button>
             <button
               onClick={() => setViewMode('table')}
-              className={`p-1.5 rounded-md transition-all ${viewMode === 'table' ? 'bg-white shadow-sm text-[#556ee6]' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'}`}
+              className={`p-1.5 rounded-md transition-all ${viewMode === 'table' ? 'bg-[var(--color-bg-elevated)] shadow-sm text-[#556ee6]' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'}`}
               aria-label="Table view"
             >
               <List className="h-4 w-4" />
@@ -235,7 +235,7 @@ export default function WorkersPage() {
 
       {/* Grid or Table render */}
       {filtered.length === 0 ? (
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-8 text-center" style={{ minHeight: '200px' }}>
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8 text-center" style={{ minHeight: '200px' }}>
           <p className="text-sm font-semibold text-[var(--color-text-primary)] mb-1">No staff members found</p>
           <p className="text-xs text-[var(--color-text-muted)]">Try adjusting your filters or search criteria.</p>
         </div>
@@ -247,9 +247,9 @@ export default function WorkersPage() {
               <motion.div
                 key={worker.id}
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: i * 0.04 }}
-                className="relative overflow-hidden rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-[0_1px_3px_rgba(15,23,42,0.05)] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(15,23,42,0.08)] transition-all duration-200"
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.2, delay: i * 0.04 } }}
+                whileHover={{ y: -2, transition: { duration: 0.15, ease: 'easeInOut' } }}
+                className="relative overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-[0_1px_3px_rgba(15,23,42,0.05)] hover:shadow-[0_4px_12px_rgba(15,23,42,0.08)] transition-shadow duration-200"
               >
                 {/* Colored role strip */}
                 <div className="absolute top-0 left-0 right-0 h-[4px]" style={{ background: roleColor }} />

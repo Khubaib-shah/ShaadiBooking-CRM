@@ -141,7 +141,7 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
               {activeTab === 'services' && (
                 <div className="grid gap-6 md:grid-cols-2">
                   {/* Equipment deployed card */}
-                  <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm space-y-4">
+                  <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm space-y-4">
                     <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Items Used</h3>
                     <div className="space-y-3">
                       {job.equipment.map((eq: any, idx: number) => (
@@ -157,7 +157,7 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
                   </div>
 
                   {/* Labor and crew card */}
-                  <div className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm space-y-4">
+                  <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 shadow-sm space-y-4">
                     <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Staff Used</h3>
                     <div className="space-y-3">
                       {job.labor.map((lb: any, idx: number) => (
@@ -177,7 +177,7 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
               {/* TAB 2: FINANCIAL SUMMARY */}
               {activeTab === 'financials' && (
                 <div className="grid gap-6 md:grid-cols-3">
-                  <div className="md:col-span-2 rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm space-y-5">
+                  <div className="md:col-span-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm space-y-5">
                     <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Money Details</h3>
                     
                     <div className="grid gap-4 sm:grid-cols-2 text-sm">
@@ -207,7 +207,7 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm space-y-5">
+                  <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm space-y-5">
                     <h3 className="text-xs font-black uppercase tracking-wider text-[var(--color-text-muted)] border-b pb-2">Profit Summary</h3>
                     <div className="space-y-4">
                       <div>
@@ -229,7 +229,7 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
               {/* TAB 3: CLIENT INVOICE */}
               {activeTab === 'invoice' && (
                 <div className="space-y-4 max-w-2xl mx-auto">
-                  <div className="rounded-xl border border-[var(--color-border)] bg-white p-6 shadow-sm flex items-center justify-between">
+                  <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm flex items-center justify-between">
                     <div>
                       <p className="text-sm font-semibold text-[var(--color-text-primary)]">Ready to generate customer receipt?</p>
                       <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Click below to open print guidelines containing SST taxes.</p>
@@ -249,7 +249,7 @@ export default function OutsourcingDetailPage({ params }: { params: Promise<{ id
       </div>
 
       {/* INVOICE HIGH-FIDELITY PRINTABLE SHEET */}
-      <div id="invoice-sheet-print" className="hidden print:block p-8 bg-white text-slate-800 max-w-3xl mx-auto">
+      <div id="invoice-sheet-print" className="hidden print:block p-8 bg-[var(--color-bg-elevated)] text-slate-800 max-w-3xl mx-auto">
         <div className="flex justify-between items-start border-b-2 pb-6 border-slate-200">
           <div>
             <h2 className="text-xl font-black tracking-wide text-slate-800">SHAADIBOOK CRM LTD</h2>

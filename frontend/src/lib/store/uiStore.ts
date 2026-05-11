@@ -1,6 +1,9 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface UIState {
+  theme: 'light' | 'dark'
+  toggleTheme: () => void
   sidebarCollapsed: boolean
   toggleSidebar: () => void
   setSidebarCollapsed: (collapsed: boolean) => void
@@ -37,8 +40,12 @@ interface UIState {
   setSelectedDate: (date: Date | null) => void
 }
 
-export const useUIStore = create<UIState>((set) => ({
-  sidebarCollapsed: false,
+export const useUIStore = create<UIState>()(
+  persist(
+    (set) => ({
+      theme: 'light',
+      toggleTheme: () => set((s) => ({ theme: s.theme === 'light' ? 'dark' : 'light' })),
+      sidebarCollapsed: false,
   newBookingOpen: false,
   editBookingOpen: false,
   newInquiryOpen: false,
@@ -72,4 +79,10 @@ export const useUIStore = create<UIState>((set) => ({
     set({ confirmDialogOpen: false, confirmTitle: '', confirmDescription: '', confirmAction: null }),
   setCalendarMonth: (date) => set({ currentCalendarMonth: date }),
   setSelectedDate: (date) => set({ selectedCalendarDate: date }),
-}))
+    }),
+    {
+      name: 'shaadibook-ui-store',
+      partialize: (state) => ({ theme: state.theme }), 
+    }
+  )
+)
